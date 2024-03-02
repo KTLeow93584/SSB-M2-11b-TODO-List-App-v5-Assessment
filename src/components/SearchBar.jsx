@@ -6,8 +6,6 @@ import Form from 'react-bootstrap/Form';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
-
-import './SearchBar.css';
 // ==============================================
 export default function SearchBar({ id = "query-item-name", placeholder = "Enter keyword", minWidth = 30, searchFilterCallback = null }) {
     const [keyword, setKeyword] = useState("");
@@ -17,7 +15,7 @@ export default function SearchBar({ id = "query-item-name", placeholder = "Enter
             <div className="d-flex justify-content-center rounded me-3 secondary-container" style={{ width: "50%" }}>
                 <Form.Control
                     type="name" id={id} value={keyword} placeholder={placeholder}
-                    className="search-bar"
+                    className="input-bar-no-shadow"
                     style={{ minWidth: `${minWidth}%`, backgroundColor: "transparent", border: "none" }}
                     onChange={(event) => {
                         const newKeyword = event.target.value;

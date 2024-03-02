@@ -16,25 +16,10 @@ import Nav from 'react-bootstrap/Nav';
 import './Login.css';
 
 export default function Login() {
-    // ===========================
-    let userObj = localStorage.getItem("user");
-
-    if (userObj !== null && userObj !== undefined)
-        userObj = JSON.parse(userObj);
-    else {
-        userObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-    }
-    // ===========================
-    const isLoggedIn = (userObj.user !== null && userObj.user !== undefined);
-
     const modeContext = ModeContextGet();
     const navigate = useNavigate();
 
-    const handleLogin = (email, password) => {
+    const handleLogin = (email, password, onProcessCallback) => {
         let users = localStorage.getItem("users");
         if (users !== null && users !== undefined)
             users = JSON.parse(users);
@@ -51,18 +36,24 @@ export default function Login() {
             const date = new Date();
 
             loggedInUserObj = {
-                user: user,
+                user: { email: user.email, firstName: user.firstName, lastName: user.lastName, image: user.image },
                 lastLogActivity: date.toISOString(),
                 token: date.toISOString()
             };
         }
 
         // Debug
-        console.log("[User Logged In] User.", loggedInUserObj);
+        //console.log("[User Logged In] User.", loggedInUserObj);
 
         localStorage.setItem("activeUser", JSON.stringify(loggedInUserObj));
+
+        if (loggedInUserObj.user !== null)
+            navigate("/");
+        else {
+            if (onProcessCallback)
+                onProcessCallback(true);
+        }
     };
-    const user = userObj.user;
     const pageMode = modeContext.useDarkMode ? "dark" : "light";
 
     return (
@@ -75,12 +66,12 @@ export default function Login() {
                     <Card className="w-100 secondary-container">
                         <Card.Header className="primary-container-contrast">
                             <p className="fs-2 my-0 text-non-links-contrast">
-                                {`${isLoggedIn ? ("Welcome," + user.lastName + " " + user.firstName) : "Login Page"}`}
+                                Login Page
                             </p>
                         </Card.Header>
                         <Card.Body className="mt-3 mx-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0">
-                                <LoginForm user={user} successfulCallback={handleLogin} />
+                                <LoginForm successfulCallback={handleLogin} />
                             </Row>
                         </Card.Body>
                         <Card.Body className="d-flex flex-column align-items-center justify-content-start"
@@ -97,11 +88,11 @@ export default function Login() {
     );
 }
 
-function LoginForm({ user, successfulCallback }) {
+function LoginForm({ successfulCallback }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isPasswordVisible, setPasswordVisibility] = useState(false);
-    const [hasLoggedInOnce, setHasLoggedInOnce] = useState(false);
+    const [invalidUser, setInvalidUser] = useState(false);
 
     const handlePasswordVisibility = () => {
         const newVisibility = !isPasswordVisible;
@@ -116,9 +107,7 @@ function LoginForm({ user, successfulCallback }) {
                     event.preventDefault();
 
                     if (successfulCallback)
-                        successfulCallback(email, password);
-
-                    setHasLoggedInOnce(true);
+                        successfulCallback(email, password, (state) => setInvalidUser(state));
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
@@ -128,7 +117,7 @@ function LoginForm({ user, successfulCallback }) {
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="email" value={email}
-                                    className="text-non-links"
+                                    className="text-non-links input-bar-no-shadow"
                                     type="email" placeholder="Enter email here"
                                     onChange={(event) => setEmail(event.target.value)} />
                             </div>
@@ -137,7 +126,7 @@ function LoginForm({ user, successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password" value={password} autoComplete="on"
-                                    className="text-non-links me-1"
+                                    className="text-non-links input-bar-no-shadow me-1"
                                     type={isPasswordVisible ? "text" : "password"}
                                     placeholder="Enter password here"
                                     style={{ border: "none" }}
@@ -160,7 +149,7 @@ function LoginForm({ user, successfulCallback }) {
                             {/* ----------------------------- */}
                         </Form.Group>
                         {
-                            (user === null && hasLoggedInOnce) ?
+                            invalidUser ?
                                 (<Form.Text className="login-text text-danger">Invalid Email/Password Combination</Form.Text>) :
                                 null
                         }

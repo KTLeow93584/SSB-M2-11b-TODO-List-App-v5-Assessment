@@ -87,14 +87,20 @@
 
 .primary-border {
   border-width: 1px !important;
-  border-color: var(--core-border-primary-color)!important;
-  border-style: solid!important;
+  border-color: var(--core-border-primary-color) !important;
+  border-style: solid !important;
 }
 
 .secondary-border {
-  border-width: 1px!important;
-  border-color: var(--core-border-secondary-color)!important;
-  border-style: solid!important;
+  border-width: 1px !important;
+  border-color: var(--core-border-secondary-color) !important;
+  border-style: solid !important;
+}
+
+/* ============================== */
+
+.input-bar-no-shadow:focus {
+  box-shadow: none !important;
 }
 
 /* ============================== */

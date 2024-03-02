@@ -1,5 +1,4 @@
 // ==============================================
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
@@ -40,7 +39,7 @@ function adjustGlobalCSSProperties({ useDarkMode }) {
 // ==============================================
 export default function NavigationPanel({ foundingName }) {
     // ===========================
-    let userObj = localStorage.getItem("user");
+    let userObj = localStorage.getItem("activeUser");
 
     if (userObj !== null && userObj !== undefined)
         userObj = JSON.parse(userObj);
@@ -89,9 +88,15 @@ export default function NavigationPanel({ foundingName }) {
                         <Nav.Link as={Link} to={"/games"} className="me-2">
                             <span className="text-links fw-bold">Games List</span>
                         </Nav.Link>
-                        <Nav.Link as={Link} to={"/tasks"} className="me-2">
-                            <span className="text-links fw-bold">Schedule</span>
-                        </Nav.Link>
+
+                        {
+                            userObj.user ? (
+                                <Nav.Link as={Link} to={"/tasks"} className="me-2">
+                                    <span className="text-links fw-bold">Schedule</span>
+                                </Nav.Link>
+                            ) : null
+                        }
+
                         <Nav.Link as={Link} to={"/kururin"} className="me-2">
                             <span className="text-links fw-bold">Kuru Kuru</span>
                         </Nav.Link>
@@ -102,7 +107,7 @@ export default function NavigationPanel({ foundingName }) {
                                 src={
                                     new URL(((userObj.user && userObj.user.image) ? userObj.user.image : "../assets/user-profile-default.webp"),
                                         import.meta.url)}
-                                className="me-2"
+                                className="me-2 rounded"
                                 style={{ width: "32px", height: "auto", minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px" }}
                             />
                             {

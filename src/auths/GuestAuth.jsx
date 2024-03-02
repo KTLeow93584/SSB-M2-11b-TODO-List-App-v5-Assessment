@@ -15,18 +15,13 @@ export default function RequireAuth({ children }) {
     }
     // ===========================
     const userProfile = userObj.user;
+    const token = userObj.token;
 
     // Debug
-    //console.log("[Page Authentication - User Required] User Profile.", userProfile);
+    //console.log("[Page Authentication - Only Accessible to Guests] User Profile.", userProfile);
 
-    if (userProfile === null || userProfile === undefined)
-        return <Navigate to="/login" replace />;
-
-    const user = userProfile.user;
-    const token = userProfile.token;
-
-    if (!user || !token)
-        return <Navigate to="/login" replace />;
+    if (userProfile !== null && userProfile !== undefined && token !== null && token !== undefined)
+        return <Navigate to="/" replace />;
 
     return children;
 }

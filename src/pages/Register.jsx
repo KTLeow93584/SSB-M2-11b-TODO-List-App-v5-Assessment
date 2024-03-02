@@ -179,7 +179,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="email" value={email}
-                                    className="text-non-links"
+                                    className="text-non-links input-bar-no-shadow"
                                     type="email" placeholder="Email"
                                     onChange={(event) => {
                                         setEmail(event.target.value);
@@ -191,7 +191,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password" value={password} autoComplete="on"
-                                    className="text-non-links me-1"
+                                    className="text-non-links input-bar-no-shadow me-1"
                                     type={isPasswordVisible ? "text" : "password"}
                                     placeholder="Password"
                                     style={{ border: "none" }}
@@ -210,7 +210,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password-confirmation" value={passwordConfirmation} autoComplete="on"
-                                    className="text-non-links me-1"
+                                    className="text-non-links input-bar-no-shadow me-1"
                                     type={isPasswordConfirmationVisible ? "text" : "password"}
                                     placeholder="Confirm your Password"
                                     style={{ border: "none" }}
@@ -230,7 +230,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="first-name" value={firstName}
-                                    className="text-non-links"
+                                    className="text-non-links input-bar-no-shadow"
                                     type="name" placeholder="First Name"
                                     onChange={(event) => {
                                         setFirstName(event.target.value);
@@ -241,7 +241,7 @@ function RegisterForm({ successfulCallback }) {
                             {/* Last Name Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
-                                    required id="last-name" value={lastName}
+                                    required id="last-name input-bar-no-shadow" value={lastName}
                                     className="text-non-links"
                                     type="name" placeholder="Last Name"
                                     onChange={(event) => {
@@ -254,10 +254,9 @@ function RegisterForm({ successfulCallback }) {
                             {/* ----------------------------- */}
                             {/* Image (File Upload) */}
                             <Form.Label className="text-non-links login-text">Profile Picture: </Form.Label>
-                            <Form.Control
-                                required id="profile-picture"
-                                className={`text-non-links login-text mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
-                                type="file"
+                            <Form.Control id="profile-picture"
+                                className={`text-non-links login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
+                                type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"
                                 onChange={handleOnProfilePictureUploaded} />
                             {
                                 image ? (

@@ -57,6 +57,9 @@ const timezoneAbbrs = {
     "+10": "AEST",
     "+11": "AEDT",
 };
+
+const millisecondsInAMinute = 1000 * 60;
+const millisecondsInAnHour = millisecondsInAMinute * 60;
 // ==============================================
 export function formatTime(date, skipSeconds = false) {
     let hours = date.getHours() % 12;
@@ -87,8 +90,8 @@ export function formatDate(date) {
 export function formatTimezone(date, shortFormat = false, skipMinutes = false) {
     const timezoneOffset = date.getTimezoneOffset();
     const minutesPerHour = 60;
-    const timezoneHours = Math.floor(Math.abs((timezoneOffset + 30) / minutesPerHour));
-    const timezoneMinutes = Math.abs((timezoneOffset + 30) % minutesPerHour);
+    const timezoneHours = Math.abs(Math.floor(timezoneOffset / minutesPerHour));
+    const timezoneMinutes = Math.abs(timezoneOffset % minutesPerHour);
 
     let result = `GMT${timezoneOffset < 0 ? "+" : "-"}${timezoneHours.toString().padStart(2, "0")}`;
 
@@ -119,5 +122,5 @@ export function formatTimezoneSimpleParseHM(hours, minutes) {
     return result;
 }
 // ==============================================
-export { days, months, defaultDenominator, denominators, timezoneAbbrs };
+export { days, months, defaultDenominator, denominators, timezoneAbbrs, millisecondsInAMinute, millisecondsInAnHour };
 // ==============================================

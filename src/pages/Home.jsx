@@ -20,7 +20,7 @@ export default function Home() {
 
 function TasksSection() {
     // ===========================
-    let userObj = localStorage.getItem("user");
+    let userObj = localStorage.getItem("activeUser");
 
     if (userObj !== null && userObj !== undefined)
         userObj = JSON.parse(userObj);
