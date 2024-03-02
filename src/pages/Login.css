@@ -1,0 +1,28 @@
+/* ============================== */
+.login-text {
+    font-size: 0.87em !important;
+}
+
+.login-form-border {
+    border: 1px black solid;
+}
+
+.login-text-form-link {
+    font-size: 0.9em !important;
+}
+
+.login-text-form-link:hover {
+    text-decoration: underline;
+}
+
+.login-other-methods-button {
+    background-color: #7e56c1 !important;
+    border: 1px var(--core-border-primary-color) solid;
+    box-shadow: 1px 2px #c9c9c9 !important;
+}
+
+.login-other-methods-button:hover {
+    background-color: #593a91 !important;
+}
+
+/* ============================== */

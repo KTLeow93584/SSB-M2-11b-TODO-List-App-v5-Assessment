@@ -1,0 +1,100 @@
+/* ============================== */
+
+.main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ============================== */
+.primary-container {
+  background-color: var(--core-bg-primary-color) !important;
+}
+
+.primary-container-contrast {
+  background-color: var(--core-bg-primary-contrast-color) !important;
+}
+
+.secondary-container {
+  background-color: var(--core-bg-secondary-color) !important;
+}
+
+.secondary-container-contrast {
+  background-color: var(--core-bg-secondary-contrast-color) !important;
+}
+
+.tertiary-container {
+  background-color: var(--core-bg-tertiary-color) !important;
+}
+
+.tertiary-container-contrast {
+  background-color: var(--core-bg-tertiary-contrast-color) !important;
+}
+
+/* ============================== */
+
+.text-non-links {
+  text-decoration: none;
+  color: var(--core-text-non-links-color) !important;
+}
+
+.text-non-links-contrast {
+  text-decoration: none;
+  color: var(--core-text-non-links-contrast-color) !important;
+}
+
+.text-links {
+  text-decoration: none;
+  color: var(--core-text-links-color) !important;
+}
+
+.text-links-contrast {
+  text-decoration: none;
+  color: var(--core-text-links-contrast-color) !important;
+}
+
+.text-links:hover {
+  text-decoration: underline;
+}
+
+.text-links-button {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--core-text-button-color);
+}
+
+.text-links-button-contrast {
+  text-decoration: none;
+  font-weight: bold;
+  color: var(--core-text-button-contrast-color);
+}
+
+.text-links-button:hover {
+  text-decoration: underline;
+}
+
+.horizontal-line-text {
+  color: var(--core-border-primary-color);
+}
+
+/* ============================== */
+
+.button-primary {
+  background: #4fadf9 !important;
+  background: linear-gradient(180deg, #4fadf9 0%, #39a4fc 35%, #2c9ffe 100%) !important;
+  border: 1px #2283d2 solid;
+}
+
+.primary-border {
+  border-width: 1px !important;
+  border-color: var(--core-border-primary-color)!important;
+  border-style: solid!important;
+}
+
+.secondary-border {
+  border-width: 1px!important;
+  border-color: var(--core-border-secondary-color)!important;
+  border-style: solid!important;
+}
+
+/* ============================== */

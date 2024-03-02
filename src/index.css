@@ -1,0 +1,55 @@
+:root {
+    /* ---------------- */
+    /* Default: Light Mode */
+    /* ---------------- */
+    /* Containers */
+    /* Light Theme Hex: #eeeeee */
+    /* Dark Theme Hex: #1e1e1e */
+    --core-bg-primary-color: #eeeeee;
+    --core-bg-primary-contrast-color: #1e1e1e;
+
+    /* Light Theme Hex: #f8f8f8 */
+    /* Dark Theme Hex: #212121 */
+    --core-bg-secondary-color: #f8f8f8;
+    --core-bg-secondary-contrast-color: #212121;
+
+    /* Light Theme Hex: #7e56c1 */
+    /* Dark Theme Hex: #322646 */
+    --core-bg-tertiary-color: #7e56c1;
+    --core-bg-tertiary-contrast-color: #322646;
+
+    /* Light Theme Hex: #2f2e30 */
+    /* Dark Theme Hex: #b7b5b9 */
+    --core-bg-container-contrast-color: #2f2e30;
+    /* ---------------- */
+    /* Text */
+    /* Light Theme Hex: black */
+    /* Dark Theme Hex: white */
+    --core-text-non-links-color: black;
+
+    /* Light Theme Hex: #292929 */
+    /* Dark Theme Hex: #c5c5c5 */
+    --core-text-links-color: #292929;
+
+    /* Light Theme Hex: black */
+    /* Dark Theme Hex: white */
+    --core-text-button-color: black;
+
+    /* Light Theme Hex: black */
+    /* Dark Theme Hex: white */
+    --core-text-non-links-contrast-color: white;
+
+    /* Light Theme Hex: black */
+    /* Dark Theme Hex: white */
+    --core-text-links-contrast-color: white;
+    /* ---------------- */
+    /* Border */
+    /* Light Theme Hex: #1f1f1f */
+    /* Dark Theme Hex: #f4f4f4 */
+    --core-border-primary-color: #1f1f1f;
+
+    /* Light Theme Hex: #ada7a7 */
+    /* Dark Theme Hex: #7e7676 */
+    --core-border-secondary-color: #ada7a7;
+    /* ---------------- */
+}

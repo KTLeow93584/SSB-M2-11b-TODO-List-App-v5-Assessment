@@ -1,0 +1,81 @@
+const users = [
+    {
+        email: "aa@aa.com",
+        password: "111111",
+        firstName: "Kaz",
+        lastName: "Tachiro",
+        image: "https://picsum.photos/id/18/128/128",
+        tasks: [
+            {
+                id: 1,
+                title: "Genshin Impact",
+                icon: null,
+                description: "Commission Dailies",
+                alarms: [
+                    () => {
+                        const currentDate = new Date();
+                        currentDate.setMinutes(currentDate.getMinutes() + 1);
+
+                        return currentDate;
+                    },
+                    () => {
+                        const currentDate = new Date();
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        currentDate.setMinutes(currentDate.getMinutes() + 1);
+
+                        return currentDate;
+                    }
+                ],
+                alarmSound: null
+            },
+            {
+                id: 2,
+                title: "Punishing Gray Raven",
+                icon: null,
+                description: "Warzone Reset",
+                alarms: [
+                    () => {
+                        const currentDate = new Date();
+                        currentDate.setMinutes(currentDate.getMinutes() + 2);
+
+                        return currentDate;
+                    },
+                    () => {
+                        const currentDate = new Date();
+                        currentDate.setDate(currentDate.getDate() + 1);
+                        currentDate.setMinutes(currentDate.getMinutes() + 2);
+
+                        return currentDate;
+                    }
+                ],
+                alarmSound: null
+            }
+        ]
+    },
+    {
+        email: "bb@bb.com",
+        password: "222222",
+        firstName: "Itsu",
+        lastName: "Majitsu",
+        image: "https://picsum.photos/id/46/128/128",
+        tasks: []
+    },
+    {
+        email: "cc@cc.com",
+        password: "333333",
+        firstName: "John",
+        lastName: "McClaine",
+        image: "https://picsum.photos/id/72/128/128",
+        tasks: []
+    },
+    {
+        email: "admin@admin.com",
+        password: "123456",
+        firstName: "admin",
+        lastName: "The Meanie",
+        image: "https://picsum.photos/id/132/128/128",
+        tasks: []
+    }
+]
+
+export default users;
