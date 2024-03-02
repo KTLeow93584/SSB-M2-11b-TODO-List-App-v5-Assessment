@@ -72,23 +72,24 @@ export default function Login() {
             data-bs-theme={pageMode}>
             <Row className="d-flex flex-column align-items-center justify-content-start mt-5 w-100 rounded">
                 <Col className="col-lg-10 col-12 d-flex justify-content-center">
-                    <Card className="w-100">
+                    <Card className="w-100 secondary-container">
                         <Card.Header className="primary-container-contrast">
                             <p className="fs-2 my-0 text-non-links-contrast">
                                 {`${isLoggedIn ? ("Welcome," + user.lastName + " " + user.firstName) : "Login Page"}`}
                             </p>
                         </Card.Header>
-                        <Card.Body className="mx-3 primary-container">
+                        <Card.Body className="mt-3 mx-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0">
                                 <LoginForm user={user} successfulCallback={handleLogin} />
                             </Row>
                         </Card.Body>
-                        <Card.Footer className="d-flex flex-column align-items-center justify-content-center secondary-container pb-3">
+                        <Card.Body className="d-flex flex-column align-items-center justify-content-start"
+                            style={{ backgroundColor: "transparent" }}>
                             <p className="text-non-links login-text">Don&apos;t have an account?</p>
                             <Button onClick={() => navigate("/register")} style={{ maxWidth: "220px", width: "100%" }}>
                                 <span className="login-text">Sign Up</span>
                             </Button>
-                        </Card.Footer>
+                        </Card.Body>
                     </Card>
                 </Col>
             </Row>

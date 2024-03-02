@@ -52,21 +52,21 @@ export default function Register() {
             data-bs-theme={pageMode}>
             <Row className="d-flex flex-column align-items-center justify-content-start mt-5 w-100 rounded">
                 <Col className="col-lg-10 col-12 d-flex justify-content-center">
-                    <Card className="w-100">
+                    <Card className="w-100 secondary-container">
                         <Card.Header className="primary-container-contrast">
                             <p className="fs-2 my-0 text-non-links-contrast">Registration</p>
                         </Card.Header>
-                        <Card.Body className="mx-3 primary-container">
+                        <Card.Body className="mx-3 mt-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0s">
                                 <RegisterForm successfulCallback={handleRegistration} />
                             </Row>
                         </Card.Body>
-                        <Card.Footer className="d-flex flex-column align-items-center justify-content-center secondary-container pb-3">
+                        <Card.Body className="d-flex flex-column align-items-center justify-content-start">
                             <p className="text-non-links login-text">Already have an account?</p>
                             <Button onClick={() => navigate("/login")} style={{ maxWidth: "220px", width: "100%" }}>
                                 <span className="login-text">Login</span>
                             </Button>
-                        </Card.Footer>
+                        </Card.Body>
                     </Card>
                 </Col>
             </Row>
