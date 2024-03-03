@@ -120,7 +120,7 @@ export default function HertaKuru() {
                         <i className="text-non-links fw-bold bi bi-box-arrow-up-right me-2"></i>
                         <a className="text-links fw-bold"
                             href="https://herta.eu.org/" target="_blank" rel="noopener noreferrer">
-                            CaliphDev's Kuru-Kuru Page
+                            CaliphDev&apos;s Kuru-Kuru Page
                         </a>
                     </p>
                 </Col>
