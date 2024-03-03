@@ -13,47 +13,18 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Nav from 'react-bootstrap/Nav';
 
+import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import './Login.css';
 
 export default function Login() {
     const modeContext = ModeContextGet();
+    const activeUserContext = ActiveUserContextGet();
+    const login = activeUserContext.login;
+
     const navigate = useNavigate();
 
-    const handleLogin = (email, password, onProcessCallback) => {
-        let users = localStorage.getItem("users");
-        if (users !== null && users !== undefined)
-            users = JSON.parse(users);
-
-        const userIndex = users.findIndex((user) => user.email === email && user.password === password);
-        let loggedInUserObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-
-        if (userIndex !== -1) {
-            const user = users[userIndex];
-            const date = new Date();
-
-            loggedInUserObj = {
-                user: { email: user.email, firstName: user.firstName, lastName: user.lastName, image: user.image },
-                lastLogActivity: date.toISOString(),
-                token: date.toISOString()
-            };
-        }
-
-        // Debug
-        //console.log("[User Logged In] User.", loggedInUserObj);
-
-        localStorage.setItem("activeUser", JSON.stringify(loggedInUserObj));
-
-        if (loggedInUserObj.user !== null)
-            navigate("/");
-        else {
-            if (onProcessCallback)
-                onProcessCallback(true);
-        }
-    };
+    const handleLogin = (email, password, onProcessCallback) =>
+        login(email, password, () => navigate("/"), () => onProcessCallback(true));
     const pageMode = modeContext.useDarkMode ? "dark" : "light";
 
     return (

@@ -20,7 +20,7 @@ export default function Dashboard() {
     let activeUserContext = ActiveUserContextGet();
 
     let userObj = activeUserContext.activeUserObj;
-    let setUserObj = activeUserContext.setActiveUser;
+    let updateUserProfileInfo = activeUserContext.updateActiveUserProfile;
 
     let users = localStorage.getItem("users");
     if (users !== null && users !== undefined)
@@ -29,12 +29,12 @@ export default function Dashboard() {
     const [isModifyingFirstName, setIsModifyingFirstName] = useState(false);
     const [firstName, setFirstName] = useState(userObj.user.firstName);
 
-    const updateUserInfoFName = () => setUserObj("first-name", firstName);
+    const updateUserInfoFName = () => updateUserProfileInfo("first-name", firstName);
     // ==================
     const [isModifyingLastName, setIsModifyingLastName] = useState(false);
     const [lastName, setLastName] = useState(userObj.user.lastName);
 
-    const updateUserInfoLName = () => setUserObj("last-name", lastName);
+    const updateUserInfoLName = () => updateUserProfileInfo("last-name", lastName);
     // ==================
     const [image, setImage] = useState(userObj.user.image);
     const [isCorrectImageFormat, setIsCorrectImageFormat] = useState(true);
@@ -42,12 +42,18 @@ export default function Dashboard() {
     const updateProfilePicture = (event) => {
         // ===================================================
         const file = event.target.files[0];
+
+        if (!file) {
+            setImage(null);
+            return;
+        }
+
         // Debug
         //console.log("[On Profile Picture Upload] Size.", file.size);
 
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file);
-        fileReader.addEventListener('load', () => {
+        fileReader.addEventListener("load", () => {
             const url = fileReader.result;
 
             // Test for width and height
@@ -64,17 +70,15 @@ export default function Dashboard() {
 
                 if (isValid) {
                     setImage(url);
-                    updateUserInfoImage(url);
+                    updateUserProfileInfo("image", url);
                 }
             }
             testImg.src = url;
         });
         // ===================================================
     }
-
-    const updateUserInfoImage = (url) => setUserObj("image", url);
-    // ==================
-    const updateClearUserSchedule = () => setUserObj("schedule", []);
+    // =======================================
+    const updateClearUserSchedule = () => updateUserProfileInfo("schedule", []);
     // =======================================
     const [isModalVisible, setIsModalVisible] = useState(false);
     // =======================================

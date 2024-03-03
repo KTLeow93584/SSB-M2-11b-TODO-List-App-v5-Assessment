@@ -35,7 +35,8 @@ export default function Register() {
             tasks: []
         };
 
-        console.log("[On Register] New User.", newUser);
+        // Debug
+        //console.log("[On Register] New User.", newUser);
 
         users.push(newUser);
         localStorage.setItem("users", JSON.stringify(users));
@@ -127,12 +128,18 @@ function RegisterForm({ successfulCallback }) {
     function handleOnProfilePictureUploaded(event) {
         // ===================================================
         const file = event.target.files[0];
+
+        if (!file) {
+            setImage(null);
+            return;
+        }
+
         // Debug
         //console.log("[On Profile Picture Upload] Size.", file.size);
 
         const fileReader = new FileReader();
         fileReader.readAsDataURL(file);
-        fileReader.addEventListener('load', () => {
+        fileReader.addEventListener("load", () => {
             const url = fileReader.result;
 
             // Test for width and height

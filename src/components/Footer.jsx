@@ -13,7 +13,7 @@ export default function Footer({ foundingName }) {
                     <p className="fs-6 text-non-links m-0 p-0">
                         © 2024-2024, {foundingName}.org by
                         <span> </span>
-                        <a className="text-links fw-bold" href="https://www.linkedin.com/in/kazcade/" target="_blank" rel="noopener noreferrer">
+                        <a className="text-links fw-bold" href="https://github.com/KTLeow93584/" target="_blank" rel="noopener noreferrer">
                             Leow Kean Tat (Kaz)/Project Kazcade
                         </a>.
                         This mock website incorporates elements from the following:
@@ -42,15 +42,6 @@ export default function Footer({ foundingName }) {
                 </Col>
             </Row>
         </Container >
-    );
-}
-
-function GlossaryLink({ title, addNewLine = true, link = "#" }) {
-    return (
-        <>
-            <a href={link} className="text-links" target="_blank" rel="noopener noreferrer">{title}</a>
-            {(addNewLine === true ? <br /> : "")}
-        </>
     );
 }
 // ==============================================

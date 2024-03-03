@@ -24,8 +24,7 @@ export default function TimeSection() {
             }
 
             setLocalTime(formatTime(updatedNowInterval, false));
-            console.log("Hello World");
-        }, 400);
+        }, 100);
 
         return (() => {
             if (timer)

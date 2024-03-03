@@ -5,52 +5,7 @@ const users = [
         firstName: "Kaz",
         lastName: "Tachiro",
         image: "https://picsum.photos/id/18/128/128",
-        tasks: [
-            {
-                id: 1,
-                title: "Genshin Impact",
-                icon: null,
-                description: "Commission Dailies",
-                alarms: [
-                    () => {
-                        const currentDate = new Date();
-                        currentDate.setMinutes(currentDate.getMinutes() + 1);
-
-                        return currentDate;
-                    },
-                    () => {
-                        const currentDate = new Date();
-                        currentDate.setDate(currentDate.getDate() + 1);
-                        currentDate.setMinutes(currentDate.getMinutes() + 1);
-
-                        return currentDate;
-                    }
-                ],
-                alarmSound: null
-            },
-            {
-                id: 2,
-                title: "Punishing Gray Raven",
-                icon: null,
-                description: "Warzone Reset",
-                alarms: [
-                    () => {
-                        const currentDate = new Date();
-                        currentDate.setMinutes(currentDate.getMinutes() + 2);
-
-                        return currentDate;
-                    },
-                    () => {
-                        const currentDate = new Date();
-                        currentDate.setDate(currentDate.getDate() + 1);
-                        currentDate.setMinutes(currentDate.getMinutes() + 2);
-
-                        return currentDate;
-                    }
-                ],
-                alarmSound: null
-            }
-        ]
+        tasks: []
     },
     {
         email: "bb@bb.com",

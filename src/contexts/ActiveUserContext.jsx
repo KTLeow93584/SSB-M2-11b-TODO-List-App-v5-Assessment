@@ -16,6 +16,56 @@ export function ActiveUserContextProvider({ children }) {
     let users = localStorage.getItem("users");
     users = (users !== null && users !== undefined) ? JSON.parse(users) : [];
 
+    function login(email, password, onProcessSuccessfulCallback, onProcessFailedCallback) {
+        let users = localStorage.getItem("users");
+        if (users !== null && users !== undefined)
+            users = JSON.parse(users);
+
+        const userIndex = users.findIndex((user) => user.email === email && user.password === password);
+        let loggedInUserObj = {
+            user: null,
+            lastLogActivity: null,
+            token: null
+        };
+
+        if (userIndex !== -1) {
+            const user = users[userIndex];
+            const date = new Date();
+
+            loggedInUserObj = {
+                user: { email: user.email, firstName: user.firstName, lastName: user.lastName, image: user.image, tasks: user.tasks },
+                lastLogActivity: date.toISOString(),
+                token: date.toISOString()
+            };
+        }
+
+        // Debug
+        //console.log("[User Logged In] User.", loggedInUserObj);
+
+        setActiveUserObj(loggedInUserObj);
+        localStorage.setItem("activeUser", JSON.stringify(loggedInUserObj));
+
+        if (loggedInUserObj.user !== null) {
+            if (onProcessSuccessfulCallback)
+                onProcessSuccessfulCallback();
+        }
+        else {
+            if (onProcessFailedCallback)
+                onProcessFailedCallback();
+        }
+    }
+
+    function logout(onProcessCompletedCallback) {
+        setActiveUserObj({
+            user: null,
+            lastLogActivity: null,
+            token: null
+        });
+
+        if (onProcessCompletedCallback)
+            onProcessCompletedCallback();
+    }
+
     function updateActiveUserProfile(type, newData) {
         const newUser = activeUserObj.user;
         const userIndexFromDB = users.findIndex((user) => user.email === activeUserObj.user.email);
@@ -36,13 +86,12 @@ export function ActiveUserContextProvider({ children }) {
                 users[userIndexFromDB].image = newData;
 
                 break;
-            case "schedule":
+            case "tasks":
                 newUser.tasks = newData;
                 users[userIndexFromDB].tasks = newData;
 
                 break;
         }
-        //localStorage.setItem("activeUser", JSON.stringify(activeUserObj));
 
         setActiveUserObj({
             user: newUser,
@@ -54,7 +103,8 @@ export function ActiveUserContextProvider({ children }) {
     }
 
     return (
-        <ActiveUserContext.Provider value={{ activeUserObj: activeUserObj, setActiveUser: updateActiveUserProfile }}>
+        <ActiveUserContext.Provider
+            value={{ activeUserObj: activeUserObj, login: login, logout: logout, updateActiveUserProfile: updateActiveUserProfile }}>
             {children}
         </ActiveUserContext.Provider>
     );

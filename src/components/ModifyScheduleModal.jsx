@@ -10,38 +10,44 @@ import Form from 'react-bootstrap/Form';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 
-import { createTask } from '../feature/tasks/tasksSlice.jsx';
+import { modifyTask } from '../feature/tasks/tasksSlice.jsx';
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 import gameInfo from '../data/gameInfo.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
 // ==============================================
-export default function AddScheduleModal({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
+export default function AddScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
 
     const [selectedGame, setSelectedGame] = useState({
-        id: gameInfo[0].id,
-        title: gameInfo[0].title,
-        supportedRegions: gameInfo[0].supportedRegions
+        id: schedule ? schedule.gameID : gameInfo[0].id,
+        title: scheduleGameData.title,
+        supportedRegions: scheduleGameData.supportedRegions
     });
 
-    useEffect(() => {
-        setSelectedGame({ id: initialGame.id, title: initialGame.title, supportedRegions: initialGame.supportedRegions });
-    }, [initialGame]);
-
     const [selectedRegion, setSelectedRegion] = useState(() =>
-        reformatRegionData(initialGame ? initialGame : gameInfo[0],
-            initialRegion ? initialRegion : selectedGame.supportedRegions[0])
+        reformatRegionData(scheduleGameData, scheduleRegionData)
     );
 
+    // =============================
+    const [description, setDescription] = useState(schedule ? schedule.description : "");
+    const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
+    const [notifyTime, setNotifyTime] = useState(schedule ? schedule.notifyTime : "12.00");
+    // =============================
     useEffect(() => {
-        setSelectedRegion(() => reformatRegionData(initialGame, initialRegion));
-    }, [initialGame, initialRegion]);
+        setDescription(schedule ? schedule.description : "");
+        setAlarmFile(schedule ? schedule.alarmFile : null);
+        setNotifyTime(schedule ? schedule.notifyTime : "12.00");
+    }, [schedule]);
 
-    const [description, setDescription] = useState("");
-    const [alarmFile, setAlarmFile] = useState(null);
-    const [notifyTime, setNotifyTime] = useState("12:00");
+    useEffect(() => {
+        setSelectedGame({ id: scheduleGameData.id, title: scheduleGameData.title, supportedRegions: scheduleGameData.supportedRegions });
+    }, [scheduleGameData]);
+
+    useEffect(() => {
+        setSelectedRegion(() => reformatRegionData(scheduleGameData, scheduleRegionData));
+    }, [scheduleGameData, scheduleRegionData]);
     // =============================
     const mappedGameEntries = gameInfo.map((game) => ({
         id: game.id,
@@ -82,26 +88,26 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         });
         // ===================================================
     };
-
+    // =============================
     const dispatch = useDispatch();
-    const handleSubmitNewSchedule = (event) => {
+    const handleSubmitModifiedSchedule = (event) => {
         event.preventDefault();
 
-        const newSchedule = {
-            id: new Date().toISOString(),
-            gameID: selectedGame.id,
-            gameRegionName: selectedRegion.name,
-            alarmFile: alarmFile,
-            notifyTime: notifyTime,
-            description: description
-        };
+        schedule.gameID = selectedGame.id;
+        schedule.alarmFile = alarmFile;
+        schedule.notifyTime = notifyTime;
+        schedule.description = description;
 
         // Debug
-        //console.log("[New Schedule] Create.", newSchedule);
+        //console.log("[Modified Schedule] Create.", modifiedSchedule);
 
-        dispatch(createTask(newSchedule));
+        const taskIndex = user.tasks.findIndex((task) => task.id === schedule.id);
+        user.tasks[taskIndex] = schedule;
+
+        const data = { taskIndex: taskIndex, modifiedTaskData: schedule };
+        dispatch(modifyTask(data));
         // ===============================
-        userContext.updateActiveUserProfile("tasks", [...user.tasks, newSchedule]);
+        userContext.updateActiveUserProfile("tasks", user.tasks);
         // ===============================
         handleClose();
     };
@@ -112,7 +118,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                 <Modal.Title>Create a new game notification schedule</Modal.Title>
             </Modal.Header>
 
-            <Form onSubmit={handleSubmitNewSchedule}>
+            <Form onSubmit={handleSubmitModifiedSchedule}>
                 <Modal.Body className="secondary-container">
                     <Form.Group>
                         {/* ----------------------------- */}

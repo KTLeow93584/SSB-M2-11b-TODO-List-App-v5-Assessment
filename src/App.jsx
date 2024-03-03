@@ -14,13 +14,14 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Schedule from './pages/Schedule';
 import GameList from './pages/GameList';
 import HertaKuru from './pages/HertaKuru';
 import ErrorPage from './pages/ErrorPage';
 
+import users from './data/users.js';
 import { store } from './store.jsx';
 
-import users from './data/users.js';
 import { ModeContextProvider } from './contexts/ModeContext.jsx';
 import { ActiveUserContextProvider } from './contexts/ActiveUserContext.jsx';
 
@@ -39,7 +40,8 @@ export function MainLayout() {
 }
 
 function App() {
-  const userCache = useLocalStorage("users", users);
+  // For pre-loading the cached List of Users Data.
+  const [userList, setUserList] = useLocalStorage("users", users);
 
   return (
     <Container fluid className="main-container p-0">
@@ -56,6 +58,12 @@ function App() {
                       <Dashboard />
                     </UserAuth>
                   } path="/dashboard" />
+
+                  <Route element={
+                    <UserAuth>
+                      <Schedule />
+                    </UserAuth>
+                  } path="/schedule" />
 
                   <Route element={
                     <GuestAuth>
@@ -77,4 +85,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

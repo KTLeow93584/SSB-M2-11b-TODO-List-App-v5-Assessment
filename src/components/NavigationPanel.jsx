@@ -96,16 +96,9 @@ export default function NavigationPanel({ foundingName }) {
 // ==============================================
 function NavigationBarBodyElements({ user }) {
     const navigate = useNavigate();
+    const logout = ActiveUserContextGet().logout;
 
-    const handleLogout = () => {
-        localStorage.setItem("activeUser", JSON.stringify({
-            user: null,
-            lastLogActivity: null,
-            token: null
-        }));
-
-        navigate('/');
-    }
+    const handleLogout = () => logout(() => navigate('/'));
 
     return (
         <>
@@ -117,7 +110,7 @@ function NavigationBarBodyElements({ user }) {
 
             {
                 user ? (
-                    <Nav.Link as={Link} to={"/tasks"} className="me-2">
+                    <Nav.Link as={Link} to={"/schedule"} className="me-2">
                         <span className="text-links fw-bold">Schedule</span>
                     </Nav.Link>
                 ) : null
@@ -177,21 +170,12 @@ function NavigationBarBodyElements({ user }) {
 // ==============================================
 function NavigationBarBodyOffCanvas({ user }) {
     const [showOffCanvasNav, setShowOffCanvasNav] = useState(false);
+
     const navigate = useNavigate();
+    const logout = ActiveUserContextGet().logout;
 
-    const handleLogout = () => {
-        localStorage.setItem("activeUser", JSON.stringify({
-            user: null,
-            lastLogActivity: null,
-            token: null
-        }));
-
-        navigate('/');
-    };
-
-    const handleClose = () => {
-        setShowOffCanvasNav(false);
-    };
+    const handleLogout = () => logout(() => navigate('/'));
+    const handleClose = () => setShowOffCanvasNav(false);
 
     return (
         <>
@@ -217,7 +201,7 @@ function NavigationBarBodyOffCanvas({ user }) {
 
                     {
                         user ? (
-                            <Nav.Link as={Link} to={"/tasks"} className="mb-3">
+                            <Nav.Link as={Link} to={"/schedule"} className="mb-3">
                                 <span className="text-links fw-bold">Schedule</span>
                             </Nav.Link>
                         ) : null
@@ -248,9 +232,6 @@ function NavigationBarBodyOffCanvas({ user }) {
                                         className="text-links fw-bold me-auto">
                                         {`${user.firstName} ${user.lastName}`}
                                     </Nav.Link>
-                                    <Nav.Link as={Link} onClick={handleLogout} className="me-auto">
-                                        <span className="text-links fw-bold">Logout</span>
-                                    </Nav.Link>
                                 </>
                             ) : (
                                 <>
@@ -261,6 +242,13 @@ function NavigationBarBodyOffCanvas({ user }) {
                             )
                         }
                     </div>
+                    {
+                        user ? (
+                            <Nav.Link as={Link} onClick={handleLogout} className="me-auto">
+                                <span className="text-links fw-bold">Logout</span>
+                            </Nav.Link>
+                        ) : null
+                    }
                     {/* ------------------------------ */}
                     {/* Register Button */}
                     {

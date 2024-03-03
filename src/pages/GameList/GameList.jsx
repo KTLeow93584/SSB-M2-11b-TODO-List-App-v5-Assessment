@@ -20,11 +20,12 @@ import {
     formatTime, formatTimezoneSimpleParseH,
     millisecondsInAMinute, millisecondsInAnHour
 } from '../../data/time.js';
+import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 // ==============================================
 export default function GameList() {
     // ===========================
-    let userObj = localStorage.getItem("activeUser");
-    const user = userObj.user;
+    let activeUserContext = ActiveUserContextGet();
+    const user = activeUserContext.activeUserObj ? activeUserContext.activeUserObj.user : null;
     // ===========================
     const [createNewSchedule, setCreateNewSchedule] = useState(false);
     const handleHideScheduleModal = () => setCreateNewSchedule(false);
@@ -49,7 +50,7 @@ export default function GameList() {
                 region.serverResetHour, region.serverResetMinute, region.timezoneOffsetHours, region.timezoneOffsetMinutes);
 
             return (
-                <Col key={`game-${gameIndex}-region-${regionIndex} `} className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
+                <Col key={`game-${gameIndex}-region-${regionIndex}`} className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
                     <Card className="secondary-container shadow-sm">
                         <Card.Header className="d-flex align-items-center justify-content-between">
                             <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
