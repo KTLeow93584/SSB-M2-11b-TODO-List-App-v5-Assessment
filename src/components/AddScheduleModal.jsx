@@ -13,7 +13,7 @@ import Modal from 'react-bootstrap/Modal';
 import gameInfo from '../data/gameInfo.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
 // ==============================================
-export default function AddSchedule({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
+export default function AddScheduleModal({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
     const [selectedGame, setSelectedGame] = useState({
         id: gameInfo[0].id,
         title: gameInfo[0].title,

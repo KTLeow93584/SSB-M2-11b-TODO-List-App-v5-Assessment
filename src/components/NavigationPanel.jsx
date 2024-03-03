@@ -9,6 +9,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 import { ModeContextGet } from '../contexts/ModeContext.jsx';
+import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 import './NavigationPanel.css';
 // ==============================================
@@ -39,17 +40,8 @@ function adjustGlobalCSSProperties({ useDarkMode }) {
 // ==============================================
 export default function NavigationPanel({ foundingName }) {
     // ===========================
-    let userObj = localStorage.getItem("activeUser");
-
-    if (userObj !== null && userObj !== undefined)
-        userObj = JSON.parse(userObj);
-    else {
-        userObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-    }
+    let userObj = ActiveUserContextGet().activeUserObj;
+    const user = userObj.user;
     // ===========================
     const navigate = useNavigate();
 
@@ -74,7 +66,7 @@ export default function NavigationPanel({ foundingName }) {
     }
 
     return (
-        <Container fluid id="nav-panel" className="header-container w-100" data-bs-theme="dark">
+        <Container fluid id="nav-panel" className="header-container w-100">
             <Container fluid className="w-100 navbar-container rounded">
                 <Navbar expand="lg">
                     <Container fluid className="d-flex justify-content-start">
@@ -111,10 +103,16 @@ export default function NavigationPanel({ foundingName }) {
                                 style={{ width: "32px", height: "auto", minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px" }}
                             />
                             {
-                                userObj.user ? (
-                                    <Nav.Link as={Link} onClick={handleLogout} className="me-2">
-                                        <span className="text-links fw-bold">Logout</span>
-                                    </Nav.Link>
+                                user ? (
+                                    <>
+                                        <Nav.Link as={Link} to={"/dashboard"}
+                                            className="text-links fw-bold me-3">
+                                            {`${user.firstName} ${user.lastName}`}
+                                        </Nav.Link>
+                                        <Nav.Link as={Link} onClick={handleLogout} className="me-2">
+                                            <span className="text-links fw-bold">Logout</span>
+                                        </Nav.Link>
+                                    </>
                                 ) : (
                                     <>
                                         <Nav.Link as={Link} to={"/login"} className="me-2">

@@ -1,26 +1,17 @@
 import { Navigate } from 'react-router-dom';
+import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 export default function RequireAuth({ children }) {
     // ===========================
-    let userObj = localStorage.getItem("activeUser");
-
-    if (userObj !== null && userObj !== undefined)
-        userObj = JSON.parse(userObj);
-    else {
-        userObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-    }
+    let userObj = ActiveUserContextGet().activeUserObj;
     // ===========================
-    const userProfile = userObj.user;
+    const user = userObj.user;
     const token = userObj.token;
 
     // Debug
-    //console.log("[Page Authentication - Only Accessible to Guests] User Profile.", userProfile);
+    //console.log("[Page Authentication - Only Accessible to Guests] User Profile.", user);
 
-    if (userProfile !== null && userProfile !== undefined && token !== null && token !== undefined)
+    if (user !== null && user !== undefined && token !== null && token !== undefined)
         return <Navigate to="/" replace />;
 
     return children;

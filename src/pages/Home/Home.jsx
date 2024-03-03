@@ -6,7 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 import Image from 'react-bootstrap/Image';
 
-import Timekeeper from "../components/Timekeeper.jsx";
+import Timekeeper from "../../components/Timekeeper.jsx";
 // ==============================================
 export default function Home() {
     return (
@@ -21,20 +21,10 @@ export default function Home() {
 function TasksSection() {
     // ===========================
     let userObj = localStorage.getItem("activeUser");
-
-    if (userObj !== null && userObj !== undefined)
-        userObj = JSON.parse(userObj);
-    else {
-        userObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-    }
     const user = userObj.user;
     // ===========================
     // Debug
-    //console.log("User.", cachedUserProfile);
+    //console.log("User.", user);
 
     let render = null;
 
@@ -52,7 +42,7 @@ function TasksSection() {
                         <span className="text-danger"> RNG Gods</span> and give
                         you this cake 🍰.
                     </p>
-                    <Image src={new URL("../assets/home/fgo_parody.webp", import.meta.url)}
+                    <Image src={new URL("../../assets/home/fgo_parody.webp", import.meta.url)}
                         style={{
                             minWidth: "128px", minHeight: "128px",
                             maxWidth: "384px", maxHeight: "384px",

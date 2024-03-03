@@ -10,17 +10,19 @@ import GuestAuth from './auths/GuestAuth.jsx';
 import NavigationPanel from './components/NavigationPanel.jsx';
 import Footer from './components/Footer.jsx';
 
-import Dashboard from './pages/Dashboard.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
-import GameList from './pages/GameList.jsx';
-import Home from './pages/Home.jsx';
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
+import GameList from './pages/GameList';
+import HertaKuru from './pages/HertaKuru';
+import ErrorPage from './pages/ErrorPage';
 
 import { store } from './store.jsx';
 
 import users from './data/users.js';
 import { ModeContextProvider } from './contexts/ModeContext.jsx';
+import { ActiveUserContextProvider } from './contexts/ActiveUserContext.jsx';
 
 import './App.css';
 
@@ -41,33 +43,36 @@ function App() {
 
   return (
     <Container fluid className="main-container p-0">
-      <ModeContextProvider>
-        <Provider store={store}>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<MainLayout />}>
-                <Route index element={<Home />} />
+      <ActiveUserContextProvider>
+        <ModeContextProvider>
+          <Provider store={store}>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<Home />} />
 
-                <Route element={
-                  <UserAuth>
-                    <Dashboard />
-                  </UserAuth>
-                } path="/dashboard" />
+                  <Route element={
+                    <UserAuth>
+                      <Dashboard />
+                    </UserAuth>
+                  } path="/dashboard" />
 
-                <Route element={
-                  <GuestAuth>
-                    <Login />
-                  </GuestAuth>
-                } path="/login" />
+                  <Route element={
+                    <GuestAuth>
+                      <Login />
+                    </GuestAuth>
+                  } path="/login" />
 
-                <Route path="/register" element={<Register />} />
-                <Route path="/games" element={<GameList />} />
-                {<Route path="*" element={<ErrorPage />} />}
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </Provider>
-      </ModeContextProvider>
+                  <Route path="/register" element={<Register />} />
+                  <Route path="/games" element={<GameList />} />
+                  <Route path="/kururin" element={<HertaKuru />} />
+                  {<Route path="*" element={<ErrorPage />} />}
+                </Route>
+              </Routes>
+            </BrowserRouter>
+          </Provider>
+        </ModeContextProvider>
+      </ActiveUserContextProvider>
     </Container>
   );
 }

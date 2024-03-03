@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
 
-import { ModeContextGet } from '../contexts/ModeContext.jsx';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -147,9 +147,8 @@ function RegisterForm({ successfulCallback }) {
                 const isValid = width === height & file.size <= 512000;
                 setIsCorrectImageFormat(isValid);
 
-                if (isValid) {
+                if (isValid)
                     setImage(url);
-                }
             }
             testImg.src = url;
         });
@@ -317,7 +316,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* Google */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/google.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/google.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Google</span>
                                 </Button>
@@ -326,7 +325,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* Facebook */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/line.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/line.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> LINE</span>
                                 </Button>
@@ -335,7 +334,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* LINE */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/facebook.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/facebook.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Facebook</span>
                                 </Button>

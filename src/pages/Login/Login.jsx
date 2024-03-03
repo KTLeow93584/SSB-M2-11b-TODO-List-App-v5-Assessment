@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { ModeContextGet } from '../contexts/ModeContext.jsx';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -166,7 +166,7 @@ function LoginForm({ successfulCallback }) {
                                 {/* Google */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/google.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/google.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Google</span>
                                 </Button>
@@ -175,7 +175,7 @@ function LoginForm({ successfulCallback }) {
                                 {/* Facebook */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/line.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/line.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> LINE</span>
                                 </Button>
@@ -184,7 +184,7 @@ function LoginForm({ successfulCallback }) {
                                 {/* LINE */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../assets/login-methods/facebook.webp", import.meta.url)}
+                                    <Image src={new URL("../../assets/login-methods/facebook.webp", import.meta.url)}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Facebook</span>
                                 </Button>

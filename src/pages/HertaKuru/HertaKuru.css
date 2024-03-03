@@ -1,0 +1,42 @@
+/* ============================== */
+.herta-container {
+    background-color: #9d88d3;
+}
+
+.herta-horizontal-line {
+    z-index: 2;
+}
+
+.herta-img {
+    position: absolute;
+
+    top: 55.5px;
+
+    min-width: 400px;
+    min-height: 400px;
+    max-width: 450px;
+    max-height: 450px;
+
+    width: 100%;
+    height: auto;
+
+    z-index: 1;
+
+    animation: rightToLeft 1.5s linear forwards;
+}
+
+.herta-img-sample-preload {
+    display: none;
+}
+
+@keyframes rightToLeft {
+    from {
+        right: -20%;
+    }
+
+    to {
+        right: 120%;
+    }
+}
+
+/* ============================== */

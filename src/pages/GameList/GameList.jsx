@@ -11,29 +11,19 @@ import Image from 'react-bootstrap/Image';
 
 import './GameList.css';
 
-import Timekeeper from '../components/Timekeeper.jsx';
-import SearchBar from '../components/SearchBar.jsx';
-import AddSchedule from '../components/AddSchedule.jsx';
+import Timekeeper from '../../components/Timekeeper.jsx';
+import SearchBar from '../../components/SearchBar.jsx';
+import AddSchedule from '../../components/AddScheduleModal.jsx';
 
-import gameInfo from '../data/gameInfo.js';
+import gameInfo from '../../data/gameInfo.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
     millisecondsInAMinute, millisecondsInAnHour
-} from '../data/time.js';
+} from '../../data/time.js';
 // ==============================================
 export default function GameList() {
     // ===========================
     let userObj = localStorage.getItem("activeUser");
-
-    if (userObj !== null && userObj !== undefined)
-        userObj = JSON.parse(userObj);
-    else {
-        userObj = {
-            user: null,
-            lastLogActivity: null,
-            token: null
-        };
-    }
     const user = userObj.user;
     // ===========================
     const [createNewSchedule, setCreateNewSchedule] = useState(false);
@@ -62,7 +52,7 @@ export default function GameList() {
                 <Col key={`game-${gameIndex}-region-${regionIndex} `} className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
                     <Card className="secondary-container shadow-sm">
                         <Card.Header className="d-flex align-items-center justify-content-between">
-                            <Image src={new URL(`../assets/game-icons/${game.icon}`, import.meta.url)}
+                            <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
                                 className="rounded me-2"
                                 style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
                             <span className="fs-4 text-non-links">{game.title}</span>
@@ -93,23 +83,24 @@ export default function GameList() {
                             </Row>
                         </Card.Body>
                         {
-                            user ? (
-                                <Card.Body>
-                                    <Row className="w-100 d-flex justify-content-center">
-                                        <Button
-                                            onClick={() => {
-                                                setSelectedGame(game);
-                                                setSelectedGameRegion(region);
+                            user ?
+                                (
+                                    <Card.Body>
+                                        <Row className="w-100 d-flex justify-content-center">
+                                            <Button
+                                                onClick={() => {
+                                                    setSelectedGame(game);
+                                                    setSelectedGameRegion(region);
 
-                                                if (onCreateScheduleCallback)
-                                                    onCreateScheduleCallback(true);
-                                            }}
-                                            className="primary-container-contrast add-schedule-button primary-border">
-                                            Add to Schedule
-                                        </Button>
-                                    </Row>
-                                </Card.Body>
-                            ) : null
+                                                    if (onCreateScheduleCallback)
+                                                        onCreateScheduleCallback(true);
+                                                }}
+                                                className="primary-container-contrast add-schedule-button primary-border">
+                                                Add to Schedule
+                                            </Button>
+                                        </Row>
+                                    </Card.Body>
+                                ) : null
                         }
                     </Card>
                 </Col>
