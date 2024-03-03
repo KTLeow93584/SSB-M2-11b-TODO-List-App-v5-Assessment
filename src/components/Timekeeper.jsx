@@ -15,7 +15,7 @@ export default function TimeSection() {
     const localTimezone = formatTimezone(now);
 
     useEffect(() => {
-        let timer = setInterval(() => {
+        const timer = setInterval(() => {
             const updatedNowInterval = new Date();
 
             if (updatedNowInterval.getDate() !== time.getDate()) {
@@ -24,12 +24,12 @@ export default function TimeSection() {
             }
 
             setLocalTime(formatTime(updatedNowInterval, false));
+            console.log("Hello World");
         }, 400);
 
         return (() => {
             if (timer)
-                clearInterval();
-            timer = null;
+                clearInterval(timer);
         });
     });
 
