@@ -187,6 +187,7 @@ export default function Dashboard() {
                                 style={{ width: "30%" }}
                                 onChange={updateProfilePicture} />
                         </Col>
+                        {/* ----------------------------- */}
                         {
                             image ? (
                                 <Col className="col-12 d-flex align-items-center mb-3">
@@ -199,11 +200,20 @@ export default function Dashboard() {
                                 </Col>
                             ) : null
                         }
+                        {/* ----------------------------- */}
+                        {/* Image Format */}
+                        {
+                            (!isCorrectImageFormat) ?
+                                (<Form.Label className="login-text text-danger">{`The current profile picture does not meet the requirements.`}</Form.Label>) :
+                                null
+                        }
+                        {/* ----------------------------- */}
                         <Col className="col-lg-4 col-md-5 col-sm-8 col-12 d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
                             <Form.Text className="text-non-links login-text fw-bold">Requirements for profile picture setup: </Form.Text>
                             <Form.Text className="text-non-links login-text">1. Must not exceed 512kb. </Form.Text>
                             <Form.Text className="text-non-links login-text">2. Equal Width and Height Dimensions. </Form.Text>
                         </Col>
+                        {/* ----------------------------- */}
                     </Row>
                     {/* -------------------------- */}
                     {/* Image (Profile Picture) */}
