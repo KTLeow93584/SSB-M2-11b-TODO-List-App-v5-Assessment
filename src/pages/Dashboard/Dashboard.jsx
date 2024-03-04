@@ -78,13 +78,13 @@ export default function Dashboard() {
         // ===================================================
     }
     // =======================================
-    const updateClearUserSchedule = () => updateUserProfileInfo("schedule", []);
+    const updateClearUserSchedule = () => updateUserProfileInfo("tasks", []);
     // =======================================
     const [isModalVisible, setIsModalVisible] = useState(false);
     // =======================================
     return (
         <>
-            <Container fluid className="d-flex flex-column primary-container m-0 p-0" style={{ flex: 1 }}>
+            <Container fluid className="d-flex flex-column primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden" }}>
                 <Form className="mt-3 mx-3">
                     {/* -------------------------- */}
                     {/* First Name */}

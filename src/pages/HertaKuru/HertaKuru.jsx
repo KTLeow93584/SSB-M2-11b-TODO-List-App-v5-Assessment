@@ -57,7 +57,7 @@ export default function HertaKuru() {
     };
 
     return (
-        <Container fluid className="primary-container m-0 p-0" style={{ flex: 1 }}>
+        <Container fluid className="primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden" }}>
             <Row className="d-flex flex-column align-items-center herta-container m-0 p-0">
                 <Col className="col-12" style={{ zIndex: 2 }}>
                     <h1 className="text-light text-center m-0 p-0">Kuru Kuru~</h1>

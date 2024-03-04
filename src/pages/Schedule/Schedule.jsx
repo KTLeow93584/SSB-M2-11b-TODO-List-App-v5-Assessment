@@ -49,7 +49,7 @@ export default function Schedule() {
     const audioPlaybackInstance = new Audio();
 
     return scheduleList.length > 0 ? (
-        <Container fluid className="primary-container" style={{ flex: 1 }}>
+        <Container fluid className="primary-container" style={{ flex: 1, overflowX: "hidden" }}>
             <Timekeeper />
             <hr className="horizontal-line-text" />
             <Row className="w-100">
@@ -138,16 +138,18 @@ export default function Schedule() {
                 scheduleRegionData={gameInfo[selectedGameIndex].supportedRegions[selectedRegionIndex]} />
         </Container>
     ) : (
-        <Row className="primary-container" style={{ flex: 1 }}>
-            <Col className="col-12 d-flex flex-column align-items-start justify-content-end" style={{ flex: 1 }}>
-                <Image src={new URL("../../assets/schedule/hsr-bronya-caption.webp", import.meta.url)}
-                    style={{
-                        minWidth: "384px", minHeight: "240px",
-                        maxWidth: "1152px", maxHeight: "1152px",
-                        width: "100%", height: "auto"
-                    }} />
-            </Col>
-        </Row>
+        <Container fluid className="primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden" }}>
+            <Row className="w-100 m-0 p-0">
+                <Col className="col-12">
+                    <Image src={new URL("../../assets/schedule/hsr-bronya-caption.webp", import.meta.url)}
+                        style={{
+                            minWidth: "384px", minHeight: "240px",
+                            maxWidth: "1152px", maxHeight: "1152px",
+                            width: "100%", height: "auto"
+                        }} />
+                </Col>
+            </Row>
+        </Container>
     );
 }
 // ==============================================

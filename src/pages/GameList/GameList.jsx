@@ -111,7 +111,7 @@ export default function GameList() {
 
     return (
         <>
-            <Container fluid className="d-flex flex-column primary-container" style={{ flex: 1 }}>
+            <Container fluid className="d-flex flex-column primary-container" style={{ flex: 1, overflowX: "hidden" }}>
                 <Timekeeper />
                 <hr className="horizontal-line-text" />
                 <SearchBar id="query-item-name"
