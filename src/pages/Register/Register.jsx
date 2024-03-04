@@ -89,6 +89,7 @@ function RegisterForm({ successfulCallback }) {
     const [doesUserExist, setDoesUserExist] = useState(false);
 
     const [isCorrectImageFormat, setIsCorrectImageFormat] = useState(true);
+    const [isCorrectPasswordFormat, setIsCorrectPasswordFormat] = useState(true);
 
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -117,6 +118,20 @@ function RegisterForm({ successfulCallback }) {
         return match;
     }
 
+    function doPasswordsMeetCriteria() {
+        const regexUpperLetters = /[A-z]/;
+        const regexLowerLetters = /[a-z]/;
+        const regexNumbers = /[0-9]/;
+        const regexSymbols = /[^a-zA-z0-9]/;
+
+        const pass = password.length >= 8 & regexUpperLetters.test(password) &
+            regexLowerLetters.test(password) & regexNumbers.test(password) &
+            regexSymbols.test(password);
+
+        setIsCorrectPasswordFormat(pass);
+
+        return pass;
+    }
     function doesEmailAlreadyExist() {
         const existingUser = users.findIndex((user) => user.email === email);
         const hasExistingUser = existingUser !== -1;
@@ -171,7 +186,7 @@ function RegisterForm({ successfulCallback }) {
                 <Form className="m-0 p-0" onSubmit={(event) => {
                     event.preventDefault();
 
-                    if (!doPasswordsMatch() || doesEmailAlreadyExist())
+                    if (!doPasswordsMatch() || doesEmailAlreadyExist() || !doPasswordsMeetCriteria())
                         return;
 
                     if (successfulCallback)
@@ -228,6 +243,12 @@ function RegisterForm({ successfulCallback }) {
                                 <Button variant="link" onClick={handlePasswordConfirmationVisibility}>
                                     <i className={`text-links bi ${isPasswordConfirmationVisible ? "bi-eye" : "bi-eye-slash"}`}></i>
                                 </Button>
+                            </div>
+                            {/* ----------------------------- */}
+                            <div className="d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
+                                <Form.Text className="text-non-links login-text fw-bold">Requirements for password: </Form.Text>
+                                <Form.Text className="text-non-links login-text">1. 8 characters long. </Form.Text>
+                                <Form.Text className="text-non-links login-text">2. Must contain 1 symbol, 1 number, 1 lower and 1 uppercase letter. </Form.Text>
                             </div>
                             {/* ----------------------------- */}
                             <hr className="horizontal-line-text" />
@@ -309,6 +330,13 @@ function RegisterForm({ successfulCallback }) {
                 {
                     (!isCorrectImageFormat) ?
                         (<Form.Label className="login-text text-danger mb-3">{`The current profile picture does not meet the requirements.`}</Form.Label>) :
+                        null
+                }
+                {/* ----------------------------- */}
+                {/* Password Format */}
+                {
+                    (!isCorrectPasswordFormat) ?
+                        (<Form.Label className="login-text text-danger mb-3">{`The current password does not meet the criteria.`}</Form.Label>) :
                         null
                 }
                 {/* ----------------------------- */}

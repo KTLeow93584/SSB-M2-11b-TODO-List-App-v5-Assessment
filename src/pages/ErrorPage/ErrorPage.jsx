@@ -13,7 +13,8 @@ export default function ErrorPage() {
                     <p className="text-non-links fw-bold mt-5">
                         We were unable to locate the page you&apos;re looking for. Here&apos;s a
                         <span> </span>
-                        <span style={{ color: "blue" }}>Koyuki</span>
+                        <a href="https://www.youtube.com/watch?v=tZoqaQrca2M" target="_blank" rel="noopener noreferrer"
+                            style={{ color: "blue", textDecoration: "none" }}>Koyuki</a>
                         <span> </span>
                         instead to cheer you up in its place!
                     </p>
