@@ -21,7 +21,7 @@ export function ActiveUserContextProvider({ children }) {
         if (users !== null && users !== undefined)
             users = JSON.parse(users);
 
-        const userIndex = users.findIndex((user) => user.email === email && user.password === password);
+        const userIndex = users.findIndex((user) => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
         let loggedInUserObj = {
             user: null,
             lastLogActivity: null,

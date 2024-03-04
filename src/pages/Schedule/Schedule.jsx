@@ -20,9 +20,10 @@ import { formatTime } from '../../data/time.js';
 import gameInfo from '../../data/gameInfo.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMusic, faScrewdriver, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import { faPlay, faScrewdriver, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 // ==============================================
 export default function Schedule() {
+    // ===========================
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
     const scheduleList = userContext.activeUserObj.user.tasks;
@@ -44,6 +45,8 @@ export default function Schedule() {
 
     const [modifyExistingSchedule, setModifyExistingSchedule] = useState(false);
     const handleHideScheduleModal = () => setModifyExistingSchedule(false);
+
+    const audioPlaybackInstance = new Audio();
 
     return scheduleList.length > 0 ? (
         <Container fluid className="primary-container" style={{ flex: 1 }}>
@@ -86,10 +89,25 @@ export default function Schedule() {
                                         </div>
                                     </Card.Body>
                                     <Card.Footer className="d-flex justify-content-evenly">
-                                        <Button variant="primary" onClick={null}>
+                                        <Button variant="primary"
+                                            onClick={() => {
+                                                if (audioPlaybackInstance.src !== schedule.alarmFile) {
+                                                    if (audioPlaybackInstance.src !== null && audioPlaybackInstance.src !== undefined &&
+                                                        audioPlaybackInstance.src.trim().length > 0) {
+                                                        audioPlaybackInstance.pause();
+                                                        audioPlaybackInstance.currentTime = 0;
+                                                    }
+
+                                                    audioPlaybackInstance.src = schedule.alarmFile;
+                                                }
+
+                                                if (!audioPlaybackInstance.ended && !audioPlaybackInstance.paused)
+                                                    audioPlaybackInstance.currentTime = 0;
+                                                audioPlaybackInstance.play();
+                                            }}>
                                             <FontAwesomeIcon
                                                 className={"text-center text-light px-3"}
-                                                icon={faMusic} />
+                                                icon={faPlay} />
                                         </Button>
                                         <Button variant="secondary" onClick={() => {
                                             setSchedule(schedule);
