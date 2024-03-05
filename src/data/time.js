@@ -122,5 +122,15 @@ export function formatTimezoneSimpleParseHM(hours, minutes) {
     return result;
 }
 // ==============================================
-export { days, months, defaultDenominator, denominators, timezoneAbbrs, millisecondsInAMinute, millisecondsInAnHour };
+const timeEventPerSecond = "onTimeUpdatePerSecond";
+const timeEventPerMinute = "onTimeUpdatePerMinute";
+const timeEventPerHour = "onTimeUpdatePerHour";
+const timeEventPerDay = "onTimeUpdatePerDay";
+// ==============================================
+export {
+    days, months,
+    defaultDenominator, denominators, timezoneAbbrs,
+    millisecondsInAMinute, millisecondsInAnHour,
+    timeEventPerSecond, timeEventPerMinute, timeEventPerHour, timeEventPerDay
+};
 // ==============================================

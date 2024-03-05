@@ -1,5 +1,5 @@
 // ==============================================
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -15,12 +15,14 @@ import Timekeeper from '../../components/Timekeeper.jsx';
 import SearchBar from '../../components/SearchBar.jsx';
 import AddSchedule from '../../components/AddScheduleModal.jsx';
 
+import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
+
 import gameInfo from '../../data/gameInfo.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
-    millisecondsInAMinute, millisecondsInAnHour
+    millisecondsInAMinute, millisecondsInAnHour,
+    timeEventPerMinute
 } from '../../data/time.js';
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 // ==============================================
 export default function GameList() {
     // ===========================
@@ -30,84 +32,10 @@ export default function GameList() {
     const [createNewSchedule, setCreateNewSchedule] = useState(false);
     const handleHideScheduleModal = () => setCreateNewSchedule(false);
 
-    const now = new Date();
     const [targetGameName, setTargetGameName] = useState("");
 
     const [selectedGame, setSelectedGame] = useState(gameInfo[0]);
     const [selectedGameRegion, setSelectedGameRegion] = useState(gameInfo[0].supportedRegions[0]);
-
-    function renderGames(onCreateScheduleCallback = null) {
-        return gameInfo.map((game, gameIndex) => renderGameRegion(game, gameIndex, onCreateScheduleCallback));
-    }
-
-    function renderGameRegion(game, gameIndex, onCreateScheduleCallback = null) {
-        if ((targetGameName !== null && targetGameName !== undefined && targetGameName.trim().length > 0) &&
-            !game.title.toLowerCase().includes(targetGameName.toLowerCase()))
-            return null;
-
-        return game.supportedRegions.map((region, regionIndex) => {
-            const timeData = formatServerRegionTimeDisplay(`${game.title} [${region.name}]`, now,
-                region.serverResetHour, region.serverResetMinute, region.timezoneOffsetHours, region.timezoneOffsetMinutes);
-
-            return (
-                <Col key={`game-${gameIndex}-region-${regionIndex}`} className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
-                    <Card className="secondary-container shadow-sm">
-                        <Card.Header className="d-flex align-items-center justify-content-between">
-                            <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
-                                className="rounded me-2"
-                                style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
-                            <span className="fs-4 text-non-links">{game.title}</span>
-                            <span className="fs-6 text-non-links ms-auto">{region.name}</span>
-                        </Card.Header>
-                        <Card.Body>
-                            <Row className="w-100">
-                                <Col className="col-6">
-                                    <Card.Text className="fs-6 text-non-links fw-bold my-0">Local Reset Time:</Card.Text>
-                                    <Card.Text className="fs-6 text-non-links">
-                                        {timeData.localResetTime}
-                                    </Card.Text>
-                                    <Card.Text className="fs-6 text-non-links fw-bold my-0">Time Until Reset:</Card.Text>
-                                    <Card.Text className="fs-6 text-non-links">
-                                        {timeData.timeUntilReset}
-                                    </Card.Text>
-                                </Col>
-                                <Col className="col-6">
-                                    <Card.Text className="fs-6 text-non-links fw-bold my-0">Server Reset Time:</Card.Text>
-                                    <Card.Text className="fs-6 text-non-links">
-                                        {timeData.serverResetTime}
-                                    </Card.Text>
-                                    <Card.Text className="fs-6 text-non-links fw-bold my-0">Current Server Time:</Card.Text>
-                                    <Card.Text className="fs-6 text-non-links">
-                                        {timeData.currentServerTime}
-                                    </Card.Text>
-                                </Col>
-                            </Row>
-                        </Card.Body>
-                        {
-                            user ?
-                                (
-                                    <Card.Body>
-                                        <Row className="w-100 d-flex justify-content-center">
-                                            <Button
-                                                onClick={() => {
-                                                    setSelectedGame(game);
-                                                    setSelectedGameRegion(region);
-
-                                                    if (onCreateScheduleCallback)
-                                                        onCreateScheduleCallback(true);
-                                                }}
-                                                className="primary-container-contrast add-schedule-button primary-border">
-                                                Add to Schedule
-                                            </Button>
-                                        </Row>
-                                    </Card.Body>
-                                ) : null
-                        }
-                    </Card>
-                </Col>
-            );
-        });
-    }
 
     return (
         <>
@@ -119,7 +47,12 @@ export default function GameList() {
                     minWidth={30}
                     searchFilterCallback={(keyword) => setTargetGameName(keyword)} />
                 <Row className="w-100">
-                    {renderGames(() => setCreateNewSchedule(true))}
+                    <Games
+                        user={user}
+                        filteredGameName={targetGameName}
+                        setSelectedGameCallback={setSelectedGame}
+                        setSelectedGameRegionCallback={setSelectedGameRegion}
+                        onCreateScheduleCallback={() => setCreateNewSchedule(true)} />
                 </Row>
             </Container>
             <AddSchedule
@@ -128,6 +61,110 @@ export default function GameList() {
                 initialGame={selectedGame}
                 initialRegion={selectedGameRegion} />
         </>
+    );
+}
+
+function Games({ user, filteredGameName,
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    return gameInfo.map((game, gameIndex) => {
+        return (filteredGameName !== null && filteredGameName !== undefined && filteredGameName.trim().length > 0) &&
+            !game.title.toLowerCase().includes(filteredGameName.toLowerCase()) ? null : (
+            <GameRegions key={`game-${gameIndex}`}
+                user={user} game={game} gameIndex={gameIndex}
+                setSelectedGameCallback={setSelectedGameCallback}
+                setSelectedGameRegionCallback={setSelectedGameRegionCallback}
+                onCreateScheduleCallback={onCreateScheduleCallback} />
+        )
+    });
+}
+
+function GameRegions({ user, game, gameIndex,
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    return game.supportedRegions.map((region, regionIndex) =>
+        <GameRegion key={`game-${gameIndex}-region-${regionIndex}`}
+            user={user}
+            game={game} region={region}
+            setSelectedGameCallback={setSelectedGameCallback}
+            setSelectedGameRegionCallback={setSelectedGameRegionCallback}
+            onCreateScheduleCallback={onCreateScheduleCallback}
+        />
+    );
+}
+
+function GameRegion({ user, game, region,
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    const [timeData, setTimeData] = useState(reassignTimeData());
+
+    function reassignTimeData() {
+        return formatServerRegionTimeDisplay(`${game.title} [${region.name}]`, new Date(),
+            region.serverResetHour, region.serverResetMinute, region.timezoneOffsetHours, region.timezoneOffsetMinutes)
+    }
+    // ===========================
+    useEffect(() => {
+        const callbackPerMinute = () => setTimeData(reassignTimeData());
+        window.addEventListener(timeEventPerMinute, callbackPerMinute);
+
+        return (() => window.removeEventListener(timeEventPerMinute, callbackPerMinute));
+    });
+    // ===========================
+    return (
+        <Col className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
+            <Card className="secondary-container shadow-sm">
+                <Card.Header className="d-flex align-items-center justify-content-between">
+                    <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
+                        className="rounded me-2"
+                        style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
+                    <span className="fs-4 text-non-links">{game.title}</span>
+                    <span className="fs-6 text-non-links ms-auto">{region.name}</span>
+                </Card.Header>
+                <Card.Body>
+                    <Row className="w-100">
+                        <Col className="col-6">
+                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Local Reset Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links">
+                                {timeData.localResetTime}
+                            </Card.Text>
+                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Time Until Reset:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links">
+                                {timeData.timeUntilReset}
+                            </Card.Text>
+                        </Col>
+                        <Col className="col-6">
+                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Server Reset Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links">
+                                {timeData.serverResetTime}
+                            </Card.Text>
+                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Current Server Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links">
+                                {timeData.currentServerTime}
+                            </Card.Text>
+                        </Col>
+                    </Row>
+                </Card.Body>
+                {
+                    user ?
+                        (
+                            <Card.Body>
+                                <Row className="w-100 d-flex justify-content-center">
+                                    <Button
+                                        onClick={() => {
+                                            if (setSelectedGameCallback)
+                                                setSelectedGameCallback(game);
+                                            if (setSelectedGameRegionCallback)
+                                                setSelectedGameRegionCallback(region);
+
+                                            if (onCreateScheduleCallback)
+                                                onCreateScheduleCallback(true);
+                                        }}
+                                        className="primary-container-contrast add-schedule-button primary-border">
+                                        Add to Schedule
+                                    </Button>
+                                </Row>
+                            </Card.Body>
+                        ) : null
+                }
+            </Card>
+        </Col>
     );
 }
 // ==============================================
