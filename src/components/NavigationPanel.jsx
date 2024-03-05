@@ -55,11 +55,9 @@ export default function NavigationPanel({ foundingName }) {
     }
     // ===========================
     const [windowWidth, setWindowWidth] = useState(document.documentElement.clientWidth);
-    const [windowHeight, setWindowHeight] = useState(document.documentElement.clientHeight);
 
     const handleResize = () => {
         setWindowWidth(document.documentElement.clientWidth);
-        setWindowHeight(document.documentElement.clientHeight);
     };
 
     useEffect(() => {

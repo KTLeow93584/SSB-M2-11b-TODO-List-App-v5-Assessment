@@ -16,7 +16,7 @@ import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 import gameInfo from '../data/gameInfo.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
 // ==============================================
-export default function AddScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
+export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
 
@@ -93,18 +93,22 @@ export default function AddScheduleModal({ isVisible, handleClose, schedule, sch
     const handleSubmitModifiedSchedule = (event) => {
         event.preventDefault();
 
-        schedule.gameID = selectedGame.id;
-        schedule.alarmFile = alarmFile;
-        schedule.notifyTime = notifyTime;
-        schedule.description = description;
+        const newSchedule = {
+            id: schedule.id,
+            gameRegionName: selectedRegion.name,
+            gameID: selectedGame.id,
+            alarmFile: alarmFile,
+            notifyTime: notifyTime,
+            description: description,
+        };
 
         // Debug
-        //console.log("[Modified Schedule] Create.", modifiedSchedule);
+        //console.log("[Modified Schedule] Modify To:", newSchedule);
 
-        const taskIndex = user.tasks.findIndex((task) => task.id === schedule.id);
-        user.tasks[taskIndex] = schedule;
+        const taskIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID);
+        user.tasks[taskIndex] = newSchedule;
 
-        const data = { taskIndex: taskIndex, modifiedTaskData: schedule };
+        const data = { taskIndex: taskIndex, modifiedTaskData: newSchedule };
         dispatch(modifyTask(data));
         // ===============================
         userContext.updateActiveUserProfile("tasks", user.tasks);
