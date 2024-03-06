@@ -279,7 +279,7 @@ function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezo
     // ===============
     return {
         localResetTime: formatTime(serverResetDateOnClientTZ, true),
-        timeUntilReset: `${diffHours} hours ${diffMinutes} minutes`
+        timeUntilReset: `${diffHours} hour(s) ${diffMinutes} minute(s)`
     };
 }
 // ==============================================

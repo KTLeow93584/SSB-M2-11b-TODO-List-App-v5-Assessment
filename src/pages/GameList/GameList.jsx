@@ -22,7 +22,7 @@ import gameInfo from '../../data/gameInfo.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
     millisecondsInAMinute, millisecondsInAnHour,
-    timeEventPerSecond, timeEventPerMinute
+    timeEventPerMinute
 } from '../../data/time.js';
 // ==============================================
 export default function GameList() {
@@ -113,6 +113,7 @@ function GameRegions({ user, game, gameIndex,
 function GameRegion({ user, game, region,
     setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
     setScheduleCallback = null }) {
+    // ===========================
     const [timeData, setTimeData] = useState(reassignTimeData());
 
     function reassignTimeData() {
@@ -268,7 +269,7 @@ function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezo
     // ===============
     return {
         localResetTime: formatTime(serverResetDateOnClientTZ, true),
-        timeUntilReset: `${diffHours} hours ${diffMinutes} minutes`,
+        timeUntilReset: `${diffHours} hour(s) ${diffMinutes} minute(s)`,
         serverResetTime: formatTime(serverResetDate, true) + " " + timezoneDisplay,
         currentServerTime: formatTime(nowToServerDate, true) + " " + timezoneDisplay
     };

@@ -16,60 +16,87 @@ import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 import gameInfo from '../data/gameInfo.js';
 import {
     formatTime, millisecondsInAMinute, millisecondsInAnHour,
+    timeEventPerMinute,
     registerModifiedScheduleEvent
 } from '../data/time.js';
 // ==============================================
 export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
     // =============================
+    const dispatch = useDispatch();
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
 
-    const [selectedGame, setSelectedGame] = useState({
-        id: schedule ? schedule.gameID : gameInfo[0].id,
-        title: scheduleGameData.title,
-        supportedRegions: scheduleGameData.supportedRegions
+    const reassignTimeData = (game, region) => {
+        return formatServerRegionTimeDisplay(game, region, new Date(),
+            region.serverResetHour, region.serverResetMinute,
+            region.timezoneOffsetHours, region.timezoneOffsetMinutes)
+    };
+
+    const [modalData, setModalData] = useState({
+        game: scheduleGameData ? scheduleGameData : gameInfo[0],
+        region: scheduleRegionData ? scheduleRegionData : gameInfo[0].supportedRegions[0],
+        time: reassignTimeData(scheduleGameData ? scheduleGameData : gameInfo[0],
+            scheduleRegionData ? scheduleRegionData : gameInfo[0].supportedRegions[0])
     });
 
-    const [selectedRegion, setSelectedRegion] = useState(reformatRegionData(scheduleGameData, scheduleRegionData));
+    useEffect(() => {
+        setModalData({
+            game: scheduleGameData ? scheduleGameData : gameInfo[0],
+            region: scheduleRegionData ? scheduleRegionData : gameInfo[0].supportedRegions[0],
+            time: reassignTimeData(scheduleGameData ? scheduleGameData : gameInfo[0],
+                scheduleRegionData ? scheduleRegionData : gameInfo[0].supportedRegions[0])
+        });
+    }, [scheduleGameData]);
     // =============================
     const [description, setDescription] = useState(schedule ? schedule.description : "");
     const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
-    const [notifyTime, setNotifyTime] = useState(schedule ? schedule.notifyTime : "12.00");
-    // =============================
+    const [notifyTime, setNotifyTime] = useState(schedule ? schedule.notifyTime : "12:00");
+
     useEffect(() => {
-        setDescription(schedule ? schedule.description : "");
-        setAlarmFile(schedule ? schedule.alarmFile : null);
-        setNotifyTime(schedule ? schedule.notifyTime : "12.00");
+        if (schedule) {
+            setDescription(schedule.description);
+            setAlarmFile(schedule.alarmFile);
+            setNotifyTime(schedule.notifyTime);
+        }
     }, [schedule]);
-
-    useEffect(() => {
-        setSelectedGame({ id: scheduleGameData.id, title: scheduleGameData.title, supportedRegions: scheduleGameData.supportedRegions });
-    }, [scheduleGameData]);
-
-    useEffect(() => {
-        setSelectedRegion(() => reformatRegionData(scheduleGameData, scheduleRegionData));
-    }, [scheduleGameData, scheduleRegionData]);
     // =============================
-    const mappedGameEntries = gameInfo.map((game) => ({
-        id: game.id,
-        title: game.title,
-        supportedRegions: game.supportedRegions
-    }));
-    // =============================
-    const handleSelectGameID = (gameIDKey) => {
-        const gameIndex = mappedGameEntries.findIndex((game) => game.id === gameIDKey);
+    useEffect(() => {
+        const callbackPerMinute = () => setModalData((previousModalData) => (
+            {
+                game: previousModalData.game,
+                region: previousModalData.region,
+                time: reassignTimeData(previousModalData.game, previousModalData.region)
+            }
+        ));
+        window.addEventListener(timeEventPerMinute, callbackPerMinute);
 
-        setSelectedGame(mappedGameEntries[gameIndex]);
-        setSelectedRegion(reformatRegionData(mappedGameEntries[gameIndex], mappedGameEntries[gameIndex].supportedRegions[0]));
+        return (() => window.removeEventListener(timeEventPerMinute, callbackPerMinute));
+    }, []);
+    // =============================
+    const onSelectNewGameType = (gameIDKey) => {
+        const gameIndex = gameInfo.findIndex((game) => game.id === gameIDKey);
+
+        setModalData((previousModalData) => {
+            previousModalData.game = gameInfo[gameIndex];
+            previousModalData.region = gameInfo[gameIndex].supportedRegions[0];
+            previousModalData.time = reassignTimeData(gameInfo[gameIndex], gameInfo[gameIndex].supportedRegions[0]);
+
+            return previousModalData;
+        });
     };
 
-    const handleSelectRegion = (regionNameKey) => {
-        const regionIndex = selectedGame.supportedRegions.findIndex((region) => region.name === regionNameKey);
+    const onSelectNewGameRegion = (regionNameKey) => {
+        const regionIndex = modalData.game.supportedRegions.findIndex((region) => region.name === regionNameKey);
 
-        setSelectedRegion(reformatRegionData(selectedGame, selectedGame.supportedRegions[regionIndex]));
+        setModalData((previousModalData) => {
+            previousModalData.region = modalData.game.supportedRegions[regionIndex];
+            previousModalData.time = reassignTimeData(modalData.game, modalData.game.supportedRegions[regionIndex]);
+
+            return previousModalData;
+        });
     };
 
-    const handleAlarmFileUpload = (event) => {
+    const onUploadNewAlarmFile = (event) => {
         // ===================================================
         const file = event.target.files[0];
 
@@ -90,15 +117,14 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         // ===================================================
     };
     // =============================
-    const dispatch = useDispatch();
-    const handleSubmitModifiedSchedule = (event) => {
+    const onSubmitModifications = (event) => {
         event.preventDefault();
 
         const newSchedule = {
             id: schedule.id,
-            gameID: selectedGame.id,
-            title: selectedGame.title,
-            regionName: selectedRegion.name,
+            gameID: modalData.game.id,
+            title: modalData.game.title,
+            regionName: modalData.region.name,
             alarmFile: alarmFile,
             notifyTime: notifyTime,
             description: description
@@ -109,10 +135,10 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
 
         onModifyScheduleEvent(newSchedule);
 
-        const taskIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID);
-        user.tasks[taskIndex] = newSchedule;
+        const scheduleIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID && task.regionName === schedule.regionName);
+        user.tasks[scheduleIndex] = newSchedule;
 
-        const data = { taskIndex: taskIndex, modifiedTaskData: newSchedule };
+        const data = { taskIndex: scheduleIndex, modifiedTaskData: newSchedule };
         dispatch(modifyTask(data));
         // ===============================
         userContext.updateActiveUserProfile("tasks", user.tasks);
@@ -126,7 +152,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                 <Modal.Title>Modify an existing game notification schedule</Modal.Title>
             </Modal.Header>
 
-            <Form onSubmit={handleSubmitModifiedSchedule}>
+            <Form onSubmit={onSubmitModifications}>
                 <Modal.Body className="secondary-container">
                     <Form.Group>
                         {/* ----------------------------- */}
@@ -136,18 +162,18 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                                 <Form.Label className="text-non-links">Game: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
-                                <Dropdown onSelect={handleSelectGameID} key={selectedGame.id}>
+                                <Dropdown onSelect={onSelectNewGameType} key={modalData.game.id}>
                                     <Dropdown.Toggle id="game-id-dropdown">
-                                        {selectedGame.title}
+                                        {modalData.game.title}
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
                                         {
-                                            mappedGameEntries.map((gameEntry, index) => {
+                                            gameInfo.map((gameEntry, index) => {
                                                 return (
                                                     <Dropdown.Item key={`game-id-dropdown-element-${index}`}
                                                         eventKey={gameEntry.id}
-                                                        active={selectedGame.id === gameEntry.id}>
+                                                        active={modalData.game.id === gameEntry.id}>
                                                         {gameEntry.title}
                                                     </Dropdown.Item>
                                                 );
@@ -164,18 +190,18 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                                 <Form.Label className="text-non-links">Region: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
-                                <Dropdown onSelect={handleSelectRegion}>
+                                <Dropdown onSelect={onSelectNewGameRegion}>
                                     <Dropdown.Toggle id="game-region-id-dropdown">
-                                        {selectedRegion.name}
+                                        {modalData.region.name}
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
                                         {
-                                            selectedGame.supportedRegions.map((region, index) => {
+                                            modalData.game.supportedRegions.map((region, index) => {
                                                 return (
                                                     <Dropdown.Item key={`game-id-dropdown-element-${index}`}
                                                         eventKey={region.name}
-                                                        active={selectedRegion.name === region.name}>
+                                                        active={modalData.region.name === region.name}>
                                                         {region.name}
                                                     </Dropdown.Item>
                                                 );
@@ -187,8 +213,8 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         </Row>
                         <Row className="d-flex flex-column align-items-center mb-3">
                             <Col className="d-flex flex-column secondary-border me-3 py-2 rounded" style={{ width: "fit-content" }}>
-                                <Form.Text>{`Local Reset Time: ${selectedRegion.localResetTime}.`}</Form.Text>
-                                <Form.Text>{`Time Until Next Reset: ${selectedRegion.timeUntilReset}.`}</Form.Text>
+                                <Form.Text>{`Local Reset Time: ${modalData.time.localResetTime}.`}</Form.Text>
+                                <Form.Text>{`Time Until Next Reset: ${modalData.time.timeUntilReset}.`}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}
@@ -202,7 +228,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                                     className="text-non-links input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
-                                    onChange={(event) => handleAlarmFileUpload(event)} />
+                                    onChange={(event) => onUploadNewAlarmFile(event)} />
                             </Col>
                         </Row>
                         {/* ----------------------------- */}
@@ -275,6 +301,9 @@ function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezo
     serverResetDate.setDate(nowToServerDate.getDate());
     if (serverResetDate < nowToServerDate)
         serverResetDate.setDate(serverResetDate.getDate() + 1);
+
+    //console.log("Server.", serverResetDate);
+    //console.log("Now.", nowToServerDate);
     // ===============
     const diff = serverResetDate - nowToServerDate;
     const diffHours = Math.floor(diff / millisecondsInAnHour);
@@ -285,24 +314,8 @@ function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezo
     // ===============
     return {
         localResetTime: formatTime(serverResetDateOnClientTZ, true),
-        timeUntilReset: `${diffHours} hours ${diffMinutes} minutes`
+        timeUntilReset: `${diffHours} hour(s) ${diffMinutes} minute(s)`
     };
-}
-// ==============================================
-function reformatRegionData(game, region) {
-    const { localResetTime, timeUntilReset } = formatServerRegionTimeDisplay(game, region, new Date(),
-        region.serverResetHour, region.serverResetMinute,
-        region.timezoneOffsetHours, region.timezoneOffsetMinutes);
-
-    return {
-        name: region.name,
-        serverResetHour: region.serverResetHour,
-        serverResetMinute: region.serverResetMinute,
-        timezoneOffsetHours: region.timezoneOffsetHours,
-        timezoneOffsetMinutes: region.timezoneOffsetMinutes,
-        localResetTime,
-        timeUntilReset
-    }
 }
 // ==============================================
 function onModifyScheduleEvent(schedule) {
