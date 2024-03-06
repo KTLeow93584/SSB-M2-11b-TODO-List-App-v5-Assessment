@@ -13,7 +13,8 @@ import './GameList.css';
 
 import Timekeeper from '../../components/Timekeeper.jsx';
 import SearchBar from '../../components/SearchBar.jsx';
-import AddSchedule from '../../components/AddScheduleModal.jsx';
+import AddScheduleModal from '../../components/AddScheduleModal.jsx';
+import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 
@@ -30,8 +31,16 @@ export default function GameList() {
     const user = activeUserContext.activeUserObj ? activeUserContext.activeUserObj.user : null;
     // ===========================
     const [createNewSchedule, setCreateNewSchedule] = useState(false);
-    const handleHideScheduleModal = () => setCreateNewSchedule(false);
+    const handleHideNewScheduleModal = () => setCreateNewSchedule(false);
 
+    const [modifyExistingSchedule, setModifyExistingSchedule] = useState(false);
+    const [schedule, setSchedule] = useState(null);
+    const handleHideModifyScheduleModal = () => setModifyExistingSchedule(false);
+    const handleShowModifyScheduleModal = (scheduleIndex) => {
+        setSchedule(user.tasks[scheduleIndex]);
+        setModifyExistingSchedule(true);
+    };
+    // ===========================
     const [targetGameName, setTargetGameName] = useState("");
 
     const [selectedGame, setSelectedGame] = useState(gameInfo[0]);
@@ -52,20 +61,28 @@ export default function GameList() {
                         filteredGameName={targetGameName}
                         setSelectedGameCallback={setSelectedGame}
                         setSelectedGameRegionCallback={setSelectedGameRegion}
-                        onCreateScheduleCallback={() => setCreateNewSchedule(true)} />
+                        onCreateScheduleCallback={() => setCreateNewSchedule(true)}
+                        setScheduleCallback={handleShowModifyScheduleModal} />
                 </Row>
             </Container>
-            <AddSchedule
+            <AddScheduleModal
                 isVisible={createNewSchedule}
-                handleClose={handleHideScheduleModal}
+                handleClose={handleHideNewScheduleModal}
                 initialGame={selectedGame}
                 initialRegion={selectedGameRegion} />
+            <ModifyScheduleModal
+                isVisible={modifyExistingSchedule}
+                handleClose={handleHideModifyScheduleModal}
+                schedule={schedule}
+                scheduleGameData={selectedGame}
+                scheduleRegionData={selectedGameRegion} />
         </>
     );
 }
 
 function Games({ user, filteredGameName,
-    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
+    setScheduleCallback = null }) {
     return gameInfo.map((game, gameIndex) => {
         return (filteredGameName !== null && filteredGameName !== undefined && filteredGameName.trim().length > 0) &&
             !game.title.toLowerCase().includes(filteredGameName.toLowerCase()) ? null : (
@@ -73,13 +90,15 @@ function Games({ user, filteredGameName,
                 user={user} game={game} gameIndex={gameIndex}
                 setSelectedGameCallback={setSelectedGameCallback}
                 setSelectedGameRegionCallback={setSelectedGameRegionCallback}
-                onCreateScheduleCallback={onCreateScheduleCallback} />
+                onCreateScheduleCallback={onCreateScheduleCallback}
+                setScheduleCallback={setScheduleCallback} />
         )
     });
 }
 
 function GameRegions({ user, game, gameIndex,
-    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
+    setScheduleCallback = null }) {
     return game.supportedRegions.map((region, regionIndex) =>
         <GameRegion key={`game-${gameIndex}-region-${regionIndex}`}
             user={user}
@@ -87,12 +106,13 @@ function GameRegions({ user, game, gameIndex,
             setSelectedGameCallback={setSelectedGameCallback}
             setSelectedGameRegionCallback={setSelectedGameRegionCallback}
             onCreateScheduleCallback={onCreateScheduleCallback}
-        />
+            setScheduleCallback={setScheduleCallback} />
     );
 }
 
 function GameRegion({ user, game, region,
-    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null }) {
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
+    setScheduleCallback = null }) {
     const [timeData, setTimeData] = useState(reassignTimeData());
 
     function reassignTimeData() {
@@ -141,31 +161,68 @@ function GameRegion({ user, game, region,
                         </Col>
                     </Row>
                 </Card.Body>
-                {
-                    user ?
-                        (
-                            <Card.Body>
-                                <Row className="w-100 d-flex justify-content-center">
-                                    <Button
-                                        onClick={() => {
-                                            if (setSelectedGameCallback)
-                                                setSelectedGameCallback(game);
-                                            if (setSelectedGameRegionCallback)
-                                                setSelectedGameRegionCallback(region);
-
-                                            if (onCreateScheduleCallback)
-                                                onCreateScheduleCallback(true);
-                                        }}
-                                        className="primary-container-contrast add-schedule-button primary-border">
-                                        Add to Schedule
-                                    </Button>
-                                </Row>
-                            </Card.Body>
-                        ) : null
-                }
+                <RegisterSchedule game={game} region={region} user={user}
+                    setSelectedGameCallback={setSelectedGameCallback}
+                    setSelectedGameRegionCallback={setSelectedGameRegionCallback}
+                    onCreateScheduleCallback={onCreateScheduleCallback}
+                    setScheduleCallback={setScheduleCallback} />
             </Card>
         </Col>
     );
+}
+// ==============================================
+function RegisterSchedule({ game, region, user,
+    setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
+    setScheduleCallback = null }) {
+    let result = null;
+
+    if (user) {
+        const scheduleIndex = user.tasks.findIndex((schedule) => schedule.gameID === game.id && schedule.gameRegionName === region.name);
+
+        if (scheduleIndex !== -1) {
+            result = (
+                <Card.Body>
+                    <Row className="w-100 d-flex justify-content-center">
+                        <Button
+                            onClick={() => {
+                                if (setSelectedGameCallback)
+                                    setSelectedGameCallback(game);
+                                if (setSelectedGameRegionCallback)
+                                    setSelectedGameRegionCallback(region);
+
+                                if (setScheduleCallback)
+                                    setScheduleCallback(scheduleIndex);
+                            }}
+                            className="btn-secondary primary-border">
+                            Modify Existing Game Schedule
+                        </Button>
+                    </Row>
+                </Card.Body>
+            )
+        }
+        else {
+            result = (
+                <Card.Body>
+                    <Row className="w-100 d-flex justify-content-center">
+                        <Button
+                            onClick={() => {
+                                if (setSelectedGameCallback)
+                                    setSelectedGameCallback(game);
+                                if (setSelectedGameRegionCallback)
+                                    setSelectedGameRegionCallback(region);
+
+                                if (onCreateScheduleCallback)
+                                    onCreateScheduleCallback(true);
+                            }}
+                            className="primary-container-contrast add-schedule-button primary-border">
+                            Add to Schedule
+                        </Button>
+                    </Row>
+                </Card.Body>
+            );
+        }
+    }
+    return result;
 }
 // ==============================================
 function formatServerRegionTimeDisplay(gameName, now, hours, minutes, timezoneHours, timezoneMinutes) {

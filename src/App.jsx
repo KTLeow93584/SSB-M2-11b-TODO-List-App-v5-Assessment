@@ -1,14 +1,19 @@
+// ==============================================
+import { useEffect } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
 
 import Container from 'react-bootstrap/Container';
 
-import UserAuth from './auths/UserAuth.jsx';
 import GuestAuth from './auths/GuestAuth.jsx';
+import UserAuth from './auths/UserAuth.jsx';
 
-import NavigationPanel from './components/NavigationPanel.jsx';
 import Footer from './components/Footer.jsx';
+import NavigationPanel from './components/NavigationPanel.jsx';
+
+import { ActiveUserContextProvider } from './contexts/ActiveUserContext.jsx';
+import { ModeContextProvider } from './contexts/ModeContext.jsx';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
@@ -20,13 +25,11 @@ import HertaKuru from './pages/HertaKuru';
 import ErrorPage from './pages/ErrorPage';
 
 import users from './data/users.js';
+
 import { store } from './store.jsx';
 
-import { ModeContextProvider } from './contexts/ModeContext.jsx';
-import { ActiveUserContextProvider } from './contexts/ActiveUserContext.jsx';
-
 import './App.css';
-
+// ==============================================
 export function MainLayout() {
   return (
     <>
@@ -38,7 +41,7 @@ export function MainLayout() {
     </>
   );
 }
-
+// ==============================================
 function App() {
   // For pre-loading the cached List of Users Data.
   const [userList, setUserList] = useLocalStorage("users", users);
@@ -86,3 +89,4 @@ function App() {
 }
 
 export default App;
+// ==============================================

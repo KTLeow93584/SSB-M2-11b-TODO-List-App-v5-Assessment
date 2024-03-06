@@ -17,6 +17,7 @@ import gameInfo from '../data/gameInfo.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
 // ==============================================
 export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
+    // =============================
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
 
@@ -26,10 +27,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         supportedRegions: scheduleGameData.supportedRegions
     });
 
-    const [selectedRegion, setSelectedRegion] = useState(() =>
-        reformatRegionData(scheduleGameData, scheduleRegionData)
-    );
-
+    const [selectedRegion, setSelectedRegion] = useState(reformatRegionData(scheduleGameData, scheduleRegionData));
     // =============================
     const [description, setDescription] = useState(schedule ? schedule.description : "");
     const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
@@ -119,7 +117,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     return (
         <Modal size="xl" show={isVisible} onHide={handleClose}>
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title>Create a new game notification schedule</Modal.Title>
+                <Modal.Title>Modify an existing game notification schedule</Modal.Title>
             </Modal.Header>
 
             <Form onSubmit={handleSubmitModifiedSchedule}>

@@ -132,7 +132,9 @@ export default function Schedule() {
                     })
                 }
             </Row>
-            <ModifyScheduleModal isVisible={modifyExistingSchedule} handleClose={handleHideScheduleModal}
+            <ModifyScheduleModal
+                isVisible={modifyExistingSchedule}
+                handleClose={handleHideScheduleModal}
                 schedule={schedule}
                 scheduleGameData={gameInfo[selectedGameIndex]}
                 scheduleRegionData={gameInfo[selectedGameIndex].supportedRegions[selectedRegionIndex]} />
