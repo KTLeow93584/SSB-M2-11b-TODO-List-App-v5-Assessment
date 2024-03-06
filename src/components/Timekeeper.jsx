@@ -56,9 +56,11 @@ function onSecondsChanged(previousNow, currentNow, onSecondChangedCallback = nul
         //console.log("Diff: " + updatedNowInterval.getSeconds() + ", " + time.getSeconds());
 
         const timeEvent = new CustomEvent(timeEventPerSecond, {
-            time: {
-                date: previousNow.getDate(), hour: previousNow.getHours(),
-                minute: previousNow.getMinutes(), second: previousNow.getSeconds()
+            detail: {
+                time: {
+                    date: previousNow.getDate(), hour: previousNow.getHours(),
+                    minute: previousNow.getMinutes(), second: previousNow.getSeconds()
+                }
             }
         });
         window.dispatchEvent(timeEvent);
@@ -73,9 +75,11 @@ function onMinutesChanged(previousNow, currentNow, onMinuteChangedCallback = nul
     // Send out a message ("onTimeUpdate") to all listening components.
     if (previousNow.getMinutes() !== currentNow.getMinutes()) {
         const timeEvent = new CustomEvent(timeEventPerMinute, {
-            time: {
-                date: previousNow.getDate(), hour: previousNow.getHours(),
-                minute: previousNow.getMinutes(), second: previousNow.getSeconds()
+            detail: {
+                time: {
+                    date: previousNow.getDate(), hour: previousNow.getHours(),
+                    minute: previousNow.getMinutes(), second: previousNow.getSeconds()
+                }
             }
         });
         window.dispatchEvent(timeEvent);
@@ -91,9 +95,11 @@ function onHoursChanged(previousNow, currentNow, onHourChangedCallback = null) {
     // Update the date.
     if (currentNow.getHours() !== previousNow.getHours()) {
         const timeEvent = new CustomEvent(timeEventPerHour, {
-            time: {
-                date: currentNow.getDate(), hour: currentNow.getHours(),
-                minute: currentNow.getMinutes(), second: currentNow.getSeconds()
+            detail: {
+                time: {
+                    date: currentNow.getDate(), hour: currentNow.getHours(),
+                    minute: currentNow.getMinutes(), second: currentNow.getSeconds()
+                }
             }
         });
         window.dispatchEvent(timeEvent);
@@ -108,15 +114,17 @@ function onDaysChanged(previousNow, currentNow, onDateChangedCallback = null) {
     // Update the date.
     if (currentNow.getDate() !== previousNow.getDate()) {
         const timeEvent = new CustomEvent(timeEventPerDay, {
-            time: {
-                date: currentNow.getDate(), hour: currentNow.getHours(),
-                minute: currentNow.getMinutes(), second: currentNow.getSeconds()
+            detail: {
+                time: {
+                    date: currentNow.getDate(), hour: currentNow.getHours(),
+                    minute: currentNow.getMinutes(), second: currentNow.getSeconds()
+                }
             }
         });
         window.dispatchEvent(timeEvent);
-
-        if (onDateChangedCallback)
-            onDateChangedCallback();
     }
+
+    if (onDateChangedCallback)
+        onDateChangedCallback();
 }
 // ==============================================

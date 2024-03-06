@@ -16,7 +16,7 @@ import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import { removeTask } from '../../feature/tasks/tasksSlice.jsx';
 
-import { formatTime } from '../../data/time.js';
+import { formatTime, registerScheduleTimerRemovalEvent } from '../../data/time.js';
 import gameInfo from '../../data/gameInfo.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -39,6 +39,8 @@ export default function Schedule() {
         let newTasks = user.tasks;
         const taskIndex = newTasks.findIndex((task) => task.id === id);
 
+        onRegisterScheduleRemovalEvent(user.tasks[taskIndex].gameID);
+
         user.tasks.splice(taskIndex, 1);
         userContext.updateActiveUserProfile("tasks", newTasks);
     };
@@ -57,7 +59,7 @@ export default function Schedule() {
                     scheduleList.map((schedule, index) => {
                         const targetGameIndex = gameInfo.findIndex((game) => game.id === schedule.gameID);
                         const targetRegionIndex = gameInfo[targetGameIndex].supportedRegions.findIndex(
-                            (region) => region.name === schedule.gameRegionName);
+                            (region) => region.name === schedule.regionName);
 
                         const date = new Date();
                         const notifyTimeSplit = schedule.notifyTime.split(":");
@@ -153,5 +155,10 @@ export default function Schedule() {
             </Row>
         </Container>
     );
+}
+// ==============================================
+function onRegisterScheduleRemovalEvent(gameID) {
+    const timeEvent = new CustomEvent(registerScheduleTimerRemovalEvent, { detail: { gameID: gameID } });
+    window.dispatchEvent(timeEvent);
 }
 // ==============================================

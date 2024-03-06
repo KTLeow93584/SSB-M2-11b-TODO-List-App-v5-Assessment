@@ -126,11 +126,17 @@ const timeEventPerSecond = "onTimeUpdatePerSecond";
 const timeEventPerMinute = "onTimeUpdatePerMinute";
 const timeEventPerHour = "onTimeUpdatePerHour";
 const timeEventPerDay = "onTimeUpdatePerDay";
+
+const registerNewScheduleEvent = "onRegisterNewScheduleTimer";
+const registerModifiedScheduleEvent = "onModifyRegisteredScheduleTimer";
+const registerScheduleTimerRemovalEvent = "onRemoveScheduleTimer";
+const registerCachedScheduleEvent = "onRegisterCachedScheduleTimer";
 // ==============================================
 export {
     days, months,
     defaultDenominator, denominators, timezoneAbbrs,
     millisecondsInAMinute, millisecondsInAnHour,
-    timeEventPerSecond, timeEventPerMinute, timeEventPerHour, timeEventPerDay
+    timeEventPerSecond, timeEventPerMinute, timeEventPerHour, timeEventPerDay,
+    registerNewScheduleEvent, registerModifiedScheduleEvent, registerScheduleTimerRemovalEvent, registerCachedScheduleEvent
 };
 // ==============================================

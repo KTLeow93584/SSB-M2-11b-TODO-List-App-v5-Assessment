@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { ModeContextGet } from '../../contexts/ModeContext.jsx';
-
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -14,8 +12,12 @@ import Image from 'react-bootstrap/Image';
 import Nav from 'react-bootstrap/Nav';
 
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
-import './Login.css';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
+import { registerCachedScheduleEvent } from '../../data/time.js';
+
+import './Login.css';
+// ==============================================
 export default function Login() {
     const modeContext = ModeContextGet();
     const activeUserContext = ActiveUserContextGet();
@@ -23,8 +25,30 @@ export default function Login() {
 
     const navigate = useNavigate();
 
-    const handleLogin = (email, password, onProcessCallback) =>
-        login(email, password, () => navigate("/"), () => onProcessCallback(true));
+    const handleLogin = (email, password, onProcessSuccessfulCallback = null, onProcessFailedCallback = null) => {
+        login(email, password,
+            // On Successful Login Process
+            (loggedInUserObj) => {
+                // =======================
+                // Dial up the "Register User's Cached Schedules" Event from "App.jsx".
+                const timeEvent = new CustomEvent(registerCachedScheduleEvent);
+                window.dispatchEvent(timeEvent);
+                // =======================
+                // Debug
+                //console.log("On Successfully Logged In", loggedInUserObj);
+                // =======================
+                navigate("/");
+
+                if (onProcessSuccessfulCallback)
+                    onProcessSuccessfulCallback(loggedInUserObj);
+            },
+            // On Failed Login Process
+            () => {
+                if (onProcessFailedCallback)
+                    onProcessFailedCallback(true);
+            }
+        );
+    };
     const pageMode = modeContext.useDarkMode ? "dark" : "light";
 
     return (
@@ -78,7 +102,7 @@ function LoginForm({ successfulCallback }) {
                     event.preventDefault();
 
                     if (successfulCallback)
-                        successfulCallback(email, password, (state) => setInvalidUser(state));
+                        successfulCallback(email, password, null, (state) => setInvalidUser(state));
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
@@ -167,3 +191,4 @@ function LoginForm({ successfulCallback }) {
         </>
     );
 }
+// ==============================================

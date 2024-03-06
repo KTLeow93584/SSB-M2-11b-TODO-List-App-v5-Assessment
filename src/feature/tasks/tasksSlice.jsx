@@ -11,7 +11,7 @@ const tasksSlice = createSlice({
             const newTask = {
                 id: action.payload.id,
                 gameID: action.payload.gameID,
-                gameRegionName: action.payload.gameRegionName,
+                regionName: action.payload.regionName,
                 description: action.payload.description,
                 deadline: action.payload.deadline,
                 alarmSound: action.payload.alarmSound

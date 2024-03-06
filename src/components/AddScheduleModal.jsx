@@ -14,7 +14,7 @@ import { createTask } from '../feature/tasks/tasksSlice.jsx';
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 import gameInfo from '../data/gameInfo.js';
-import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
+import { formatTime, millisecondsInAMinute, millisecondsInAnHour, registerNewScheduleEvent } from '../data/time.js';
 // ==============================================
 export default function AddScheduleModal({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
     const userContext = ActiveUserContextGet();
@@ -85,12 +85,14 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
 
     const dispatch = useDispatch();
     const handleSubmitNewSchedule = (event) => {
+        // ===============================
         event.preventDefault();
 
         const newSchedule = {
             id: new Date().toISOString(),
             gameID: selectedGame.id,
-            gameRegionName: selectedRegion.name,
+            title: selectedGame.title,
+            regionName: selectedRegion.name,
             alarmFile: alarmFile,
             notifyTime: notifyTime,
             description: description
@@ -98,6 +100,8 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
 
         // Debug
         //console.log("[New Schedule] Create.", newSchedule);
+
+        onRegisterScheduleEvent(newSchedule);
 
         dispatch(createTask(newSchedule));
         // ===============================
@@ -286,5 +290,18 @@ function reformatRegionData(game, region) {
         localResetTime,
         timeUntilReset
     }
+}
+// ==============================================
+function onRegisterScheduleEvent(schedule) {
+    const timeEvent = new CustomEvent(registerNewScheduleEvent, {
+        detail: {
+            gameID: schedule.gameID,
+            title: schedule.title,
+            regionName: schedule.regionName,
+            notifyTime: schedule.notifyTime,
+            alarmFile: schedule.alarmFile
+        }
+    });
+    window.dispatchEvent(timeEvent);
 }
 // ==============================================

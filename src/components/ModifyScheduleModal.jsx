@@ -14,7 +14,10 @@ import { modifyTask } from '../feature/tasks/tasksSlice.jsx';
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 import gameInfo from '../data/gameInfo.js';
-import { formatTime, millisecondsInAMinute, millisecondsInAnHour } from '../data/time.js';
+import {
+    formatTime, millisecondsInAMinute, millisecondsInAnHour,
+    registerModifiedScheduleEvent
+} from '../data/time.js';
 // ==============================================
 export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
     // =============================
@@ -93,15 +96,18 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
 
         const newSchedule = {
             id: schedule.id,
-            gameRegionName: selectedRegion.name,
             gameID: selectedGame.id,
+            title: selectedGame.title,
+            regionName: selectedRegion.name,
             alarmFile: alarmFile,
             notifyTime: notifyTime,
-            description: description,
+            description: description
         };
 
         // Debug
         //console.log("[Modified Schedule] Modify To:", newSchedule);
+
+        onModifyScheduleEvent(newSchedule);
 
         const taskIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID);
         user.tasks[taskIndex] = newSchedule;
@@ -233,8 +239,8 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                 </Modal.Body>
 
                 <Modal.Footer className="secondary-container">
-                    <Button type="submit" variant="primary">Add</Button>
-                    <Button variant="danger" onClick={handleClose}>Discard</Button>
+                    <Button type="submit" variant="primary">Save Changes</Button>
+                    <Button variant="danger" onClick={handleClose}>Discard Changes</Button>
                 </Modal.Footer>
             </Form>
         </Modal>
@@ -294,5 +300,18 @@ function reformatRegionData(game, region) {
         localResetTime,
         timeUntilReset
     }
+}
+// ==============================================
+function onModifyScheduleEvent(schedule) {
+    const timeEvent = new CustomEvent(registerModifiedScheduleEvent, {
+        detail: {
+            gameID: schedule.gameID,
+            title: schedule.title,
+            regionName: schedule.regionName,
+            notifyTime: schedule.notifyTime,
+            alarmFile: schedule.alarmFile
+        }
+    });
+    window.dispatchEvent(timeEvent);
 }
 // ==============================================

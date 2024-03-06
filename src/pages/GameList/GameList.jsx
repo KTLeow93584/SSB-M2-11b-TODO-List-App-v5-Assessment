@@ -22,7 +22,7 @@ import gameInfo from '../../data/gameInfo.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
     millisecondsInAMinute, millisecondsInAnHour,
-    timeEventPerMinute
+    timeEventPerSecond, timeEventPerMinute
 } from '../../data/time.js';
 // ==============================================
 export default function GameList() {
@@ -177,7 +177,7 @@ function RegisterSchedule({ game, region, user,
     let result = null;
 
     if (user) {
-        const scheduleIndex = user.tasks.findIndex((schedule) => schedule.gameID === game.id && schedule.gameRegionName === region.name);
+        const scheduleIndex = user.tasks.findIndex((schedule) => schedule.gameID === game.id && schedule.regionName === region.name);
 
         if (scheduleIndex !== -1) {
             result = (

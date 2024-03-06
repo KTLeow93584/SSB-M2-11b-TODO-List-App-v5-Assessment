@@ -49,7 +49,7 @@ export function ActiveUserContextProvider({ children }) {
 
         if (loggedInUserObj.user !== null) {
             if (onProcessSuccessfulCallback)
-                onProcessSuccessfulCallback();
+                onProcessSuccessfulCallback(loggedInUserObj);
         }
         else {
             if (onProcessFailedCallback)

@@ -17,6 +17,8 @@ module.exports = {
       'warn',
       { allowConstantExport: true },
     ],
-    'react/prop-types': 'off'
+    'react/prop-types': 'off',
+    // Line below is to disable the warning about dependency arrays in "useEffect" calls. Especially problematic in "App.jsx".
+    'react-hooks/exhaustive-deps': 'off'
   },
 }
