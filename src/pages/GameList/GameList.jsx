@@ -116,7 +116,7 @@ function GameRegion({ user, game, region,
     const [timeData, setTimeData] = useState(reassignTimeData());
 
     function reassignTimeData() {
-        return formatServerRegionTimeDisplay(`${game.title} [${region.name}]`, new Date(),
+        return formatServerRegionTimeDisplay(game, region, new Date(),
             region.serverResetHour, region.serverResetMinute, region.timezoneOffsetHours, region.timezoneOffsetMinutes)
     }
     // ===========================
@@ -225,10 +225,10 @@ function RegisterSchedule({ game, region, user,
     return result;
 }
 // ==============================================
-function formatServerRegionTimeDisplay(gameName, now, hours, minutes, timezoneHours, timezoneMinutes) {
+function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezoneHours, timezoneMinutes) {
     // ===============
     // Debug
-    //console.log("--------" + gameName + "----------");
+    //console.log("--------" + game.title + " [" + region.name + "]----------");
     //console.log(`[Parameters] Hour: ${hours}, Minute: ${minutes}, TZ Hour: ${timezoneHours}, TZ Minute: ${timezoneMinutes}`);
 
     // Debug

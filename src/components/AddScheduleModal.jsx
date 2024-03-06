@@ -107,6 +107,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         // ===============================
         userContext.updateActiveUserProfile("tasks", [...user.tasks, newSchedule]);
         // ===============================
+        setDescription("");
+        setAlarmFile(null);
+        setNotifyTime("12:00");
+        // ===============================
         handleClose();
     };
     // =============================
@@ -237,10 +241,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     );
 }
 // ==============================================
-function formatServerRegionTimeDisplay(game, now, hours, minutes, timezoneHours, timezoneMinutes) {
+function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezoneHours, timezoneMinutes) {
     // ===============
     // Debug
-    //console.log("--------" + game + "----------");
+    //console.log("--------" + game.title + " [" + region.name + "]----------");
     //console.log(`[Parameters] Hour: ${hours}, Minute: ${minutes}, TZ Hour: ${timezoneHours}, TZ Minute: ${timezoneMinutes}`);
 
     const serverResetDate = new Date();
@@ -250,18 +254,21 @@ function formatServerRegionTimeDisplay(game, now, hours, minutes, timezoneHours,
     //console.log(`[Server] Date Post-Adjustment:[` +
     //`${serverResetDate.getHours().toString().padStart(2, "0") + ":" + serverResetDate.getMinutes().toString().padStart(2, "0")}]`);
     // ===============
-    if (serverResetDate < now)
-        serverResetDate.setDate(serverResetDate.getDate() + 1);
-
     const serverTZ = (timezoneHours * 60 + timezoneMinutes);
     const clientTZ = now.getTimezoneOffset() * -1;
     const serverTZOffsetFromClient = (serverTZ - clientTZ) * millisecondsInAMinute;
 
     // Debug
-    // console.log(`[Server (${serverTZ} mins) And Client (${clientTZ} mins)] Offset (milliseconds): ${serverTZOffsetFromClient} ms.`);
+    //console.log(`[Server (${serverTZ} mins) And Client (${clientTZ} mins)] Offset (milliseconds): ${serverTZOffsetFromClient} ms.`);
     // ===============
-    const nowToServerDate = new Date()
-    nowToServerDate.setTime(now.getTime() + serverTZOffsetFromClient);
+    const nowToServerDate = new Date();
+    nowToServerDate.setTime(nowToServerDate.getTime() + serverTZOffsetFromClient);
+
+    // Sync up [Server Reset Date] to [Current System's Date (Post-parse to server time zone)].
+    // The former can be 1 day behind when, e.g. it's 11pm in GMT+8 (Local Time) but 1am in GMT+10 (Server Time)
+    serverResetDate.setDate(nowToServerDate.getDate());
+    if (serverResetDate < nowToServerDate)
+        serverResetDate.setDate(serverResetDate.getDate() + 1);
     // ===============
     const diff = serverResetDate - nowToServerDate;
     const diffHours = Math.floor(diff / millisecondsInAnHour);
@@ -277,7 +284,7 @@ function formatServerRegionTimeDisplay(game, now, hours, minutes, timezoneHours,
 }
 // ==============================================
 function reformatRegionData(game, region) {
-    const { localResetTime, timeUntilReset } = formatServerRegionTimeDisplay(game, new Date(),
+    const { localResetTime, timeUntilReset } = formatServerRegionTimeDisplay(game, region, new Date(),
         region.serverResetHour, region.serverResetMinute,
         region.timezoneOffsetHours, region.timezoneOffsetMinutes);
 
