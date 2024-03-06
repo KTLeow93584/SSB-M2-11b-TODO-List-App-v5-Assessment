@@ -57,9 +57,9 @@ export default function HertaKuru() {
     };
 
     return (
-        <Container fluid className="primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden" }}>
+        <Container fluid className="primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden", position: "relative" }}>
             <Row className="d-flex flex-column align-items-center herta-container m-0 p-0">
-                <Col className="col-12" style={{ zIndex: 2 }}>
+                <Col className="col-12" style={{ zIndex: 2, position: "relative" }}>
                     <h1 className="text-light text-center m-0 p-0">Kuru Kuru~</h1>
 
                     <hr className="horizontal-line-text herta-horizontal-line mx-5" style={{ border: "dashed" }} />
@@ -68,7 +68,7 @@ export default function HertaKuru() {
                         The webpage dedicated for Herta, the cutest genius Honkai Star Rail Character to ever exist.
                     </h2>
                 </Col>
-                <Col className="col-12 mt-5" style={{ zIndex: 2 }}>
+                <Col className="col-12 mt-5" style={{ zIndex: 2, position: "relative" }}>
                     <p className="fs-6 text-light fw-bold text-center m-0 p-0 mb-5">
                         The kuru~ has been squished
                     </p>
@@ -80,7 +80,7 @@ export default function HertaKuru() {
                     </p>
                 </Col>
 
-                <Col className="col-12 mt-3" style={{ zIndex: 2 }}>
+                <Col className="col-12 mt-3" style={{ zIndex: 2, position: "relative" }}>
                     <div className="d-flex justify-content-center">
                         <Button variant="primary" className="fs-6 fw-bold" onClick={playKuru}>
                             Squish the kuru~!
@@ -89,7 +89,7 @@ export default function HertaKuru() {
                     <hr className="horizontal-line-text herta-horizontal-line mx-5" style={{ border: "dashed" }} />
                 </Col>
 
-                <Col className="col-12 mt-3" style={{ zIndex: 1 }}>
+                <Col className="col-12 mt-3" style={{ zIndex: 1, position: "relative" }}>
                     {
                         kuruImgList.length > 0 ? kuruImgList.map((img) => img.htmlElement) : null
                     }
@@ -101,7 +101,7 @@ export default function HertaKuru() {
                     </div>
                 </Col>
             </Row>
-            <Row className="d-flex align-items-center primary-container mx-0 mb-0 mt-3 p-0">
+            <Row className="d-flex align-items-center primary-container mx-0 mb-0 mt-3 p-0" style={{ position: "relative" }}>
                 <Col className="col-6 mb-3 mx-auto">
                     <Image src={new URL("../../assets/kuru-kuru/card.webp", import.meta.url)}
                         style={{ width: "100%", height: "auto" }} />
