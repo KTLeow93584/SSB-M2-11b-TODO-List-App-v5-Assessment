@@ -21,7 +21,7 @@ import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import gameInfo from '../../data/gameInfo.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
-    millisecondsInAMinute, millisecondsInAnHour,
+    millisecondsInAMinute, millisecondsInAnHour, timezoneAbbrs,
     timeEventPerMinute
 } from '../../data/time.js';
 // ==============================================
@@ -270,8 +270,8 @@ function formatServerRegionTimeDisplay(game, region, now, hours, minutes, timezo
     return {
         localResetTime: formatTime(serverResetDateOnClientTZ, true),
         timeUntilReset: `${diffHours} hour(s) ${diffMinutes} minute(s)`,
-        serverResetTime: formatTime(serverResetDate, true) + " " + timezoneDisplay,
-        currentServerTime: formatTime(nowToServerDate, true) + " " + timezoneDisplay
+        serverResetTime: formatTime(serverResetDate, true) + " " + timezoneAbbrs[timezoneDisplay.replace("GMT", "")],
+        currentServerTime: formatTime(nowToServerDate, true) + " " + timezoneAbbrs[timezoneDisplay.replace("GMT", "")]
     };
 }
 // ==============================================

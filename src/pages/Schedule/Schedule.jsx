@@ -145,7 +145,7 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                     { /* ------------------------------------- */}
                     {/* Alarm Time At */}
                     <div className="d-flex align-items-center mb-3">
-                        <Card.Title className="fs-5 text-non-links me-3 my-0 py-0">Alarm Time: </Card.Title>
+                        <Card.Title className="fs-5 text-non-links me-3 my-0 py-0">Local Alarm Time: </Card.Title>
                         <Card.Text className="fs-6 fw-bold text-non-links my-0 py-0">
                             {alarmTime}
                         </Card.Text>
