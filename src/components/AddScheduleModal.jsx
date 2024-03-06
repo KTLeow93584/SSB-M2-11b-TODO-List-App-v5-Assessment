@@ -43,17 +43,11 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     const [alarmFile, setAlarmFile] = useState(null);
     const [notifyTime, setNotifyTime] = useState("12:00");
     // =============================
-    const mappedGameEntries = gameInfo.map((game) => ({
-        id: game.id,
-        title: game.title,
-        supportedRegions: game.supportedRegions
-    }));
-    // =============================
     const handleSelectGameID = (gameIDKey) => {
-        const gameIndex = mappedGameEntries.findIndex((game) => game.id === gameIDKey);
+        const gameIndex = gameInfo.findIndex((game) => game.id === gameIDKey);
 
-        setSelectedGame(mappedGameEntries[gameIndex]);
-        setSelectedRegion(reformatRegionData(mappedGameEntries[gameIndex], mappedGameEntries[gameIndex].supportedRegions[0]));
+        setSelectedGame(gameInfo[gameIndex]);
+        setSelectedRegion(reformatRegionData(gameInfo[gameIndex], gameInfo[gameIndex].supportedRegions[0]));
     };
 
     const handleSelectRegion = (regionNameKey) => {
@@ -137,12 +131,12 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
 
                                     <Dropdown.Menu>
                                         {
-                                            mappedGameEntries.map((gameEntry, index) => {
+                                            gameInfo.map((game, index) => {
                                                 return (
                                                     <Dropdown.Item key={`game-id-dropdown-element-${index}`}
-                                                        eventKey={gameEntry.id}
-                                                        active={selectedGame.id === gameEntry.id}>
-                                                        {gameEntry.title}
+                                                        eventKey={game.id}
+                                                        active={selectedGame.id === game.id}>
+                                                        {game.title}
                                                     </Dropdown.Item>
                                                 );
                                             })
@@ -166,7 +160,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                                     <Dropdown.Menu>
                                         {
                                             selectedGame.supportedRegions.map((region, index) => {
-                                                return (
+                                                const existingSchedule = user.tasks.find((schedule) => schedule.gameID === selectedGame.id &&
+                                                    schedule.regionName === region.name);
+
+                                                return existingSchedule ? null : (
                                                     <Dropdown.Item key={`game-id-dropdown-element-${index}`}
                                                         eventKey={region.name}
                                                         active={selectedRegion.name === region.name}>

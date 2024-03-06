@@ -46,7 +46,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
             time: reassignTimeData(scheduleGameData ? scheduleGameData : gameInfo[0],
                 scheduleRegionData ? scheduleRegionData : gameInfo[0].supportedRegions[0])
         });
-    }, [scheduleGameData]);
+    }, [scheduleGameData, scheduleRegionData]);
     // =============================
     const [description, setDescription] = useState(schedule ? schedule.description : "");
     const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
@@ -198,7 +198,10 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                                     <Dropdown.Menu>
                                         {
                                             modalData.game.supportedRegions.map((region, index) => {
-                                                return (
+                                                const existingSchedule = user.tasks.find((schedule) => schedule.gameID === modalData.game.id &&
+                                                    schedule.regionName === region.name);
+
+                                                return (existingSchedule && existingSchedule !== schedule) ? null : (
                                                     <Dropdown.Item key={`game-id-dropdown-element-${index}`}
                                                         eventKey={region.name}
                                                         active={modalData.region.name === region.name}>
