@@ -29,7 +29,8 @@ import {
   registerNewScheduleEvent,
   registerModifiedScheduleEvent,
   registerScheduleTimerRemovalEvent,
-  registerCachedScheduleEvent
+  registerCachedScheduleEvent,
+  registerAllScheduleRemovalEvent
 } from './data/time.js';
 import users from './data/users.js';
 
@@ -127,18 +128,25 @@ export function MainLayout() {
     // ======================
     // Callback when adding a new schedule timer.
     const addNewScheduleTimerCallback = (event) => {
-      const schedule = event.detail;
-      const now = new Date();
-      const notifyDate = getNotifyDate(now, schedule);
-      const durationToAlarmMS = notifyDate.getTime() - now.getTime();
+      setScheduleTimers((prevScheduleTimers) => {
+        const schedule = event.detail;
+        const now = new Date();
+        const notifyDate = getNotifyDate(now, schedule);
+        const durationToAlarmMS = notifyDate.getTime() - now.getTime();
 
-      const newScheduleTimer = {
-        id: schedule.gameID,
-        timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
-        durationToAlarmMS: durationToAlarmMS
-      };
+        const newScheduleTimer = {
+          id: schedule.gameID,
+          timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
+          durationToAlarmMS: durationToAlarmMS
+        };
 
-      setScheduleTimers((prevScheduleTimers) => [...prevScheduleTimers, newScheduleTimer]);
+        const newTimerList = prevScheduleTimers && prevScheduleTimers.length > 0 ? [...prevScheduleTimers, newScheduleTimer] : [newScheduleTimer];
+
+        // Debug
+        console.log("[On Add New Schedule Timer] New Timer List.", newTimerList);
+
+        return newTimerList;
+      });
     };
     window.addEventListener(registerNewScheduleEvent, addNewScheduleTimerCallback);
     // ======================
@@ -147,7 +155,7 @@ export function MainLayout() {
       const schedule = event.detail;
       setScheduleTimers((prevScheduleTimers) => {
         // Debug
-        //console.log("[On Modify an existing Timer] Pre Update.", prevScheduleTimers);
+        console.log("[On Modify an existing Timer] Pre Update.", prevScheduleTimers);
 
         const now = new Date();
 
@@ -161,7 +169,7 @@ export function MainLayout() {
         prevScheduleTimers[existingTimerIndex].durationToAlarmMS = durationToAlarmMS;
 
         // Debug
-        //console.log("[On Modify an existing Timer] Post Update.", prevScheduleTimers);
+        console.log("[On Modify an existing Timer] Post Update.", prevScheduleTimers);
 
         return prevScheduleTimers;
       });
@@ -178,7 +186,7 @@ export function MainLayout() {
         prevScheduleTimers.splice(existingTimerIndex, 1);
 
         // Debug
-        //console.log("[On Remove Timer] Updated Timers.", prevScheduleTimers);
+        console.log("[On Remove Timer] Updated Timers.", prevScheduleTimers);
 
         return prevScheduleTimers;
       });
@@ -215,11 +223,24 @@ export function MainLayout() {
     window.addEventListener(registerCachedScheduleEvent, loadCachedScheduleTimersCallback);
     loadCachedScheduleTimersCallback();
     // ======================
+    // Callback when clearing all existing timers (From Logout action).
+    const clearAllScheduleTimersCallback = () => {
+      setScheduleTimers((previousTimers) => {
+        // Debug
+        //console.log("[On Remove All Existing Timers] Previous Timers.", previousTimers);
+
+        previousTimers.forEach((scheduleTimerObj) => clearTimeout(scheduleTimerObj.timer));
+        return [];
+      });
+    };
+    window.addEventListener(registerAllScheduleRemovalEvent, clearAllScheduleTimersCallback);
+    // ======================
     return (() => {
       window.removeEventListener(registerNewScheduleEvent, addNewScheduleTimerCallback);
       window.removeEventListener(registerModifiedScheduleEvent, modifyExistingScheduleTimerCallback);
       window.removeEventListener(registerScheduleTimerRemovalEvent, removeScheduleTimerCallback);
       window.removeEventListener(registerCachedScheduleEvent, loadCachedScheduleTimersCallback);
+      window.removeEventListener(registerCachedScheduleEvent, clearAllScheduleTimersCallback);
     })
   }, []);
   // ==============================================
@@ -240,7 +261,8 @@ export function MainLayout() {
 }
 // ==============================================
 function App() {
-  const cachedUsers = useLocalStorage("users", users)[0];
+  // Setup the Local Storage with preset "users" if first time (value of key "users" would not exist).
+  useLocalStorage("users", users)[0];
 
   return (
     <Container fluid className="main-container p-0">

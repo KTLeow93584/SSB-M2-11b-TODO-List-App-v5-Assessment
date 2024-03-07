@@ -17,6 +17,7 @@ import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import gameInfo from '../data/GameInfo/index.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour, registerNewScheduleEvent } from '../data/time.js';
+import users from '../data/users.js';
 // ==============================================
 export default function AddScheduleModal({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
     // ===========================
@@ -25,6 +26,8 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     // ===========================
     let activeUserObj = useSelector((state) => state.activeUser);
     const user = activeUserObj.user;
+    const cachedUsers = JSON.parse(localStorage.getItem("users", users));
+    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
     // ===========================
     const [selectedGame, setSelectedGame] = useState({
         id: gameInfo[0].id,
@@ -49,20 +52,20 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     const [alarmFile, setAlarmFile] = useState(null);
     const [notifyTime, setNotifyTime] = useState("12:00");
     // =============================
-    const handleSelectGameID = (gameIDKey) => {
+    const onSelectNewGame = (gameIDKey) => {
         const gameIndex = gameInfo.findIndex((game) => game.id === gameIDKey);
 
         setSelectedGame(gameInfo[gameIndex]);
         setSelectedRegion(reformatRegionData(gameInfo[gameIndex], gameInfo[gameIndex].supportedRegions[0]));
     };
 
-    const handleSelectRegion = (regionNameKey) => {
+    const onSelectNewGameRegion = (regionNameKey) => {
         const regionIndex = selectedGame.supportedRegions.findIndex((region) => region.name === regionNameKey);
 
         setSelectedRegion(reformatRegionData(selectedGame, selectedGame.supportedRegions[regionIndex]));
     };
 
-    const handleAlarmFileUpload = (event) => {
+    const onUploadNewAlarmFile = (event) => {
         // ===================================================
         const file = event.target.files[0];
 
@@ -84,7 +87,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     };
 
     const dispatch = useDispatch();
-    const handleSubmitNewSchedule = (event) => {
+    const onSubmitNewSchedule = (event) => {
         // ===============================
         event.preventDefault();
 
@@ -99,15 +102,18 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         };
 
         // Debug
-        //console.log("[New Schedule] Create.", newSchedule);
+        console.log("[New Schedule] Create.", newSchedule);
 
         onRegisterScheduleEvent(newSchedule);
-
         dispatch(createTask(newSchedule));
+
+        const newScheduleList = [...user.tasks, newSchedule];
         dispatch(updateUserProfileData({
             type: "tasks",
-            data: [...user.tasks, newSchedule]
+            data: newScheduleList
         }));
+        cachedUsers[userIndexFromCache].tasks = newScheduleList;
+        localStorage.setItem("users", JSON.stringify(cachedUsers));
         // ===============================
         setDescription("");
         setAlarmFile(null);
@@ -122,7 +128,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                 <Modal.Title className="text-non-links-primary">Create a new game notification schedule</Modal.Title>
             </Modal.Header>
 
-            <Form onSubmit={handleSubmitNewSchedule}>
+            <Form onSubmit={onSubmitNewSchedule}>
                 <Modal.Body className="secondary-container">
                     <Form.Group>
                         {/* ----------------------------- */}
@@ -132,7 +138,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                                 <Form.Label htmlFor="game-id-dropdown" className="text-non-links-primary">Game: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
-                                <Dropdown onSelect={handleSelectGameID} key={selectedGame.id}>
+                                <Dropdown onSelect={onSelectNewGame} key={selectedGame.id}>
                                     <Dropdown.Toggle id="game-id-dropdown">
                                         {selectedGame.title}
                                     </Dropdown.Toggle>
@@ -160,7 +166,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                                 <Form.Label htmlFor="game-region-id-dropdown" className="text-non-links-primary">Region: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
-                                <Dropdown onSelect={handleSelectRegion}>
+                                <Dropdown onSelect={onSelectNewGameRegion}>
                                     <Dropdown.Toggle id="game-region-id-dropdown">
                                         {selectedRegion.name}
                                     </Dropdown.Toggle>
@@ -201,7 +207,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
-                                    onChange={(event) => handleAlarmFileUpload(event)} />
+                                    onChange={(event) => onUploadNewAlarmFile(event)} />
                             </Col>
                         </Row>
                         {/* ----------------------------- */}

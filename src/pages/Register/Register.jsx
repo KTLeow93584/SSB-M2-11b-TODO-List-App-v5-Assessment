@@ -94,17 +94,17 @@ function RegisterForm({ successfulCallback }) {
 
     const [image, setImage] = useState("");
 
-    const handleOnFieldChanged = () => {
+    const onInputFieldChanged = () => {
         setDoesPasswordMatch(true);
         setDoesUserExist(false);
     }
 
-    const handlePasswordVisibility = () => {
+    const onPasswordVisibilityChanged = () => {
         const newVisibility = !isPasswordVisible;
         setPasswordVisibility(newVisibility);
     };
 
-    const handlePasswordConfirmationVisibility = () => {
+    const onPasswordConfirmationVisibilityChanged = () => {
         const newVisibility = !isPasswordConfirmationVisible;
         setPasswordConfirmationVisibility(newVisibility);
     };
@@ -130,6 +130,7 @@ function RegisterForm({ successfulCallback }) {
 
         return pass;
     }
+
     function doesEmailAlreadyExist() {
         const existingUser = users.findIndex((user) => user.email === email);
         const hasExistingUser = existingUser !== -1;
@@ -138,7 +139,7 @@ function RegisterForm({ successfulCallback }) {
         return hasExistingUser;
     }
 
-    function handleOnProfilePictureUploaded(event) {
+    function onNewProfilePictureUploaded(event) {
         // ===================================================
         const file = event.target.files[0];
 
@@ -166,16 +167,13 @@ function RegisterForm({ successfulCallback }) {
 
                 const isValid = width === height & file.size <= 128000;
                 setIsCorrectImageFormat(isValid);
-
-                if (isValid)
-                    setImage(url);
+                setImage(url);
             }
             testImg.src = url;
         });
-        handleOnFieldChanged();
+        onInputFieldChanged();
         // ===================================================
     }
-
 
     return (
         <>
@@ -202,11 +200,20 @@ function RegisterForm({ successfulCallback }) {
                                     type="email" placeholder="Email"
                                     onChange={(event) => {
                                         setEmail(event.target.value);
-                                        handleOnFieldChanged();
+                                        onInputFieldChanged();
                                     }} />
                             </div>
+                            {/* User already Exist Error */}
+                            {
+                                (doesUserExist) ?
+                                    (<Form.Label className="login-text text-danger ms-1 mb-3">{`The user with the email ${email} already exists.`}</Form.Label>) :
+                                    null
+                            }
+                            {/* ----------------------------- */}
+                            <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
                             {/* Password Form */}
+                            <Form.Label htmlFor="password" className="text-non-links-primary login-text">Password: </Form.Label>
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password" value={password} autoComplete="on"
@@ -216,10 +223,10 @@ function RegisterForm({ successfulCallback }) {
                                     style={{ border: "none" }}
                                     onChange={(event) => {
                                         setPassword(event.target.value);
-                                        handleOnFieldChanged();
+                                        onInputFieldChanged();
                                     }} />
 
-                                <Button variant="link" onClick={handlePasswordVisibility}>
+                                <Button variant="link" onClick={onPasswordVisibilityChanged}>
                                     <i className={`text-links bi ${isPasswordVisible ? "bi-eye" : "bi-eye-slash"}`}></i>
                                 </Button>
                             </div>
@@ -235,13 +242,27 @@ function RegisterForm({ successfulCallback }) {
                                     style={{ border: "none" }}
                                     onChange={(event) => {
                                         setPasswordConfirmation(event.target.value);
-                                        handleOnFieldChanged();
+                                        onInputFieldChanged();
                                     }} />
 
-                                <Button variant="link" onClick={handlePasswordConfirmationVisibility}>
+                                <Button variant="link" onClick={onPasswordConfirmationVisibilityChanged}>
                                     <i className={`text-links bi ${isPasswordConfirmationVisible ? "bi-eye" : "bi-eye-slash"}`}></i>
                                 </Button>
                             </div>
+
+                            {/* Mismatched Password Error */}
+                            {
+                                (!doesPasswordMatch) ?
+                                    (<Form.Label className="login-text text-danger ms-1 mb-3">Both the Password and Password Confirmation fields do not match</Form.Label>) :
+                                    null
+                            }
+
+                            {/* Password Format */}
+                            {
+                                (!isCorrectPasswordFormat) ?
+                                    (<Form.Label className="login-text text-danger ms-1 mb-3">{`The current password does not meet the criteria.`}</Form.Label>) :
+                                    null
+                            }
                             {/* ----------------------------- */}
                             <div className="d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
                                 <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for password: </Form.Text>
@@ -260,7 +281,7 @@ function RegisterForm({ successfulCallback }) {
                                     type="name" placeholder="First Name"
                                     onChange={(event) => {
                                         setFirstName(event.target.value);
-                                        handleOnFieldChanged();
+                                        onInputFieldChanged();
                                     }} />
                             </div>
                             {/* ----------------------------- */}
@@ -272,7 +293,7 @@ function RegisterForm({ successfulCallback }) {
                                     type="name" placeholder="Last Name"
                                     onChange={(event) => {
                                         setLastName(event.target.value);
-                                        handleOnFieldChanged();
+                                        onInputFieldChanged();
                                     }} />
                             </div>
                             {/* ----------------------------- */}
@@ -283,7 +304,7 @@ function RegisterForm({ successfulCallback }) {
                             <Form.Control id="profile-picture"
                                 className={`text-non-links-primary login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"
-                                onChange={handleOnProfilePictureUploaded} />
+                                onChange={onNewProfilePictureUploaded} />
                             {
                                 image ? (
                                     <div className="d-flex align-items-center justify-content-center w-100 mb-2">
@@ -301,6 +322,13 @@ function RegisterForm({ successfulCallback }) {
                                 <Form.Text className="text-non-links-primary login-text">1. Must not exceed 128kb. </Form.Text>
                                 <Form.Text className="text-non-links-primary login-text">2. Equal Width and Height Dimensions. </Form.Text>
                             </div>
+
+                            {/* Image Format */}
+                            {
+                                (!isCorrectImageFormat) ?
+                                    (<Form.Label className="login-text text-danger ms-1 mb-3">{`The current profile picture does not meet the requirements.`}</Form.Label>) :
+                                    null
+                            }
                             {/* ----------------------------- */}
                             <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
@@ -310,34 +338,6 @@ function RegisterForm({ successfulCallback }) {
                         </Form.Group>
                     </Card.Body>
                 </Form>
-                {/* ----------------------------- */}
-                {/* Mismatched Password Error */}
-                {
-                    (!doesPasswordMatch) ?
-                        (<Form.Label className="login-text text-danger mb-3">Both the Password and Password Confirmation fields do not match</Form.Label>) :
-                        null
-                }
-                {/* ----------------------------- */}
-                {/* User already Exist Error */}
-                {
-                    (doesUserExist) ?
-                        (<Form.Label className="login-text text-danger mb-3">{`The user with the email ${email} already exists.`}</Form.Label>) :
-                        null
-                }
-                {/* ----------------------------- */}
-                {/* Image Format */}
-                {
-                    (!isCorrectImageFormat) ?
-                        (<Form.Label className="login-text text-danger mb-3">{`The current profile picture does not meet the requirements.`}</Form.Label>) :
-                        null
-                }
-                {/* ----------------------------- */}
-                {/* Password Format */}
-                {
-                    (!isCorrectPasswordFormat) ?
-                        (<Form.Label className="login-text text-danger mb-3">{`The current password does not meet the criteria.`}</Form.Label>) :
-                        null
-                }
                 {/* ----------------------------- */}
             </Col>
             <Col className="col-lg-6 col-12 secondary-border d-flex flex-column"

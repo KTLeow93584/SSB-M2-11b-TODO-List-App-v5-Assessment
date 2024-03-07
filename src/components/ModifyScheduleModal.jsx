@@ -21,6 +21,7 @@ import {
     timeEventPerMinute,
     registerModifiedScheduleEvent
 } from '../data/time.js';
+import users from '../data/users.js';
 // ==============================================
 export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
     const dispatch = useDispatch();
@@ -30,6 +31,9 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     // ===========================
     let activeUserObj = useSelector((state) => state.activeUser);
     const user = activeUserObj.user;
+
+    const cachedUsers = JSON.parse(localStorage.getItem("users", users));
+    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
     // ===========================
     const reassignTimeData = (game, region) => {
         return formatServerRegionTimeDisplay(game, region, new Date(),
@@ -141,15 +145,17 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         onModifyScheduleEvent(newSchedule);
 
         const scheduleIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID && task.regionName === schedule.regionName);
-        const schedules = [...user.tasks];
-        schedules[scheduleIndex] = newSchedule;
+        const newScheduleList = [...user.tasks];
+        newScheduleList[scheduleIndex] = newSchedule;
 
         const data = { taskIndex: scheduleIndex, modifiedTaskData: newSchedule };
         dispatch(modifyTask(data));
         dispatch(updateUserProfileData({
             type: "tasks",
-            data: schedules
+            data: newScheduleList
         }));
+        cachedUsers[userIndexFromCache].tasks = newScheduleList;
+        localStorage.setItem("users", JSON.stringify(cachedUsers));
         // ===============================
         handleClose();
     };

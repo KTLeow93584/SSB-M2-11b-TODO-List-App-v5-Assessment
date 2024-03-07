@@ -13,7 +13,7 @@ export default function ScheduleAlarmModal({ isVisible, activeAlarms, onEndIndiv
                 <Modal.Title className="text-non-links-primary"> Time to do your dailies![Alarm Notice]</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body className="secondary-container">
+            <Modal.Body className="secondary-container pt-4">
                 <Row className="w-100">
                     {
                         activeAlarms.map((alarm, index) =>
@@ -35,7 +35,7 @@ export default function ScheduleAlarmModal({ isVisible, activeAlarms, onEndIndiv
 // ==============================================
 function AlarmGroup({ alarm, index, onEndIndividualAlarmCallback }) {
     return (
-        <Col className="col-12 d-flex align-items-center">
+        <Col className="col-12 d-flex align-items-center mb-3">
             <p className="my-0 ms-0 me-3 p-0">
                 <span className="text-non-links-primary fw-bold">{`${index + 1}`}.</span>
                 <span> </span>

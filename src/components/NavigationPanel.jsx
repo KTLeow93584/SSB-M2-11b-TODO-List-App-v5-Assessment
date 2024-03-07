@@ -15,6 +15,8 @@ import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import { logout } from '../feature/activeUser/activeUserSlice.jsx';
 
+import { registerAllScheduleRemovalEvent } from '../data/time.js';
+
 import './NavigationPanel.css';
 // ==============================================
 export default function NavigationPanel({ foundingName }) {
@@ -24,6 +26,7 @@ export default function NavigationPanel({ foundingName }) {
 
     const onLogout = () => {
         dispatch(logout());
+        onRemoveAllScheduleEvent();
         navigate('/');
     };
     // ===========================
@@ -301,6 +304,11 @@ function NavigationBarBodyOffCanvas({ user, onLogoutCallback }) {
             </Offcanvas>
         </>
     );
+}
+// ==============================================
+function onRemoveAllScheduleEvent() {
+    const timeEvent = new CustomEvent(registerAllScheduleRemovalEvent);
+    window.dispatchEvent(timeEvent);
 }
 // ==============================================
 function adjustGlobalCSSProperties(useDarkMode) {

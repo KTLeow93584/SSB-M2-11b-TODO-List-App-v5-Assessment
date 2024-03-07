@@ -131,12 +131,15 @@ const registerNewScheduleEvent = "onRegisterNewScheduleTimer";
 const registerModifiedScheduleEvent = "onModifyRegisteredScheduleTimer";
 const registerScheduleTimerRemovalEvent = "onRemoveScheduleTimer";
 const registerCachedScheduleEvent = "onRegisterCachedScheduleTimer";
+const registerAllScheduleRemovalEvent = "onRemoveAllScheduleTimers";
 // ==============================================
 export {
     days, months,
     defaultDenominator, denominators, timezoneAbbrs,
     millisecondsInAMinute, millisecondsInAnHour,
     timeEventPerSecond, timeEventPerMinute, timeEventPerHour, timeEventPerDay,
-    registerNewScheduleEvent, registerModifiedScheduleEvent, registerScheduleTimerRemovalEvent, registerCachedScheduleEvent
+
+    registerNewScheduleEvent, registerModifiedScheduleEvent,
+    registerScheduleTimerRemovalEvent, registerCachedScheduleEvent, registerAllScheduleRemovalEvent
 };
 // ==============================================

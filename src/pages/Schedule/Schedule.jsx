@@ -10,6 +10,9 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import Image from 'react-bootstrap/Image';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay, faScrewdriver, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
 import Timekeeper from '../../components/Timekeeper.jsx';
 import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 
@@ -22,9 +25,7 @@ import {
     timeEventPerMinute
 } from '../../data/time.js';
 import gameInfo from '../../data/GameInfo/index.js';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlay, faScrewdriver, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+import users from '../../data/users.js';
 
 import './Schedule.css';
 // ==============================================
@@ -33,6 +34,10 @@ export default function Schedule() {
     // ===========================
     let activeUserObj = useSelector((state) => state.activeUser);
     const user = activeUserObj.user;
+
+    const cachedUsers = JSON.parse(localStorage.getItem("users", users));
+    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
+
     const scheduleList = user.tasks;
     // ===========================
     const [schedule, setSchedule] = useState(null);
@@ -42,16 +47,18 @@ export default function Schedule() {
     const onDeleteSchedule = (id) => {
         dispatch(removeTask({ taskId: id }));
 
-        let schedules = [...user.tasks];
-        const scheduleIndex = schedules.findIndex((task) => task.id === id);
+        let newScheduleList = [...user.tasks];
+        const scheduleIndex = newScheduleList.findIndex((task) => task.id === id);
 
-        onRegisterScheduleRemovalEvent(schedules[scheduleIndex].gameID);
-        schedules.splice(scheduleIndex, 1);
+        onRegisterScheduleRemovalEvent(newScheduleList[scheduleIndex].gameID);
+        newScheduleList.splice(scheduleIndex, 1);
 
         dispatch(updateUserProfileData({
             type: "tasks",
-            data: schedules
+            data: newScheduleList
         }));
+        cachedUsers[userIndexFromCache].tasks = newScheduleList;
+        localStorage.setItem("users", JSON.stringify(cachedUsers));
     };
     // ===========================
     const [modifyExistingSchedule, setModifyExistingSchedule] = useState(false);
