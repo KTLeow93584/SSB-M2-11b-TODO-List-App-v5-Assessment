@@ -63,7 +63,7 @@ export default function Login() {
                         {/* ---------------------- */}
                         {/* Card Title/Header */}
                         <Card.Header className="primary-container-contrast">
-                            <p className="fs-2 my-0 text-non-links-contrast">
+                            <p className="fs-2 my-0 text-non-links-primary-contrast">
                                 Login Page
                             </p>
                         </Card.Header>
@@ -78,7 +78,7 @@ export default function Login() {
                         {/* Card Body (To Registration Page) */}
                         <Card.Body className="d-flex flex-column align-items-center justify-content-start"
                             style={{ backgroundColor: "transparent" }}>
-                            <p className="text-non-links login-text">Don&apos;t have an account?</p>
+                            <p className="text-non-links-primary login-text">Don&apos;t have an account?</p>
                             <Button onClick={() => navigate("/register")} style={{ maxWidth: "220px", width: "100%" }}>
                                 <span className="login-text">Sign Up</span>
                             </Button>
@@ -120,14 +120,14 @@ function LoginForm({ successfulCallback }) {
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label htmlFor="email" className="text-non-links login-text">Please login with your email and password: </Form.Label>
+                            <Form.Label htmlFor="email" className="text-non-links-primary login-text">Please login with your email and password: </Form.Label>
                             {/* ----------------------------- */}
                             {/* Email Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     ref={startingInputRef}
                                     required id="email" value={email} autoComplete="on"
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="email" placeholder="Enter email here"
                                     onChange={(event) => setEmail(event.target.value)} />
                             </div>
@@ -136,7 +136,7 @@ function LoginForm({ successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password" value={password} autoComplete="on"
-                                    className="text-non-links input-bar-no-shadow me-1"
+                                    className="text-non-links-primary input-bar-no-shadow me-1"
                                     type={isPasswordVisible ? "text" : "password"}
                                     placeholder="Enter password here"
                                     style={{ border: "none" }}
@@ -169,7 +169,7 @@ function LoginForm({ successfulCallback }) {
             <Col className="col-lg-6 col-12 secondary-border d-flex flex-column"
                 style={{ borderTopRightRadius: "5px", borderBottomRightRadius: "5px", borderLeftWidth: "1px" }}>
                 <Card.Body>
-                    <p className="login-text fw-bold text-non-links mx-0 mt-0 mb-3 p-0">Login with other services: </p>
+                    <p className="login-text fw-bold text-non-links-primary mx-0 mt-0 mb-3 p-0">Login with other services: </p>
                     <Container fluid className="w-100 m-0 p-0">
                         <Row className="d-flex w-100 m-0 p-0">
                             <Col className="col-sm-6 col-12 mt-0 mb-2 me-auto">

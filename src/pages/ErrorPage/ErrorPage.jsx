@@ -10,7 +10,7 @@ export default function ErrorPage() {
         <Container fluid className="w-100 d-flex flex-column align-items-center justify-content-end" style={{ flex: 1 }}>
             <Row className="mt-3 d-flex flex-column align-items-center justify-content-center" style={{ flex: 1 }}>
                 <Col className="col-8 text-center d-flex flex-column align-items-center justify-content-between" style={{ flex: 1 }}>
-                    <p className="text-non-links fw-bold mt-5">
+                    <p className="text-non-links-primary fw-bold mt-5">
                         We were unable to locate the page you&apos;re looking for. Here&apos;s a
                         <span> </span>
                         <a href="https://www.youtube.com/watch?v=tZoqaQrca2M" target="_blank" rel="noopener noreferrer"

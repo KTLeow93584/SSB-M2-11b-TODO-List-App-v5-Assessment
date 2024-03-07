@@ -25,8 +25,13 @@
     /* Text */
     /* Light Theme Hex: black */
     /* Dark Theme Hex: white */
-    --core-text-non-links-color: black;
-    --core-text-non-links-contrast-color: white;
+    --core-text-non-links-primary-color: black;
+    --core-text-non-links-primary-contrast-color: white;
+    
+    /* Light Theme Hex: #333333 */
+    /* Dark Theme Hex: #cccccc */
+    --core-text-non-links-secondary-color: #333333;
+    --core-text-non-links-secondary-contrast-color: #cccccc;
 
     /* Light Theme Hex: #292929 */
     /* Dark Theme Hex: #c5c5c5 */

@@ -106,7 +106,7 @@ function NavigationBarBodyElements({ user }) {
                     checked={modeContext.useDarkMode}
                     id="darkModeSwitch"
                     onChange={onChangeMode} />
-                <label className="form-check-label text-non-links" htmlFor="darkModeSwitch">
+                <label className="form-check-label text-non-links-primary" htmlFor="darkModeSwitch">
                     {
                         modeContext.useDarkMode ?
                             (<i className="fs-3 bi bi-moon-fill"></i>) :
@@ -190,7 +190,7 @@ function NavigationBarBodyOffCanvas({ user }) {
         <>
             {/* ------------------------------ */}
             <Button variant="link" onClick={() => setShowOffCanvasNav(!showOffCanvasNav)}>
-                <i className="fs-2 text-non-links bi bi-list"></i>
+                <i className="fs-2 text-non-links-primary bi bi-list"></i>
             </Button>
             {/* ------------------------------ */}
             <Offcanvas show={showOffCanvasNav}
@@ -199,7 +199,7 @@ function NavigationBarBodyOffCanvas({ user }) {
                 className="primary-container"
                 placement="end">
                 <Offcanvas.Header closeButton className="mt-2 py-0">
-                    <Offcanvas.Title className="text-non-links">Navigation</Offcanvas.Title>
+                    <Offcanvas.Title className="text-non-links-primary">Navigation</Offcanvas.Title>
                 </Offcanvas.Header>
                 <hr className="horizontal-line-text" />
                 <Offcanvas.Body>
@@ -232,7 +232,7 @@ function NavigationBarBodyOffCanvas({ user }) {
                             checked={modeContext.useDarkMode}
                             id="darkModeSwitch"
                             onChange={onChangeMode} />
-                        <label className="form-check-label text-non-links" htmlFor="darkModeSwitch">
+                        <label className="form-check-label text-non-links-primary" htmlFor="darkModeSwitch">
                             {
                                 modeContext.useDarkMode ?
                                     (<i className="fs-2 bi bi-moon-fill"></i>) :
@@ -325,8 +325,13 @@ function adjustGlobalCSSProperties(useDarkMode) {
 
     // Light Theme Hex: black
     // Dark Theme Hex: white
-    document.documentElement.style.setProperty("--core-text-non-links-color", useDarkMode ? "white" : "black");
-    document.documentElement.style.setProperty("--core-text-non-links-contrast-color", useDarkMode ? "black" : "white");
+    document.documentElement.style.setProperty("--core-text-non-links-primary-color", useDarkMode ? "white" : "black");
+    document.documentElement.style.setProperty("--core-text-non-links-primary-contrast-color", useDarkMode ? "black" : "white");
+
+    /* Light Theme Hex: #333333 */
+    /* Dark Theme Hex: #cccccc */
+    document.documentElement.style.setProperty("--core-text-non-links-secondary-color", useDarkMode ? "#cccccc" : "#333333");
+    document.documentElement.style.setProperty("--core-text-non-links-secondary-contrast-color", useDarkMode ? "#333333" : "#cccccc");
     // ======================
     // Text (Links)
 

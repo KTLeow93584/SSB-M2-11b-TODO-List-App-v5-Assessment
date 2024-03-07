@@ -55,7 +55,7 @@ export default function Register() {
                 <Col className="col-lg-10 col-12 d-flex justify-content-center">
                     <Card className="w-100 secondary-container">
                         <Card.Header className="primary-container-contrast">
-                            <p className="fs-2 my-0 text-non-links-contrast">Registration</p>
+                            <p className="fs-2 my-0 text-non-links-primary-contrast">Registration</p>
                         </Card.Header>
                         <Card.Body className="mx-3 mt-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0s">
@@ -63,7 +63,7 @@ export default function Register() {
                             </Row>
                         </Card.Body>
                         <Card.Body className="d-flex flex-column align-items-center justify-content-start">
-                            <p className="text-non-links login-text">Already have an account?</p>
+                            <p className="text-non-links-primary login-text">Already have an account?</p>
                             <Button onClick={() => navigate("/login")} style={{ maxWidth: "220px", width: "100%" }}>
                                 <span className="login-text">Login</span>
                             </Button>
@@ -194,13 +194,13 @@ function RegisterForm({ successfulCallback }) {
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label className="text-non-links login-text">Register with Email Address: </Form.Label>
+                            <Form.Label className="text-non-links-primary login-text">Register with Email Address: </Form.Label>
                             {/* ----------------------------- */}
                             {/* Email Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="email" value={email}
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="email" placeholder="Email"
                                     onChange={(event) => {
                                         setEmail(event.target.value);
@@ -212,7 +212,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password" value={password} autoComplete="on"
-                                    className="text-non-links input-bar-no-shadow me-1"
+                                    className="text-non-links-primary input-bar-no-shadow me-1"
                                     type={isPasswordVisible ? "text" : "password"}
                                     placeholder="Password"
                                     style={{ border: "none" }}
@@ -231,7 +231,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="d-flex secondary-container login-form-border rounded m-0 p-0 mb-2">
                                 <Form.Control
                                     required id="password-confirmation" value={passwordConfirmation} autoComplete="on"
-                                    className="text-non-links input-bar-no-shadow me-1"
+                                    className="text-non-links-primary input-bar-no-shadow me-1"
                                     type={isPasswordConfirmationVisible ? "text" : "password"}
                                     placeholder="Confirm your Password"
                                     style={{ border: "none" }}
@@ -246,19 +246,19 @@ function RegisterForm({ successfulCallback }) {
                             </div>
                             {/* ----------------------------- */}
                             <div className="d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
-                                <Form.Text className="text-non-links login-text fw-bold">Requirements for password: </Form.Text>
-                                <Form.Text className="text-non-links login-text">1. 8 characters long. </Form.Text>
-                                <Form.Text className="text-non-links login-text">2. Must contain 1 symbol, 1 number, 1 lower and 1 uppercase letter. </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for password: </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text">1. 8 characters long. </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text">2. Must contain 1 symbol, 1 number, 1 lower and 1 uppercase letter. </Form.Text>
                             </div>
                             {/* ----------------------------- */}
                             <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
                             {/* First Name + Last Name Forms */}
-                            <Form.Label htmlFor="first-name" className="text-non-links login-text">Name: </Form.Label>
+                            <Form.Label htmlFor="first-name" className="text-non-links-primary login-text">Name: </Form.Label>
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="first-name" value={firstName}
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="name" placeholder="First Name"
                                     onChange={(event) => {
                                         setFirstName(event.target.value);
@@ -270,7 +270,7 @@ function RegisterForm({ successfulCallback }) {
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="last-name input-bar-no-shadow" value={lastName}
-                                    className="text-non-links"
+                                    className="text-non-links-primary"
                                     type="name" placeholder="Last Name"
                                     onChange={(event) => {
                                         setLastName(event.target.value);
@@ -281,9 +281,9 @@ function RegisterForm({ successfulCallback }) {
                             <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
                             {/* Image (File Upload) */}
-                            <Form.Label htmlFor="profile-picture" className="text-non-links login-text">Profile Picture: </Form.Label>
+                            <Form.Label htmlFor="profile-picture" className="text-non-links-primary login-text">Profile Picture: </Form.Label>
                             <Form.Control id="profile-picture"
-                                className={`text-non-links login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
+                                className={`text-non-links-primary login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"
                                 onChange={handleOnProfilePictureUploaded} />
                             {
@@ -299,9 +299,9 @@ function RegisterForm({ successfulCallback }) {
                                 ) : null
                             }
                             <div className="d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
-                                <Form.Text className="text-non-links login-text fw-bold">Requirements for profile picture setup: </Form.Text>
-                                <Form.Text className="text-non-links login-text">1. Must not exceed 512kb. </Form.Text>
-                                <Form.Text className="text-non-links login-text">2. Equal Width and Height Dimensions. </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for profile picture setup: </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text">1. Must not exceed 512kb. </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text">2. Equal Width and Height Dimensions. </Form.Text>
                             </div>
                             {/* ----------------------------- */}
                             <hr className="horizontal-line-text" />
@@ -345,7 +345,7 @@ function RegisterForm({ successfulCallback }) {
             <Col className="col-lg-6 col-12 secondary-border d-flex flex-column"
                 style={{ borderTopRightRadius: "5px", borderBottomRightRadius: "5px", borderLeftWidth: "1px" }}>
                 <Card.Body>
-                    <p className="login-text fw-bold text-non-links mx-0 mt-0 mb-3 p-0">Register with other services: </p>
+                    <p className="login-text fw-bold text-non-links-primary mx-0 mt-0 mb-3 p-0">Register with other services: </p>
                     <Container fluid className="w-100 m-0 p-0">
                         <Row className="d-flex w-100 m-0 p-0">
                             <Col className="col-sm-6 col-12 mt-0 mb-2 me-auto">

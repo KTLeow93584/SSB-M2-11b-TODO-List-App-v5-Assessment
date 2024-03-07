@@ -19,7 +19,7 @@ import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
-import gameInfo from '../../data/gameInfo.js';
+import gameInfo from '../../data/GameInfo/index.js';
 import {
     formatTime, formatTimezoneSimpleParseH,
     millisecondsInAMinute, millisecondsInAnHour, timezoneAbbrs,
@@ -141,6 +141,9 @@ function GameRegion({ user, game, region,
         return (() => window.removeEventListener(timeEventPerMinute, callbackPerMinute));
     });
     // ===========================
+    // Debug
+    //console.log("Icon", game.icon);
+    // ===========================
     return (
         <Col className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
             <Card className="secondary-container shadow-sm">
@@ -148,28 +151,28 @@ function GameRegion({ user, game, region,
                     <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
                         className="rounded me-2"
                         style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
-                    <span className="fs-4 text-non-links">{game.title}</span>
-                    <span className="fs-6 text-non-links ms-auto">{region.name}</span>
+                    <span className="fs-4 text-non-links-primary">{game.title}</span>
+                    <span className="fs-6 text-non-links-secondary fw-bold ms-auto">{region.name}</span>
                 </Card.Header>
                 <Card.Body>
                     <Row className="w-100">
                         <Col className="col-6">
-                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Local Reset Time:</Card.Text>
-                            <Card.Text className="fs-6 text-non-links">
+                            <Card.Text className="fs-6 text-non-links-primary fw-bold my-0">Local Reset Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links-primary">
                                 {timeData.localResetTime}
                             </Card.Text>
-                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Time Until Reset:</Card.Text>
-                            <Card.Text className="fs-6 text-non-links">
+                            <Card.Text className="fs-6 text-non-links-primary fw-bold my-0">Time Until Reset:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links-primary">
                                 {timeData.timeUntilReset}
                             </Card.Text>
                         </Col>
                         <Col className="col-6">
-                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Server Reset Time:</Card.Text>
-                            <Card.Text className="fs-6 text-non-links">
+                            <Card.Text className="fs-6 text-non-links-primary fw-bold my-0">Server Reset Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links-primary">
                                 {timeData.serverResetTime}
                             </Card.Text>
-                            <Card.Text className="fs-6 text-non-links fw-bold my-0">Current Server Time:</Card.Text>
-                            <Card.Text className="fs-6 text-non-links">
+                            <Card.Text className="fs-6 text-non-links-primary fw-bold my-0">Current Server Time:</Card.Text>
+                            <Card.Text className="fs-6 text-non-links-primary">
                                 {timeData.currentServerTime}
                             </Card.Text>
                         </Col>
@@ -235,7 +238,7 @@ function RegisterSchedule({ game, region, user,
                                     onCreateScheduleCallback(true);
                             }}
                             className={`primary-container-contrast add-schedule-button-${useDarkMode ? "dark" : "light"} primary-border`}>
-                            <span className="text-non-links-contrast">Add to Schedule</span>
+                            <span className="text-non-links-primary-contrast">Add to Schedule</span>
                         </Button>
                     </Row>
                 </Card.Body >

@@ -9,9 +9,9 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 
-import './HertaKuru.css';
+import './KuruKuru.css';
 // ==============================================
-export default function HertaKuru() {
+export default function KuruKuru() {
     const [squishedTimes, setSquishedTimes] = useLocalStorage("kuru-count", 0);
     const [kuruImgList, setKuruImgList] = useState([]);
 
@@ -107,17 +107,17 @@ export default function HertaKuru() {
                         style={{ width: "100%", height: "auto" }} />
                 </Col>
                 <Col className="col-6 mb-3 mx-auto">
-                    <p className="text-non-links">Herta gif created by</p>
+                    <p className="text-non-links-primary">Herta gif created by</p>
                     <p>
-                        <i className="text-non-links fw-bold bi bi-twitter-x me-2"></i>
+                        <i className="text-non-links-primary fw-bold bi bi-twitter-x me-2"></i>
                         <a className="text-links fw-bold"
                             href="https://twitter.com/Seseren_kr" target="_blank" rel="noopener noreferrer">
                             Seseren_kr
                         </a>
                     </p>
-                    <p className="text-non-links">Original Reference from CaliphDev</p>
+                    <p className="text-non-links-primary">Original Reference from CaliphDev</p>
                     <p>
-                        <i className="text-non-links fw-bold bi bi-box-arrow-up-right me-2"></i>
+                        <i className="text-non-links-primary fw-bold bi bi-box-arrow-up-right me-2"></i>
                         <a className="text-links fw-bold"
                             href="https://herta.eu.org/" target="_blank" rel="noopener noreferrer">
                             CaliphDev&apos;s Kuru-Kuru Page

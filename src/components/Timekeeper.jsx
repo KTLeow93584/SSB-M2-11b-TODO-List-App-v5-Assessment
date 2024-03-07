@@ -39,10 +39,10 @@ export default function TimeSection() {
     return (
         <Row className="mt-3 mb-2">
             <Col className="col-12 d-flex flex-column align-items-center justify-content-center text-center">
-                <p className="fs-3 text-non-links fw-bold m-0 p-0">Your local time: </p>
-                <p className="fs-1 text-non-links fw-bold m-0 p-0">{localTime}</p>
-                <p className="fs-5 text-non-links fw-bold m-0 p-0">{localDate}</p>
-                <p className="fs-5 text-non-links fw-bold m-0 p-0">{localTimezone}</p>
+                <p className="fs-3 text-non-links-primary fw-bold m-0 p-0">Your local time: </p>
+                <p className="fs-1 text-non-links-primary fw-bold m-0 p-0">{localTime}</p>
+                <p className="fs-5 text-non-links-primary fw-bold m-0 p-0">{localDate}</p>
+                <p className="fs-5 text-non-links-primary fw-bold m-0 p-0">{localTimezone}</p>
             </Col>
         </Row>
     );

@@ -15,7 +15,7 @@ import { modifyTask } from '../feature/tasks/tasksSlice.jsx';
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
-import gameInfo from '../data/gameInfo.js';
+import gameInfo from '../data/GameInfo/index.js';
 import {
     formatTime, millisecondsInAMinute, millisecondsInAnHour,
     timeEventPerMinute,
@@ -154,7 +154,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     return !user ? null : (
         <Modal size="xl" show={isVisible} onHide={handleClose} data-bs-theme={useDarkMode ? "dark" : "light"}>
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title className="text-non-links">Modify an existing game notification schedule</Modal.Title>
+                <Modal.Title className="text-non-links-primary">Modify an existing game notification schedule</Modal.Title>
             </Modal.Header>
 
             <Form onSubmit={onSubmitModifications}>
@@ -164,7 +164,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Game ID */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links">Game: </Form.Label>
+                                <Form.Label className="text-non-links-primary">Game: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={onSelectNewGameType} key={modalData.game.id}>
@@ -192,7 +192,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Game Regions */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links">Region: </Form.Label>
+                                <Form.Label className="text-non-links-primary">Region: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={onSelectNewGameRegion}>
@@ -221,19 +221,19 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         </Row>
                         <Row className="d-flex flex-column align-items-center mb-3">
                             <Col className="d-flex flex-column secondary-border me-3 py-2 rounded" style={{ width: "fit-content" }}>
-                                <Form.Text className="text-non-links">{`Local Reset Time: ${modalData.time.localResetTime}.`}</Form.Text>
-                                <Form.Text className="text-non-links">{`Time Until Next Reset: ${modalData.time.timeUntilReset}.`}</Form.Text>
+                                <Form.Text className="text-non-links-primary">{`Local Reset Time: ${modalData.time.localResetTime}.`}</Form.Text>
+                                <Form.Text className="text-non-links-primary">{`Time Until Next Reset: ${modalData.time.timeUntilReset}.`}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}
                         {/* Alarm File */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links e-3">Notification Sound: </Form.Label>
+                                <Form.Label className="text-non-links-primary e-3">Notification Sound: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control required id="description"
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
                                     onChange={(event) => onUploadNewAlarmFile(event)} />
@@ -244,11 +244,11 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links me-3">Notify Me At: </Form.Label>
+                                <Form.Label className="text-non-links-primary me-3">Notify Me At: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="notify-time" value={notifyTime}
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="time" placeholder="Enter additional notes/descriptions here."
                                     onChange={(event) => setNotifyTime(event.target.value)} />
                             </Col>
@@ -257,13 +257,13 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links me-3">Note: </Form.Label>
+                                <Form.Label className="text-non-links-primary me-3">Note: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="description" value={description} autoFocus
                                     as="textarea"
                                     rows={3}
-                                    className="text-non-links input-bar-no-shadow"
+                                    className="text-non-links-primary input-bar-no-shadow"
                                     type="name" placeholder="Enter additional notes/descriptions here."
                                     onChange={(event) => setDescription(event.target.value)} />
                             </Col>

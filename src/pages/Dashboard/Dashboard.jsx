@@ -98,7 +98,7 @@ export default function Dashboard() {
                     {/* First Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">First Name: </Form.Label>
+                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">First Name: </Form.Label>
                             {
                                 isModifyingFirstName ?
                                     (
@@ -142,7 +142,7 @@ export default function Dashboard() {
                     {/* Last Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">Last Name: </Form.Label>
+                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">Last Name: </Form.Label>
                             {
                                 isModifyingLastName ?
                                     (
@@ -188,9 +188,9 @@ export default function Dashboard() {
                     {/* Image (Profile Picture) */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center mb-3">
-                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">Profile Picture: </Form.Label>
+                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">Profile Picture: </Form.Label>
                             <Form.Control id="profile-picture"
-                                className={`text-non-links login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
+                                className={`text-non-links-primary login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"
                                 style={{ width: "30%" }}
                                 onChange={updateProfilePicture} />
@@ -217,9 +217,9 @@ export default function Dashboard() {
                         }
                         {/* ----------------------------- */}
                         <Col className="col-lg-4 col-md-5 col-sm-8 col-12 d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
-                            <Form.Text className="text-non-links login-text fw-bold">Requirements for profile picture setup: </Form.Text>
-                            <Form.Text className="text-non-links login-text">1. Must not exceed 512kb. </Form.Text>
-                            <Form.Text className="text-non-links login-text">2. Equal Width and Height Dimensions. </Form.Text>
+                            <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for profile picture setup: </Form.Text>
+                            <Form.Text className="text-non-links-primary login-text">1. Must not exceed 512kb. </Form.Text>
+                            <Form.Text className="text-non-links-primary login-text">2. Equal Width and Height Dimensions. </Form.Text>
                         </Col>
                         {/* ----------------------------- */}
                     </Row>

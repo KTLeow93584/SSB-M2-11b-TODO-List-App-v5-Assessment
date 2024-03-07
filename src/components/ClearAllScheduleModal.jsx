@@ -11,7 +11,7 @@ export default function ClearAllScheduleModal({ isVisible, handleClose, handleEx
     return (
         <Modal size="md" show={isVisible} onHide={handleClose} className="d-flex flex-column align-items-center justify-content-center">
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title className="fs-5 text-non-links">Are you sure to delete all your scheduled alarms? (This action is irreversible)</Modal.Title>
+                <Modal.Title className="fs-5 text-non-links-primary">Are you sure to delete all your scheduled alarms? (This action is irreversible)</Modal.Title>
             </Modal.Header>
 
             <Modal.Body className="secondary-container d-flex justify-content-evenly">

@@ -32,25 +32,44 @@
 }
 
 /* ============================== */
-
-.text-non-links {
+.text-non-links-primary {
   text-decoration: none;
-  color: var(--core-text-non-links-color) !important;
+  color: var(--core-text-non-links-primary-color) !important;
 }
 
-.text-non-links-static {
+.text-non-links-primary-static {
   text-decoration: none;
   color: black !important;
 }
 
-.text-non-links-contrast {
+.text-non-links-primary-contrast {
   text-decoration: none;
-  color: var(--core-text-non-links-contrast-color) !important;
+  color: var(--core-text-non-links-primary-contrast-color) !important;
 }
 
-.text-non-links-contrast-static {
+.text-non-links-primary-contrast-static {
   text-decoration: none;
   color: white !important;
+}
+
+.text-non-links-secondary {
+  text-decoration: none;
+  color: var(--core-text-non-links-secondary-color) !important;
+}
+
+.text-non-links-secondary-static {
+  text-decoration: none;
+  color: #333333 !important;
+}
+
+.text-non-links-secondary-contrast {
+  text-decoration: none;
+  color: var(--core-text-non-links-secondary-contrast-color) !important;
+}
+
+.text-non-links-secondary-contrast-static {
+  text-decoration: none;
+  color: #cccccc !important;
 }
 
 .text-links {

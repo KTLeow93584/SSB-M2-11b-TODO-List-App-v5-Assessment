@@ -22,7 +22,7 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Schedule from './pages/Schedule';
 import GameList from './pages/GameList';
-import HertaKuru from './pages/HertaKuru';
+import KuruKuru from './pages/KuruKuru';
 import ErrorPage from './pages/ErrorPage';
 
 import users from './data/users.js';
@@ -271,7 +271,7 @@ function App() {
 
                   <Route path="/register" element={<Register />} />
                   <Route path="/games" element={<GameList />} />
-                  <Route path="/kururin" element={<HertaKuru />} />
+                  <Route path="/kururin" element={<KuruKuru />} />
                   {<Route path="*" element={<ErrorPage />} />}
                 </Route>
               </Routes>
