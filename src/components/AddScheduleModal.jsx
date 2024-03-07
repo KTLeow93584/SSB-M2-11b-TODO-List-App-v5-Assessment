@@ -27,7 +27,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     let activeUserObj = useSelector((state) => state.activeUser);
     const user = activeUserObj.user;
     const cachedUsers = JSON.parse(localStorage.getItem("users", users));
-    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
+    const userIndexFromCache = user ? cachedUsers.findIndex((userIter) => userIter.email === user.email) : -1;
     // ===========================
     const [selectedGame, setSelectedGame] = useState({
         id: gameInfo[0].id,
@@ -50,6 +50,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
 
     const [description, setDescription] = useState("");
     const [alarmFile, setAlarmFile] = useState(null);
+    const [alarmFileName, setAlarmFileName] = useState("");
     const [notifyTime, setNotifyTime] = useState("12:00");
     // =============================
     const onSelectNewGame = (gameIDKey) => {
@@ -82,6 +83,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         fileReader.addEventListener("load", () => {
             const url = fileReader.result;
             setAlarmFile(url);
+            setAlarmFileName(file.name);
         });
         // ===================================================
     };
@@ -97,6 +99,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
             title: selectedGame.title,
             regionName: selectedRegion.name,
             alarmFile: alarmFile,
+            alarmFileName: alarmFileName,
             notifyTime: notifyTime,
             description: description
         };
@@ -117,6 +120,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         // ===============================
         setDescription("");
         setAlarmFile(null);
+        setAlarmFileName("");
         setNotifyTime("12:00");
         // ===============================
         handleClose();
@@ -208,6 +212,16 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
                                     onChange={(event) => onUploadNewAlarmFile(event)} />
+                            </Col>
+                        </Row>
+                        {/* ----------------------------- */}
+                        {/* Alarm File Name */}
+                        <Row className="d-flex align-items-center mb-3">
+                            <Col className="col-3">
+                                <Form.Label htmlFor="alarm-file" className="text-non-links-primary e-3">Uploaded File Name: </Form.Label>
+                            </Col>
+                            <Col className="col-9">
+                                <Form.Text className="text-non-links-primary">{alarmFileName ? alarmFileName : "N/A"}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}

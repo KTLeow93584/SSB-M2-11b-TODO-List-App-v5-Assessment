@@ -33,7 +33,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     const user = activeUserObj.user;
 
     const cachedUsers = JSON.parse(localStorage.getItem("users", users));
-    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
+    const userIndexFromCache = user ? cachedUsers.findIndex((userIter) => userIter.email === user.email) : -1;
     // ===========================
     const reassignTimeData = (game, region) => {
         return formatServerRegionTimeDisplay(game, region, new Date(),
@@ -59,12 +59,14 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     // =============================
     const [description, setDescription] = useState(schedule ? schedule.description : "");
     const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
+    const [alarmFileName, setAlarmFileName] = useState(schedule ? schedule.alarmFileName : null);
     const [notifyTime, setNotifyTime] = useState(schedule ? schedule.notifyTime : "12:00");
 
     useEffect(() => {
         if (schedule) {
             setDescription(schedule.description);
             setAlarmFile(schedule.alarmFile);
+            setAlarmFileName(schedule.alarmFileName);
             setNotifyTime(schedule.notifyTime);
         }
     }, [schedule]);
@@ -135,6 +137,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
             title: modalData.game.title,
             regionName: modalData.region.name,
             alarmFile: alarmFile,
+            alarmFileName: alarmFileName,
             notifyTime: notifyTime,
             description: description
         };
@@ -156,6 +159,11 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         }));
         cachedUsers[userIndexFromCache].tasks = newScheduleList;
         localStorage.setItem("users", JSON.stringify(cachedUsers));
+        // ===============================
+        setDescription("");
+        setAlarmFile(null);
+        setAlarmFileName("");
+        setNotifyTime("12:00");
         // ===============================
         handleClose();
     };
@@ -241,11 +249,21 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                                 <Form.Label htmlFor="alarm-file" className="text-non-links-primary e-3">Notification Sound: </Form.Label>
                             </Col>
                             <Col className="col-9">
-                                <Form.Control required id="alarm-file"
+                                <Form.Control id="alarm-file"
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
                                     onChange={(event) => onUploadNewAlarmFile(event)} />
+                            </Col>
+                        </Row>
+                        {/* ----------------------------- */}
+                        {/* Alarm File Name */}
+                        <Row className="d-flex align-items-center mb-3">
+                            <Col className="col-3">
+                                <Form.Label htmlFor="alarm-file" className="text-non-links-primary e-3">Uploaded File Name: </Form.Label>
+                            </Col>
+                            <Col className="col-9">
+                                <Form.Text className="text-non-links-primary">{alarmFileName ? alarmFileName : "N/A"}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}

@@ -29,19 +29,13 @@ const activeUserSlice = createSlice({
             };
         },
         updateUserProfileData: (state, action) => {
-            const newUserData = {
-                firstName: action.payload.type.toLowerCase() === "first-name" ? action.payload.data : state.user.firstName,
-                lastName: action.payload.type.toLowerCase() === "last-name" ? action.payload.data : state.user.lastName,
-                image: action.payload.type.toLowerCase() === "image" ? action.payload.data : state.user.image,
-                tasks: action.payload.type.toLowerCase() === "tasks" ? action.payload.data : state.user.tasks,
-            };
-
             return {
                 user: {
-                    firstName: newUserData.firstName,
-                    lastName: newUserData.lastName,
-                    image: newUserData.image,
-                    tasks: newUserData.tasks,
+                    email: state.user.email,
+                    firstName: action.payload.type.toLowerCase() === "first-name" ? action.payload.data : state.user.firstName,
+                    lastName: action.payload.type.toLowerCase() === "last-name" ? action.payload.data : state.user.lastName,
+                    image: action.payload.type.toLowerCase() === "image" ? action.payload.data : state.user.image,
+                    tasks: action.payload.type.toLowerCase() === "tasks" ? action.payload.data : state.user.tasks
                 },
                 lastLogActivity: state.lastLogActivity,
                 token: state.token,

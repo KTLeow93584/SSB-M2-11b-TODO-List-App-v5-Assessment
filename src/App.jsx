@@ -135,7 +135,7 @@ export function MainLayout() {
         const durationToAlarmMS = notifyDate.getTime() - now.getTime();
 
         const newScheduleTimer = {
-          id: schedule.gameID,
+          id: `${schedule.gameID}-${schedule.regionName}`,
           timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
           durationToAlarmMS: durationToAlarmMS
         };
@@ -143,7 +143,7 @@ export function MainLayout() {
         const newTimerList = prevScheduleTimers && prevScheduleTimers.length > 0 ? [...prevScheduleTimers, newScheduleTimer] : [newScheduleTimer];
 
         // Debug
-        console.log("[On Add New Schedule Timer] New Timer List.", newTimerList);
+        //console.log("[On Add New Schedule Timer] New Timer List.", newTimerList);
 
         return newTimerList;
       });
@@ -155,7 +155,7 @@ export function MainLayout() {
       const schedule = event.detail;
       setScheduleTimers((prevScheduleTimers) => {
         // Debug
-        console.log("[On Modify an existing Timer] Pre Update.", prevScheduleTimers);
+        //console.log("[On Modify an existing Timer] Pre Update.", prevScheduleTimers);
 
         const now = new Date();
 
@@ -169,7 +169,7 @@ export function MainLayout() {
         prevScheduleTimers[existingTimerIndex].durationToAlarmMS = durationToAlarmMS;
 
         // Debug
-        console.log("[On Modify an existing Timer] Post Update.", prevScheduleTimers);
+        //console.log("[On Modify an existing Timer] Post Update.", prevScheduleTimers);
 
         return prevScheduleTimers;
       });
@@ -186,7 +186,7 @@ export function MainLayout() {
         prevScheduleTimers.splice(existingTimerIndex, 1);
 
         // Debug
-        console.log("[On Remove Timer] Updated Timers.", prevScheduleTimers);
+        //console.log("[On Remove Timer] Updated Timers.", prevScheduleTimers);
 
         return prevScheduleTimers;
       });

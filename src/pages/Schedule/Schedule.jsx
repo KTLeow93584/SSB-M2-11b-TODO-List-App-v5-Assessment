@@ -36,7 +36,7 @@ export default function Schedule() {
     const user = activeUserObj.user;
 
     const cachedUsers = JSON.parse(localStorage.getItem("users", users));
-    const userIndexFromCache = user ? cachedUsers.findIndex((userObj) => userObj.email === user.email) : -1;
+    const userIndexFromCache = user ? cachedUsers.findIndex((userIter) => userIter.email === user.email) : -1;
 
     const scheduleList = user.tasks;
     // ===========================
