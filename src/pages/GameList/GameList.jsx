@@ -1,5 +1,6 @@
 // ==============================================
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -16,7 +17,6 @@ import SearchBar from '../../components/SearchBar.jsx';
 import AddScheduleModal from '../../components/AddScheduleModal.jsx';
 import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import gameInfo from '../../data/GameInfo/index.js';
@@ -28,8 +28,8 @@ import {
 // ==============================================
 export default function GameList() {
     // ===========================
-    let activeUserContext = ActiveUserContextGet();
-    const user = activeUserContext.activeUserObj ? activeUserContext.activeUserObj.user : null;
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
     // ===========================
     const [createNewSchedule, setCreateNewSchedule] = useState(false);
     const handleHideNewScheduleModal = () => setCreateNewSchedule(false);

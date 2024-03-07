@@ -1,5 +1,6 @@
 // ==============================================
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -12,36 +13,43 @@ import Image from 'react-bootstrap/Image';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk, faPen } from '@fortawesome/free-solid-svg-icons';
 
+import { updateUserProfileData } from '../../feature/activeUser/activeUserSlice.jsx';
+
 import ClearAllScheduleModal from '../../components/ClearAllScheduleModal.jsx';
 
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 // ==============================================
 export default function Dashboard() {
     // ===========================
+    const dispatch = useDispatch();
+
     const modeContext = ModeContextGet();
     const useDarkMode = modeContext.useDarkMode;
     // ===========================
-    let activeUserContext = ActiveUserContextGet();
-
-    let userObj = activeUserContext.activeUserObj;
-    let updateUserProfileInfo = activeUserContext.updateActiveUserProfile;
-
-    let users = localStorage.getItem("users");
-    if (users !== null && users !== undefined)
-        users = JSON.parse(users);
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
     // ===========================
     const [isModifyingFirstName, setIsModifyingFirstName] = useState(false);
-    const [firstName, setFirstName] = useState(userObj.user.firstName);
+    const [firstName, setFirstName] = useState(user.firstName);
 
-    const updateUserInfoFName = () => updateUserProfileInfo("first-name", firstName);
+    const updateUserInfoFName = () => {
+        dispatch(updateUserProfileData({
+            type: "first-name",
+            data: firstName
+        }));
+    };
     // ===========================
     const [isModifyingLastName, setIsModifyingLastName] = useState(false);
-    const [lastName, setLastName] = useState(userObj.user.lastName);
+    const [lastName, setLastName] = useState(user.lastName);
 
-    const updateUserInfoLName = () => updateUserProfileInfo("last-name", lastName);
+    const updateUserInfoLName = () => {
+        dispatch(updateUserProfileData({
+            type: "last-name",
+            data: lastName
+        }));
+    };
     // ===========================
-    const [image, setImage] = useState(userObj.user.image);
+    const [image, setImage] = useState(user.image);
     const [isCorrectImageFormat, setIsCorrectImageFormat] = useState(true);
 
     const updateProfilePicture = (event) => {
@@ -70,12 +78,16 @@ export default function Dashboard() {
                 // Debug
                 //console.log("[On Profile Picture Upload] Width: " + width + ", Height: " + height);
 
-                const isValid = width === height & file.size <= 512000;
+                const isValid = width === height & file.size <= 128000;
                 setIsCorrectImageFormat(isValid);
 
                 if (isValid) {
                     setImage(url);
-                    updateUserProfileInfo("image", url);
+
+                    dispatch(updateUserProfileData({
+                        type: "image",
+                        data: url
+                    }));
                 }
             }
             testImg.src = url;
@@ -83,7 +95,12 @@ export default function Dashboard() {
         // ===================================================
     }
     // ===========================
-    const updateClearUserSchedule = () => updateUserProfileInfo("tasks", []);
+    const updateClearUserSchedule = () => {
+        dispatch(updateUserProfileData({
+            type: "tasks",
+            data: []
+        }));
+    };
     // ===========================
     const [isModalVisible, setIsModalVisible] = useState(false);
     // ===========================
@@ -98,18 +115,21 @@ export default function Dashboard() {
                     {/* First Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">First Name: </Form.Label>
+                            <Form.Label htmlFor="first-name"
+                                className="text-non-links-primary fw-bold me-2 my-0 py-0">
+                                First Name:<span> </span>
+                            </Form.Label>
                             {
                                 isModifyingFirstName ?
                                     (
-                                        <Form.Control id="first-name" value={firstName}
+                                        <Form.Control id="first-name" value={firstName} autoComplete={"on"}
                                             className="input-bar-no-shadow me-2"
                                             type="name" placeholder="First Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setFirstName(event.target.value)} />
                                     ) :
                                     (
-                                        <Form.Control id="first-name" disabled value={firstName}
+                                        <Form.Control id="first-name" disabled value={firstName} autoComplete={"on"}
                                             className="input-bar-no-shadow me-2"
                                             type="name" placeholder="First Name"
                                             style={{ width: "30%" }}
@@ -142,18 +162,21 @@ export default function Dashboard() {
                     {/* Last Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">Last Name: </Form.Label>
+                            <Form.Label htmlFor="last-name"
+                                className="text-non-links-primary fw-bold me-2 my-0 py-0">
+                                Last Name:<span> </span>
+                            </Form.Label>
                             {
                                 isModifyingLastName ?
                                     (
-                                        <Form.Control id="last-name" value={lastName}
+                                        <Form.Control id="last-name" value={lastName} autoComplete={"on"}
                                             className="input-bar-no-shadow me-2"
                                             type="name" placeholder="Last Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setLastName(event.target.value)} />
                                     ) :
                                     (
-                                        <Form.Control id="last-name" disabled value={lastName}
+                                        <Form.Control id="last-name" disabled value={lastName} autoComplete={"on"}
                                             className="input-bar-no-shadow me-2"
                                             type="name" placeholder="Last Name"
                                             style={{ width: "30%" }}
@@ -188,7 +211,10 @@ export default function Dashboard() {
                     {/* Image (Profile Picture) */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center mb-3">
-                            <Form.Label className="text-non-links-primary fw-bold me-2 my-0 py-0">Profile Picture: </Form.Label>
+                            <Form.Label htmlFor="profile-picture"
+                                className="text-non-links-primary fw-bold me-2 my-0 py-0">
+                                Profile Picture:<span> </span>
+                            </Form.Label>
                             <Form.Control id="profile-picture"
                                 className={`text-non-links-primary login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"
@@ -218,7 +244,7 @@ export default function Dashboard() {
                         {/* ----------------------------- */}
                         <Col className="col-lg-4 col-md-5 col-sm-8 col-12 d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
                             <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for profile picture setup: </Form.Text>
-                            <Form.Text className="text-non-links-primary login-text">1. Must not exceed 512kb. </Form.Text>
+                            <Form.Text className="text-non-links-primary login-text">1. Must not exceed 128kb. </Form.Text>
                             <Form.Text className="text-non-links-primary login-text">2. Equal Width and Height Dimensions. </Form.Text>
                         </Col>
                         {/* ----------------------------- */}

@@ -1,5 +1,6 @@
 // ==============================================
 import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
@@ -11,13 +12,23 @@ import Navbar from 'react-bootstrap/Navbar';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 
 import { ModeContextGet } from '../contexts/ModeContext.jsx';
-import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
+
+import { logout } from '../feature/activeUser/activeUserSlice.jsx';
 
 import './NavigationPanel.css';
 // ==============================================
 export default function NavigationPanel({ foundingName }) {
     // ===========================
-    let userObj = ActiveUserContextGet().activeUserObj;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const onLogout = () => {
+        dispatch(logout());
+        navigate('/');
+    };
+    // ===========================
+    const userObj = useSelector((state) => state.activeUser);
+    const user = userObj.user;
 
     const [windowWidth, setWindowWidth] = useState(document.documentElement.clientWidth);
 
@@ -39,15 +50,15 @@ export default function NavigationPanel({ foundingName }) {
                             className="d-flex align-items-center">
                             <Image className="me-3" src={new URL("../assets/logo.webp", import.meta.url)}
                                 style={{ width: "48px", height: "auto", minWidth: "48px", minHeight: "48px", maxWidth: "48px", maxHeight: "48px" }} />
-                            <span className="fs-3 fw-bold me-2 text-links">{foundingName}</span>
+                            <span className="fs-3 fw-bold me-2 text-non-links-primary">{foundingName}</span>
                         </Navbar.Brand>
                         {
                             windowWidth <= 768 ?
                                 (
-                                    <NavigationBarBodyOffCanvas user={userObj.user} />
+                                    <NavigationBarBodyOffCanvas user={user} onLogoutCallback={onLogout} />
                                 ) :
                                 (
-                                    <NavigationBarBodyElements user={userObj.user} />
+                                    <NavigationBarBodyElements user={user} onLogoutCallback={onLogout} />
                                 )
                         }
                     </Container>
@@ -57,12 +68,9 @@ export default function NavigationPanel({ foundingName }) {
     );
 }
 // ==============================================
-function NavigationBarBodyElements({ user }) {
+function NavigationBarBodyElements({ user, onLogoutCallback }) {
     // ===========================
     const navigate = useNavigate();
-    const logout = ActiveUserContextGet().logout;
-
-    const handleLogout = () => logout(() => navigate('/'));
     // ===========================
     const modeContext = ModeContextGet();
     useEffect(() => adjustGlobalCSSProperties(modeContext.useDarkMode), [])
@@ -137,7 +145,7 @@ function NavigationBarBodyElements({ user }) {
                             className="text-links fw-bold me-3">
                             {`${user.firstName} ${user.lastName}`}
                         </Nav.Link>
-                        <Nav.Link as={Link} onClick={handleLogout}
+                        <Nav.Link as={Link} onClick={onLogoutCallback}
                             className="text-links fw-bold me-2">
                             Logout
                         </Nav.Link>
@@ -166,7 +174,7 @@ function NavigationBarBodyElements({ user }) {
     );
 }
 // ==============================================
-function NavigationBarBodyOffCanvas({ user }) {
+function NavigationBarBodyOffCanvas({ user, onLogoutCallback }) {
     // ===========================
     const modeContext = ModeContextGet();
     useEffect(() => adjustGlobalCSSProperties(modeContext.useDarkMode), [])
@@ -181,9 +189,6 @@ function NavigationBarBodyOffCanvas({ user }) {
     const [showOffCanvasNav, setShowOffCanvasNav] = useState(false);
 
     const navigate = useNavigate();
-    const logout = ActiveUserContextGet().logout;
-
-    const handleLogout = () => logout(() => navigate('/'));
     const handleClose = () => setShowOffCanvasNav(false);
     // ===========================
     return (
@@ -276,7 +281,7 @@ function NavigationBarBodyOffCanvas({ user }) {
                     </div>
                     {
                         user ? (
-                            <Nav.Link as={Link} onClick={handleLogout}
+                            <Nav.Link as={Link} onClick={onLogoutCallback}
                                 className="text-links fw-bold me-auto">
                                 Logout
                             </Nav.Link>

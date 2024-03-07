@@ -1,6 +1,7 @@
 // ==============================================
 import { useEffect, useState } from 'react';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react'
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
 
@@ -13,7 +14,6 @@ import Footer from './components/Footer.jsx';
 import NavigationPanel from './components/NavigationPanel.jsx';
 import ScheduleAlarmModal from './components/ScheduleAlarmModal.jsx';
 
-import { ActiveUserContextProvider } from './contexts/ActiveUserContext.jsx';
 import { ModeContextProvider } from './contexts/ModeContext.jsx';
 
 import Home from './pages/Home';
@@ -25,40 +25,30 @@ import GameList from './pages/GameList';
 import KuruKuru from './pages/KuruKuru';
 import ErrorPage from './pages/ErrorPage';
 
-import users from './data/users.js';
 import {
   registerNewScheduleEvent,
   registerModifiedScheduleEvent,
   registerScheduleTimerRemovalEvent,
   registerCachedScheduleEvent
 } from './data/time.js';
+import users from './data/users.js';
 
-import { store } from './store.jsx';
+import { store, persistor } from './store.jsx';
 
 import './App.css';
 // ==============================================
 export function MainLayout() {
-  return (
-    <>
-      {/* Header Panels Section */}
-      <NavigationPanel foundingName={"StishFicks"} />
-      <Outlet />
-      {/* Footer Section */}
-      <Footer foundingName={"StishFicks"} />
-    </>
-  );
-}
-// ==============================================
-function App() {
-  // ==============================================
-  // For pre-loading the cached List of Users Data.
-  useLocalStorage("users", users);
-  // ==============================================
   const [scheduleTimers, setScheduleTimers] = useState([]);
+
+  const activeUserObj = useSelector((state) => state.activeUser);
+  const user = activeUserObj.user;
+
+  // Debug
+  //console.log("User.", activeUserObj);
 
   const [activeAlarms, setActiveAlarms] = useState([]);
   const [alarmModalVisible, setAlarmModalVisible] = useState(false);
-  const handleEndAlarm = (alarmGameID) => {
+  const onEndIndividualAlarm = (alarmGameID) => {
     const newActiveAlarms = [...activeAlarms];
 
     const alarmIndex = newActiveAlarms.findIndex((alarm) => alarm.schedule.gameID === alarmGameID);
@@ -72,7 +62,7 @@ function App() {
       setAlarmModalVisible(false);
   };
 
-  const handleEndAllAlarms = () => {
+  const onEndAllAlarms = () => {
     activeAlarms.forEach((alarm) => alarm.alarmAudio.pause());
 
     setActiveAlarms([]);
@@ -118,7 +108,7 @@ function App() {
 
         if (now.getMinutes() !== alarmMinutes) {
           alarmAudio.removeEventListener("ended", alarmCallback);
-          handleEndAllAlarms();
+          onEndAllAlarms();
           return;
         }
 
@@ -199,15 +189,7 @@ function App() {
     const loadCachedScheduleTimersCallback = () => {
       setScheduleTimers((previousScheduleTimer) => {
         const now = new Date();
-        const activeUser = JSON.parse(localStorage.getItem("activeUser",
-          {
-            user: null,
-            lastLogActivity: null,
-            token: null
-          }
-        ));
 
-        const user = activeUser.user;
         if (user === null)
           return;
 
@@ -242,10 +224,29 @@ function App() {
   }, []);
   // ==============================================
   return (
+    <>
+      {/* Header Panels Section */}
+      <NavigationPanel foundingName={"StishFicks"} />
+      <Outlet />
+      {/* Footer Section */}
+      <Footer foundingName={"StishFicks"} />
+      <ScheduleAlarmModal
+        isVisible={alarmModalVisible}
+        activeAlarms={activeAlarms}
+        onEndIndividualAlarm={onEndIndividualAlarm}
+        onEndAllAlarms={onEndAllAlarms} />
+    </>
+  );
+}
+// ==============================================
+function App() {
+  const cachedUsers = useLocalStorage("users", users)[0];
+
+  return (
     <Container fluid className="main-container p-0">
-      <ActiveUserContextProvider>
-        <ModeContextProvider>
-          <Provider store={store}>
+      <ModeContextProvider>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
             <BrowserRouter>
               <Routes>
                 <Route path="/" element={<MainLayout />}>
@@ -276,14 +277,9 @@ function App() {
                 </Route>
               </Routes>
             </BrowserRouter>
-          </Provider>
-          <ScheduleAlarmModal
-            isVisible={alarmModalVisible}
-            activeAlarms={activeAlarms}
-            handleEndAlarm={handleEndAlarm}
-            handleEndAllAlarms={handleEndAllAlarms} />
-        </ModeContextProvider>
-      </ActiveUserContextProvider>
+          </PersistGate>
+        </Provider>
+      </ModeContextProvider>
     </Container>
   );
 }

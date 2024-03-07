@@ -7,7 +7,7 @@ import Image from 'react-bootstrap/Image';
 // ==============================================
 export default function ErrorPage() {
     return (
-        <Container fluid className="w-100 d-flex flex-column align-items-center justify-content-end" style={{ flex: 1 }}>
+        <Container fluid className="primary-container w-100 d-flex flex-column align-items-center justify-content-end" style={{ flex: 1 }}>
             <Row className="mt-3 d-flex flex-column align-items-center justify-content-center" style={{ flex: 1 }}>
                 <Col className="col-8 text-center d-flex flex-column align-items-center justify-content-between" style={{ flex: 1 }}>
                     <p className="text-non-links-primary fw-bold mt-5">

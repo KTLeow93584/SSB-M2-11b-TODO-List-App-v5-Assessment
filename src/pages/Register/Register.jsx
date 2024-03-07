@@ -1,8 +1,7 @@
+// ==============================================
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
-
-import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -13,16 +12,17 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 
-import './Register.css';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
+import users from '../../data/users.js';
 
+import './Register.css';
+// ==============================================
 export default function Register() {
     const modeContext = ModeContextGet();
     const navigate = useNavigate();
+    const cachedUsers = useLocalStorage("users", users)[0];
 
-    const handleRegistration = (email, password, firstName, lastName, image) => {
-        let users = localStorage.getItem("users");
-        users = users !== null && users !== undefined ? JSON.parse(users) : [];
-
+    const onRegister = (email, password, firstName, lastName, image) => {
         // Debug
         //console.log("[Registration] Payload.", action.payload);
 
@@ -38,8 +38,8 @@ export default function Register() {
         // Debug
         //console.log("[On Register] New User.", newUser);
 
-        users.push(newUser);
-        localStorage.setItem("users", JSON.stringify(users));
+        const newUsersBatch = [...cachedUsers, newUser];
+        localStorage.setItem("users", JSON.stringify(newUsersBatch));
 
         navigate("/login");
     };
@@ -59,7 +59,7 @@ export default function Register() {
                         </Card.Header>
                         <Card.Body className="mx-3 mt-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0s">
-                                <RegisterForm successfulCallback={handleRegistration} />
+                                <RegisterForm successfulCallback={onRegister} />
                             </Row>
                         </Card.Body>
                         <Card.Body className="d-flex flex-column align-items-center justify-content-start">
@@ -74,10 +74,8 @@ export default function Register() {
         </Container>
     );
 }
-
+// ==============================================
 function RegisterForm({ successfulCallback }) {
-    const users = useLocalStorage("users")[0];
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [passwordConfirmation, setPasswordConfirmation] = useState("");
@@ -166,7 +164,7 @@ function RegisterForm({ successfulCallback }) {
                 // Debug
                 //console.log("[On Profile Picture Upload] Width: " + width + ", Height: " + height);
 
-                const isValid = width === height & file.size <= 512000;
+                const isValid = width === height & file.size <= 128000;
                 setIsCorrectImageFormat(isValid);
 
                 if (isValid)
@@ -194,12 +192,12 @@ function RegisterForm({ successfulCallback }) {
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label className="text-non-links-primary login-text">Register with Email Address: </Form.Label>
+                            <Form.Label htmlFor="email" className="text-non-links-primary login-text">Register with Email Address: </Form.Label>
                             {/* ----------------------------- */}
                             {/* Email Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
-                                    required id="email" value={email}
+                                    required id="email" value={email} autoComplete="on"
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="email" placeholder="Email"
                                     onChange={(event) => {
@@ -257,7 +255,7 @@ function RegisterForm({ successfulCallback }) {
                             <Form.Label htmlFor="first-name" className="text-non-links-primary login-text">Name: </Form.Label>
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
-                                    required id="first-name" value={firstName}
+                                    required id="first-name" value={firstName} autoComplete="on"
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="name" placeholder="First Name"
                                     onChange={(event) => {
@@ -269,7 +267,7 @@ function RegisterForm({ successfulCallback }) {
                             {/* Last Name Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
-                                    required id="last-name input-bar-no-shadow" value={lastName}
+                                    required id="last-name input-bar-no-shadow" value={lastName} autoComplete="on"
                                     className="text-non-links-primary"
                                     type="name" placeholder="Last Name"
                                     onChange={(event) => {
@@ -300,7 +298,7 @@ function RegisterForm({ successfulCallback }) {
                             }
                             <div className="d-flex flex-column secondary-container primary-border rounded mb-2 px-2 py-1">
                                 <Form.Text className="text-non-links-primary login-text fw-bold">Requirements for profile picture setup: </Form.Text>
-                                <Form.Text className="text-non-links-primary login-text">1. Must not exceed 512kb. </Form.Text>
+                                <Form.Text className="text-non-links-primary login-text">1. Must not exceed 128kb. </Form.Text>
                                 <Form.Text className="text-non-links-primary login-text">2. Equal Width and Height Dimensions. </Form.Text>
                             </div>
                             {/* ----------------------------- */}
@@ -382,3 +380,4 @@ function RegisterForm({ successfulCallback }) {
         </>
     );
 }
+// ==============================================

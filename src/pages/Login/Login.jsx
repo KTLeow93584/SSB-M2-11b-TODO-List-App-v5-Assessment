@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
+import useLocalStorage from 'use-local-storage';
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -11,45 +13,68 @@ import Form from 'react-bootstrap/Form';
 import Image from 'react-bootstrap/Image';
 import Nav from 'react-bootstrap/Nav';
 
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
+import { login } from '../../feature/activeUser/activeUserSlice.jsx';
 import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import { registerCachedScheduleEvent } from '../../data/time.js';
+import users from '../../data/users.js';
 
 import './Login.css';
 // ==============================================
 export default function Login() {
+    const cachedUsers = useLocalStorage("users", users)[0];
+    // ===========================
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    // ===========================
+    // Login Process
+    const onLogin = (email, password, onProcessSuccessfulCallback = null, onProcessFailedCallback = null) => {
+        // =======================
+        let loggedInUserObj = {
+            user: null,
+            lastLogActivity: null,
+            token: null
+        };
+
+        const userIndex = cachedUsers.findIndex((user) => user.email.toLowerCase() === email.toLowerCase() && user.password === password);
+        if (userIndex !== -1) {
+            const user = cachedUsers[userIndex];
+            const date = new Date();
+
+            loggedInUserObj = {
+                user: { email: user.email, firstName: user.firstName, lastName: user.lastName, image: user.image, tasks: user.tasks },
+                lastLogActivity: date.toISOString(),
+                token: date.toISOString()
+            };
+        }
+        // =======================
+        dispatch(login(loggedInUserObj));
+        // =======================
+        // Dial up the "Register User's Cached Schedules" Event from "App.jsx".
+        const timeEvent = new CustomEvent(registerCachedScheduleEvent);
+        window.dispatchEvent(timeEvent);
+        // =======================
+        // Debug
+        //console.log("On Successfully Logged In", loggedInUserObj);
+        // =======================
+        if (onProcessSuccessfulCallback)
+            onProcessSuccessfulCallback(loggedInUserObj);
+
+        // On Successful Login Process
+        if (loggedInUserObj.user !== null) {
+            if (onProcessSuccessfulCallback)
+                onProcessSuccessfulCallback(loggedInUserObj);
+            navigate("/");
+        }
+        // On Failed Login Process
+        else {
+            if (onProcessFailedCallback)
+                onProcessFailedCallback(true);
+        }
+        // =======================
+    };
     // ===========================
     const modeContext = ModeContextGet();
-    const activeUserContext = ActiveUserContextGet();
-    const login = activeUserContext.login;
-
-    const navigate = useNavigate();
-
-    const handleLogin = (email, password, onProcessSuccessfulCallback = null, onProcessFailedCallback = null) => {
-        login(email, password,
-            // On Successful Login Process
-            (loggedInUserObj) => {
-                // =======================
-                // Dial up the "Register User's Cached Schedules" Event from "App.jsx".
-                const timeEvent = new CustomEvent(registerCachedScheduleEvent);
-                window.dispatchEvent(timeEvent);
-                // =======================
-                // Debug
-                //console.log("On Successfully Logged In", loggedInUserObj);
-                // =======================
-                navigate("/");
-
-                if (onProcessSuccessfulCallback)
-                    onProcessSuccessfulCallback(loggedInUserObj);
-            },
-            // On Failed Login Process
-            () => {
-                if (onProcessFailedCallback)
-                    onProcessFailedCallback(true);
-            }
-        );
-    };
     const pageMode = modeContext.useDarkMode ? "dark" : "light";
     // ===========================
     return (
@@ -71,7 +96,7 @@ export default function Login() {
                         {/* Card Body (Email/Password) */}
                         <Card.Body className="mt-3 mx-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0">
-                                <LoginForm successfulCallback={handleLogin} />
+                                <LoginForm onLoginCallback={onLogin} />
                             </Row>
                         </Card.Body>
                         {/* ---------------------- */}
@@ -91,7 +116,7 @@ export default function Login() {
     );
 }
 
-function LoginForm({ successfulCallback }) {
+function LoginForm({ onLoginCallback }) {
     // ===========================
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -115,8 +140,8 @@ function LoginForm({ successfulCallback }) {
                 <Form className="mb-2" onSubmit={(event) => {
                     event.preventDefault();
 
-                    if (successfulCallback)
-                        successfulCallback(email, password, null, (state) => setInvalidUser(state));
+                    if (onLoginCallback)
+                        onLoginCallback(email, password, null, (state) => setInvalidUser(state));
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">

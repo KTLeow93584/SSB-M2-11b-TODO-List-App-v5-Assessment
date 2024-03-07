@@ -1,10 +1,9 @@
 import { Navigate } from 'react-router-dom';
-import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
+import { useSelector } from 'react-redux';
 
 export default function RequireAuth({ children }) {
     // ===========================
-    let userObj = ActiveUserContextGet().activeUserObj;
-    // ===========================
+    const userObj = useSelector((state) => state.activeUser);
     const user = userObj.user;
     const token = userObj.token;
 

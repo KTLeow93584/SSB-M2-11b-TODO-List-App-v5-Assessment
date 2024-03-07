@@ -1,6 +1,6 @@
 // ==============================================
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // ==============================================
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,8 +11,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 
 import { createTask } from '../feature/tasks/tasksSlice.jsx';
+import { updateUserProfileData } from '../feature/activeUser/activeUserSlice.jsx';
 
-import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import gameInfo from '../data/GameInfo/index.js';
@@ -23,8 +23,8 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
     const modeContext = ModeContextGet();
     const useDarkMode = modeContext.useDarkMode;
     // ===========================
-    const userContext = ActiveUserContextGet();
-    const user = userContext.activeUserObj.user;
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
     // ===========================
     const [selectedGame, setSelectedGame] = useState({
         id: gameInfo[0].id,
@@ -104,8 +104,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         onRegisterScheduleEvent(newSchedule);
 
         dispatch(createTask(newSchedule));
-        // ===============================
-        userContext.updateActiveUserProfile("tasks", [...user.tasks, newSchedule]);
+        dispatch(updateUserProfileData({
+            type: "tasks",
+            data: [...user.tasks, newSchedule]
+        }));
         // ===============================
         setDescription("");
         setAlarmFile(null);
@@ -127,7 +129,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                         {/* Game ID */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary">Game: </Form.Label>
+                                <Form.Label htmlFor="game-id-dropdown" className="text-non-links-primary">Game: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={handleSelectGameID} key={selectedGame.id}>
@@ -155,7 +157,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                         {/* Game Regions */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary">Region: </Form.Label>
+                                <Form.Label htmlFor="game-region-id-dropdown" className="text-non-links-primary">Region: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={handleSelectRegion}>
@@ -192,10 +194,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                         {/* Alarm File */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary e-3">Notification Sound: </Form.Label>
+                                <Form.Label htmlFor="alarm-file" className="text-non-links-primary e-3">Notification Sound: </Form.Label>
                             </Col>
                             <Col className="col-9">
-                                <Form.Control required id="description"
+                                <Form.Control required id="alarm-file"
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
@@ -207,7 +209,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary me-3">Notify Me At: </Form.Label>
+                                <Form.Label htmlFor="notify-time" className="text-non-links-primary me-3">Notify Me At: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="notify-time" value={notifyTime}
@@ -220,7 +222,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary me-3">Note: </Form.Label>
+                                <Form.Label htmlFor="description" className="text-non-links-primary me-3">Note: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="description" value={description} autoFocus

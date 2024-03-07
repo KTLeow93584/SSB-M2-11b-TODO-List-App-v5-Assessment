@@ -1,4 +1,6 @@
 // ==============================================
+import { useSelector } from 'react-redux';
+
 import Container from 'react-bootstrap/Container';
 
 import Row from 'react-bootstrap/Row';
@@ -7,7 +9,6 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 
 import Timekeeper from "../../components/Timekeeper.jsx";
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 // ==============================================
 export default function Home() {
     return (
@@ -21,8 +22,8 @@ export default function Home() {
 
 function BodySection() {
     // ===========================
-    let userContext = ActiveUserContextGet();
-    const user = userContext.activeUserObj.user;
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
     // ===========================
     // Debug
     //console.log("User.", user);

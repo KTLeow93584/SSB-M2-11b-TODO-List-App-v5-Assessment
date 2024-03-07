@@ -1,6 +1,6 @@
 // ==============================================
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -13,8 +13,8 @@ import Image from 'react-bootstrap/Image';
 import Timekeeper from '../../components/Timekeeper.jsx';
 import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 
-import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
 import { removeTask } from '../../feature/tasks/tasksSlice.jsx';
+import { updateUserProfileData } from '../../feature/activeUser/activeUserSlice.jsx';
 
 import {
     formatTime, millisecondsInAnHour, millisecondsInAMinute,
@@ -31,9 +31,9 @@ import './Schedule.css';
 export default function Schedule() {
     const dispatch = useDispatch();
     // ===========================
-    const userContext = ActiveUserContextGet();
-    const user = userContext.activeUserObj.user;
-    const scheduleList = userContext.activeUserObj.user.tasks;
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
+    const scheduleList = user.tasks;
     // ===========================
     const [schedule, setSchedule] = useState(null);
     const [selectedGame, setSelectedGame] = useState(null);
@@ -42,13 +42,16 @@ export default function Schedule() {
     const onDeleteSchedule = (id) => {
         dispatch(removeTask({ taskId: id }));
 
-        let schedules = user.tasks;
-        const taskIndex = schedules.findIndex((task) => task.id === id);
+        let schedules = [...user.tasks];
+        const scheduleIndex = schedules.findIndex((task) => task.id === id);
 
-        onRegisterScheduleRemovalEvent(user.tasks[taskIndex].gameID);
+        onRegisterScheduleRemovalEvent(schedules[scheduleIndex].gameID);
+        schedules.splice(scheduleIndex, 1);
 
-        user.tasks.splice(taskIndex, 1);
-        userContext.updateActiveUserProfile("tasks", schedules);
+        dispatch(updateUserProfileData({
+            type: "tasks",
+            data: schedules
+        }));
     };
     // ===========================
     const [modifyExistingSchedule, setModifyExistingSchedule] = useState(false);
@@ -134,7 +137,7 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                         className="rounded me-2"
                         style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
                     <span className="fs-4 text-non-links-primary">{game.title}</span>
-                    <span className="fs-6 text-non-links-primary ms-auto">{region.name}</span>
+                    <span className="fs-6 text-non-links-secondary fw-bold ms-auto">{region.name}</span>
                 </Card.Header>
                 { /* ------------------------------------- */}
                 <Card.Body className="secondary-container">

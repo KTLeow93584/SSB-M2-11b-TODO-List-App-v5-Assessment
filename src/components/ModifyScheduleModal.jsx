@@ -1,6 +1,6 @@
 // ==============================================
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // ==============================================
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -11,8 +11,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 
 import { modifyTask } from '../feature/tasks/tasksSlice.jsx';
+import { updateUserProfileData } from '../feature/activeUser/activeUserSlice.jsx';
 
-import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import gameInfo from '../data/GameInfo/index.js';
@@ -28,8 +28,8 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     const modeContext = ModeContextGet();
     const useDarkMode = modeContext.useDarkMode;
     // ===========================
-    const userContext = ActiveUserContextGet();
-    const user = userContext.activeUserObj.user;
+    let activeUserObj = useSelector((state) => state.activeUser);
+    const user = activeUserObj.user;
     // ===========================
     const reassignTimeData = (game, region) => {
         return formatServerRegionTimeDisplay(game, region, new Date(),
@@ -141,12 +141,15 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         onModifyScheduleEvent(newSchedule);
 
         const scheduleIndex = user.tasks.findIndex((task) => task.gameID === schedule.gameID && task.regionName === schedule.regionName);
-        user.tasks[scheduleIndex] = newSchedule;
+        const schedules = [...user.tasks];
+        schedules[scheduleIndex] = newSchedule;
 
         const data = { taskIndex: scheduleIndex, modifiedTaskData: newSchedule };
         dispatch(modifyTask(data));
-        // ===============================
-        userContext.updateActiveUserProfile("tasks", user.tasks);
+        dispatch(updateUserProfileData({
+            type: "tasks",
+            data: schedules
+        }));
         // ===============================
         handleClose();
     };
@@ -164,7 +167,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Game ID */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary">Game: </Form.Label>
+                                <Form.Label htmlFor="game-id-dropdown" className="text-non-links-primary">Game: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={onSelectNewGameType} key={modalData.game.id}>
@@ -192,7 +195,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Game Regions */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary">Region: </Form.Label>
+                                <Form.Label htmlFor="game-region-id-dropdown" className="text-non-links-primary">Region: </Form.Label>
                             </Col>
                             <Col className="col-9 mx-auto">
                                 <Dropdown onSelect={onSelectNewGameRegion}>
@@ -229,10 +232,10 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Alarm File */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary e-3">Notification Sound: </Form.Label>
+                                <Form.Label htmlFor="alarm-file" className="text-non-links-primary e-3">Notification Sound: </Form.Label>
                             </Col>
                             <Col className="col-9">
-                                <Form.Control required id="description"
+                                <Form.Control required id="alarm-file"
                                     className="text-non-links-primary input-bar-no-shadow"
                                     type="file" accept="audio/mpeg, audio/ogg, audio/webm, audio/flac"
                                     placeholder="Enter additional notes/descriptions here."
@@ -244,7 +247,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary me-3">Notify Me At: </Form.Label>
+                                <Form.Label htmlFor="notify-time" className="text-non-links-primary me-3">Notify Me At: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="notify-time" value={notifyTime}
@@ -257,7 +260,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         {/* Description */}
                         <Row className="d-flex align-items-center mb-3">
                             <Col className="col-3">
-                                <Form.Label className="text-non-links-primary me-3">Note: </Form.Label>
+                                <Form.Label htmlFor="description" className="text-non-links-primary me-3">Note: </Form.Label>
                             </Col>
                             <Col className="col-9">
                                 <Form.Control id="description" value={description} autoFocus
