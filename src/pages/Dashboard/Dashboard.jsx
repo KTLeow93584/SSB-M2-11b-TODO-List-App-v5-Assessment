@@ -13,10 +13,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFloppyDisk, faPen } from '@fortawesome/free-solid-svg-icons';
 
 import ClearAllScheduleModal from '../../components/ClearAllScheduleModal.jsx';
+
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 // ==============================================
 export default function Dashboard() {
-    // =======================================
+    // ===========================
+    const modeContext = ModeContextGet();
+    const useDarkMode = modeContext.useDarkMode;
+    // ===========================
     let activeUserContext = ActiveUserContextGet();
 
     let userObj = activeUserContext.activeUserObj;
@@ -25,17 +30,17 @@ export default function Dashboard() {
     let users = localStorage.getItem("users");
     if (users !== null && users !== undefined)
         users = JSON.parse(users);
-    // =======================================
+    // ===========================
     const [isModifyingFirstName, setIsModifyingFirstName] = useState(false);
     const [firstName, setFirstName] = useState(userObj.user.firstName);
 
     const updateUserInfoFName = () => updateUserProfileInfo("first-name", firstName);
-    // ==================
+    // ===========================
     const [isModifyingLastName, setIsModifyingLastName] = useState(false);
     const [lastName, setLastName] = useState(userObj.user.lastName);
 
     const updateUserInfoLName = () => updateUserProfileInfo("last-name", lastName);
-    // ==================
+    // ===========================
     const [image, setImage] = useState(userObj.user.image);
     const [isCorrectImageFormat, setIsCorrectImageFormat] = useState(true);
 
@@ -77,32 +82,35 @@ export default function Dashboard() {
         });
         // ===================================================
     }
-    // =======================================
+    // ===========================
     const updateClearUserSchedule = () => updateUserProfileInfo("tasks", []);
-    // =======================================
+    // ===========================
     const [isModalVisible, setIsModalVisible] = useState(false);
-    // =======================================
+    // ===========================
     return (
         <>
-            <Container fluid className="d-flex flex-column primary-container m-0 p-0" style={{ flex: 1, overflowX: "hidden" }}>
+            <Container fluid
+                className="d-flex flex-column primary-container m-0 p-0"
+                style={{ flex: 1, overflowX: "hidden" }}
+                data-bs-theme={`${useDarkMode} ? "dark" : "light`}>
                 <Form className="mt-3 mx-3">
                     {/* -------------------------- */}
                     {/* First Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-link fw-bold me-2 my-0 py-0">First Name: </Form.Label>
+                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">First Name: </Form.Label>
                             {
                                 isModifyingFirstName ?
                                     (
                                         <Form.Control id="first-name" value={firstName}
-                                            className="text-non-links input-bar-no-shadow me-2"
+                                            className="input-bar-no-shadow me-2"
                                             type="name" placeholder="First Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setFirstName(event.target.value)} />
                                     ) :
                                     (
                                         <Form.Control id="first-name" disabled value={firstName}
-                                            className="text-non-links input-bar-no-shadow me-2"
+                                            className="input-bar-no-shadow me-2"
                                             type="name" placeholder="First Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setFirstName(event.target.value)} />
@@ -134,19 +142,19 @@ export default function Dashboard() {
                     {/* Last Name */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center">
-                            <Form.Label className="text-non-link fw-bold me-2 my-0 py-0">Last Name: </Form.Label>
+                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">Last Name: </Form.Label>
                             {
                                 isModifyingLastName ?
                                     (
                                         <Form.Control id="last-name" value={lastName}
-                                            className="text-non-links input-bar-no-shadow me-2"
+                                            className="input-bar-no-shadow me-2"
                                             type="name" placeholder="Last Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setLastName(event.target.value)} />
                                     ) :
                                     (
                                         <Form.Control id="last-name" disabled value={lastName}
-                                            className="text-non-links input-bar-no-shadow me-2"
+                                            className="input-bar-no-shadow me-2"
                                             type="name" placeholder="Last Name"
                                             style={{ width: "30%" }}
                                             onChange={(event) => setLastName(event.target.value)} />
@@ -180,7 +188,7 @@ export default function Dashboard() {
                     {/* Image (Profile Picture) */}
                     <Row className="w-100 mb-3">
                         <Col className="col-12 d-flex align-items-center mb-3">
-                            <Form.Label className="text-non-link fw-bold me-2 my-0 py-0">Profile Picture: </Form.Label>
+                            <Form.Label className="text-non-links fw-bold me-2 my-0 py-0">Profile Picture: </Form.Label>
                             <Form.Control id="profile-picture"
                                 className={`text-non-links login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"

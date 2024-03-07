@@ -11,15 +11,21 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 
 import { createTask } from '../feature/tasks/tasksSlice.jsx';
+
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
+import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import gameInfo from '../data/gameInfo.js';
 import { formatTime, millisecondsInAMinute, millisecondsInAnHour, registerNewScheduleEvent } from '../data/time.js';
 // ==============================================
 export default function AddScheduleModal({ isVisible, handleClose, initialGame = null, initialRegion = null }) {
+    // ===========================
+    const modeContext = ModeContextGet();
+    const useDarkMode = modeContext.useDarkMode;
+    // ===========================
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
-
+    // ===========================
     const [selectedGame, setSelectedGame] = useState({
         id: gameInfo[0].id,
         title: gameInfo[0].title,
@@ -108,10 +114,10 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         handleClose();
     };
     // =============================
-    return (
-        <Modal size="xl" show={isVisible} onHide={handleClose}>
+    return !user ? null : (
+        <Modal size="xl" show={isVisible} onHide={handleClose} data-bs-theme={useDarkMode ? "dark" : "light"}>
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title>Create a new game notification schedule</Modal.Title>
+                <Modal.Title className="text-non-links">Create a new game notification schedule</Modal.Title>
             </Modal.Header>
 
             <Form onSubmit={handleSubmitNewSchedule}>
@@ -177,9 +183,9 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
                             </Col>
                         </Row>
                         <Row className="d-flex flex-column align-items-center mb-3">
-                            <Col className="d-flex flex-column secondary-border me-3 py-2 rounded" style={{ width: "fit-content" }}>
-                                <Form.Text>{`Local Reset Time: ${selectedRegion.localResetTime}.`}</Form.Text>
-                                <Form.Text>{`Time Until Next Reset: ${selectedRegion.timeUntilReset}.`}</Form.Text>
+                            <Col className="d-flex flex-column secondary-border primary-container me-3 py-2 rounded" style={{ width: "fit-content" }}>
+                                <Form.Text className="text-non-links">{`Local Reset Time: ${selectedRegion.localResetTime}.`}</Form.Text>
+                                <Form.Text className="text-non-links">{`Time Until Next Reset: ${selectedRegion.timeUntilReset}.`}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}

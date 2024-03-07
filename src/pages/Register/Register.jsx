@@ -253,7 +253,8 @@ function RegisterForm({ successfulCallback }) {
                             {/* ----------------------------- */}
                             <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
-                            {/* First Name Form */}
+                            {/* First Name + Last Name Forms */}
+                            <Form.Label htmlFor="first-name" className="text-non-links login-text">Name: </Form.Label>
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
                                     required id="first-name" value={firstName}
@@ -280,7 +281,7 @@ function RegisterForm({ successfulCallback }) {
                             <hr className="horizontal-line-text" />
                             {/* ----------------------------- */}
                             {/* Image (File Upload) */}
-                            <Form.Label className="text-non-links login-text">Profile Picture: </Form.Label>
+                            <Form.Label htmlFor="profile-picture" className="text-non-links login-text">Profile Picture: </Form.Label>
                             <Form.Control id="profile-picture"
                                 className={`text-non-links login-text input-bar-no-shadow mb-2 ${isCorrectImageFormat ? "text-secondary" : "text-danger fw-bold"}`}
                                 type="file" accept="image/png, image/jpg, image/jpeg, image/webp, image/svg"

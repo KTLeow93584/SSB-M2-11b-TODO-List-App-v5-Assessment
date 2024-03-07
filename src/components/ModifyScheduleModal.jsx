@@ -11,7 +11,9 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-bootstrap/Modal';
 
 import { modifyTask } from '../feature/tasks/tasksSlice.jsx';
+
 import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
+import { ModeContextGet } from '../contexts/ModeContext.jsx';
 
 import gameInfo from '../data/gameInfo.js';
 import {
@@ -21,11 +23,14 @@ import {
 } from '../data/time.js';
 // ==============================================
 export default function ModifyScheduleModal({ isVisible, handleClose, schedule, scheduleGameData, scheduleRegionData }) {
-    // =============================
     const dispatch = useDispatch();
+    // ===========================
+    const modeContext = ModeContextGet();
+    const useDarkMode = modeContext.useDarkMode;
+    // ===========================
     const userContext = ActiveUserContextGet();
     const user = userContext.activeUserObj.user;
-
+    // ===========================
     const reassignTimeData = (game, region) => {
         return formatServerRegionTimeDisplay(game, region, new Date(),
             region.serverResetHour, region.serverResetMinute,
@@ -146,10 +151,10 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         handleClose();
     };
     // =============================
-    return (
-        <Modal size="xl" show={isVisible} onHide={handleClose}>
+    return !user ? null : (
+        <Modal size="xl" show={isVisible} onHide={handleClose} data-bs-theme={useDarkMode ? "dark" : "light"}>
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title>Modify an existing game notification schedule</Modal.Title>
+                <Modal.Title className="text-non-links">Modify an existing game notification schedule</Modal.Title>
             </Modal.Header>
 
             <Form onSubmit={onSubmitModifications}>
@@ -216,8 +221,8 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
                         </Row>
                         <Row className="d-flex flex-column align-items-center mb-3">
                             <Col className="d-flex flex-column secondary-border me-3 py-2 rounded" style={{ width: "fit-content" }}>
-                                <Form.Text>{`Local Reset Time: ${modalData.time.localResetTime}.`}</Form.Text>
-                                <Form.Text>{`Time Until Next Reset: ${modalData.time.timeUntilReset}.`}</Form.Text>
+                                <Form.Text className="text-non-links">{`Local Reset Time: ${modalData.time.localResetTime}.`}</Form.Text>
+                                <Form.Text className="text-non-links">{`Time Until Next Reset: ${modalData.time.timeUntilReset}.`}</Form.Text>
                             </Col>
                         </Row>
                         {/* ----------------------------- */}

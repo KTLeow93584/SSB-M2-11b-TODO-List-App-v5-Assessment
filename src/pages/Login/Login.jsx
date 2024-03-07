@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 import Container from 'react-bootstrap/Container';
@@ -19,6 +19,7 @@ import { registerCachedScheduleEvent } from '../../data/time.js';
 import './Login.css';
 // ==============================================
 export default function Login() {
+    // ===========================
     const modeContext = ModeContextGet();
     const activeUserContext = ActiveUserContextGet();
     const login = activeUserContext.login;
@@ -50,7 +51,7 @@ export default function Login() {
         );
     };
     const pageMode = modeContext.useDarkMode ? "dark" : "light";
-
+    // ===========================
     return (
         <Container fluid
             className="d-flex flex-column align-items-center justify-content-start primary-container"
@@ -59,16 +60,22 @@ export default function Login() {
             <Row className="d-flex flex-column align-items-center justify-content-start mt-5 w-100 rounded">
                 <Col className="col-lg-10 col-12 d-flex justify-content-center">
                     <Card className="w-100 secondary-container">
+                        {/* ---------------------- */}
+                        {/* Card Title/Header */}
                         <Card.Header className="primary-container-contrast">
                             <p className="fs-2 my-0 text-non-links-contrast">
                                 Login Page
                             </p>
                         </Card.Header>
+                        {/* ---------------------- */}
+                        {/* Card Body (Email/Password) */}
                         <Card.Body className="mt-3 mx-3 primary-container rounded">
                             <Row className="secondary-container rounded mx-0 px-0">
                                 <LoginForm successfulCallback={handleLogin} />
                             </Row>
                         </Card.Body>
+                        {/* ---------------------- */}
+                        {/* Card Body (To Registration Page) */}
                         <Card.Body className="d-flex flex-column align-items-center justify-content-start"
                             style={{ backgroundColor: "transparent" }}>
                             <p className="text-non-links login-text">Don&apos;t have an account?</p>
@@ -76,6 +83,7 @@ export default function Login() {
                                 <span className="login-text">Sign Up</span>
                             </Button>
                         </Card.Body>
+                        {/* ---------------------- */}
                     </Card>
                 </Col>
             </Row>
@@ -84,6 +92,7 @@ export default function Login() {
 }
 
 function LoginForm({ successfulCallback }) {
+    // ===========================
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [isPasswordVisible, setPasswordVisibility] = useState(false);
@@ -93,7 +102,12 @@ function LoginForm({ successfulCallback }) {
         const newVisibility = !isPasswordVisible;
         setPasswordVisibility(newVisibility);
     };
-
+    // ===========================
+    const startingInputRef = useRef();
+    useEffect(() => {
+        startingInputRef.current.focus();
+    }, []);
+    // ===========================
     return (
         <>
             <Col className="col-lg-6 col-12 secondary-border"
@@ -106,12 +120,13 @@ function LoginForm({ successfulCallback }) {
                 }}>
                     <Card.Body>
                         <Form.Group className="d-flex flex-column">
-                            <Form.Label className="text-non-links login-text">Please login with your email and password: </Form.Label>
+                            <Form.Label htmlFor="email" className="text-non-links login-text">Please login with your email and password: </Form.Label>
                             {/* ----------------------------- */}
                             {/* Email Form */}
                             <div className="login-form-border rounded mb-2">
                                 <Form.Control
-                                    required id="email" value={email}
+                                    ref={startingInputRef}
+                                    required id="email" value={email} autoComplete="on"
                                     className="text-non-links input-bar-no-shadow"
                                     type="email" placeholder="Enter email here"
                                     onChange={(event) => setEmail(event.target.value)} />
@@ -135,7 +150,7 @@ function LoginForm({ successfulCallback }) {
                             {/* Submit */}
                             <Button type="submit" className="button-primary mb-1">Login</Button>
                             {/* ----------------------------- */}
-                            {/* Forgot Password */}
+                            {/* Forgot Password (Intended to be missing to show error page) */}
                             <Nav.Link as={Link} to={"/forgotPassword"}>
                                 <span className="text-links login-text-form-link">
                                     <i className="bi bi-arrow-right-circle"></i> Forgot Your Password? Click here.

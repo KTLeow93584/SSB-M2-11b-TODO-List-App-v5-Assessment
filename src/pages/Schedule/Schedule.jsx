@@ -25,6 +25,8 @@ import gameInfo from '../../data/gameInfo.js';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlay, faScrewdriver, faTrashCan } from '@fortawesome/free-solid-svg-icons';
+
+import './Schedule.css';
 // ==============================================
 export default function Schedule() {
     const dispatch = useDispatch();
@@ -124,10 +126,10 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
     // ===========================
     return (
         <Col className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
-            <Card>
-                { /* ------------------------------------- */}
+            <Card className="schedule-card-shadow secondary-border">
+                {/* ------------------------------------- */}
                 {/* Game Icon + Game Title + Region Name */}
-                <Card.Header className="d-flex align-items-center justify-content-between">
+                <Card.Header className="secondary-container d-flex align-items-center justify-content-between">
                     <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
                         className="rounded me-2"
                         style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
@@ -135,14 +137,14 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                     <span className="fs-6 text-non-links ms-auto">{region.name}</span>
                 </Card.Header>
                 { /* ------------------------------------- */}
-                <Card.Body>
-                    { /* ------------------------------------- */}
+                <Card.Body className="secondary-container">
+                    {/* ------------------------------------- */}
                     {/* Description */}
                     <Card.Title className="fs-5 text-non-links">Description: </Card.Title>
                     <Card.Text className="fs-6 text-non-links rounded secondary-container px-2 py-2" style={{ width: "100%", border: "1px black solid" }}>
                         {schedule.description ? schedule.description : "N/A"}
                     </Card.Text>
-                    { /* ------------------------------------- */}
+                    {/* ------------------------------------- */}
                     {/* Alarm Time At */}
                     <div className="d-flex align-items-center mb-3">
                         <Card.Title className="fs-5 text-non-links me-3 my-0 py-0">Local Alarm Time: </Card.Title>
@@ -150,7 +152,7 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                             {alarmTime}
                         </Card.Text>
                     </div>
-                    { /* ------------------------------------- */}
+                    {/* ------------------------------------- */}
                     {/* Time til Alarm */}
                     <div className="d-flex align-items-center">
                         <Card.Title className="fs-5 text-non-links me-3 my-0 py-0">Time Remaining (h/m): </Card.Title>
@@ -158,10 +160,11 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                             {timeData.timeUntilAlarm}
                         </Card.Text>
                     </div>
-                    { /* ------------------------------------- */}
+                    {/* ------------------------------------- */}
                 </Card.Body>
-                { /* ------------------------------------- */}
-                <Card.Footer className="d-flex justify-content-evenly">
+                {/* ------------------------------------- */}
+                {/* Button Controls */}
+                <Card.Footer className="secondary-container d-flex justify-content-evenly">
                     <Button variant="primary"
                         onClick={() => {
                             if (audioPlaybackInstance.src !== schedule.alarmFile) {
@@ -197,6 +200,7 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                             icon={faTrashCan} />
                     </Button>
                 </Card.Footer>
+                {/* ------------------------------------- */}
             </Card>
         </Col >
     );

@@ -26,22 +26,17 @@
     /* Light Theme Hex: black */
     /* Dark Theme Hex: white */
     --core-text-non-links-color: black;
+    --core-text-non-links-contrast-color: white;
 
     /* Light Theme Hex: #292929 */
     /* Dark Theme Hex: #c5c5c5 */
     --core-text-links-color: #292929;
+    --core-text-links-contrast-color: #c5c5c5;
 
     /* Light Theme Hex: black */
     /* Dark Theme Hex: white */
     --core-text-button-color: black;
-
-    /* Light Theme Hex: black */
-    /* Dark Theme Hex: white */
-    --core-text-non-links-contrast-color: white;
-
-    /* Light Theme Hex: black */
-    /* Dark Theme Hex: white */
-    --core-text-links-contrast-color: white;
+    --core-text-button-contrast-color: white;
     /* ---------------- */
     /* Border */
     /* Light Theme Hex: #1f1f1f */

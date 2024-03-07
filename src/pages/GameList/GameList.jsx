@@ -17,6 +17,7 @@ import AddScheduleModal from '../../components/AddScheduleModal.jsx';
 import ModifyScheduleModal from '../../components/ModifyScheduleModal.jsx';
 
 import { ActiveUserContextGet } from '../../contexts/ActiveUserContext.jsx';
+import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 
 import gameInfo from '../../data/gameInfo.js';
 import {
@@ -49,12 +50,20 @@ export default function GameList() {
     return (
         <>
             <Container fluid className="d-flex flex-column primary-container" style={{ flex: 1, overflowX: "hidden" }}>
+                {/* ------------------------------ */}
+                {/* Timer located at the top of the page */}
                 <Timekeeper />
+                {/* ------------------------------ */}
                 <hr className="horizontal-line-text" />
+                {/* ------------------------------ */}
+                {/* Search Feature (Around the top of the page as well) */}
                 <SearchBar id="query-item-name"
                     placeholder="Filter by Game Name"
                     minWidth={30}
+                    isPrimaryInputFocus={true}
                     searchFilterCallback={(keyword) => setTargetGameName(keyword)} />
+                {/* ------------------------------ */}
+                {/* Game Listing Data Grid */}
                 <Row className="w-100">
                     <Games
                         user={user}
@@ -64,7 +73,10 @@ export default function GameList() {
                         onCreateScheduleCallback={() => setCreateNewSchedule(true)}
                         setScheduleCallback={handleShowModifyScheduleModal} />
                 </Row>
+                {/* ------------------------------ */}
             </Container>
+            {/* ------------------------------ */}
+            {/* Modals */}
             <AddScheduleModal
                 isVisible={createNewSchedule}
                 handleClose={handleHideNewScheduleModal}
@@ -76,6 +88,7 @@ export default function GameList() {
                 schedule={schedule}
                 scheduleGameData={selectedGame}
                 scheduleRegionData={selectedGameRegion} />
+            {/* ------------------------------ */}
         </>
     );
 }
@@ -175,11 +188,16 @@ function GameRegion({ user, game, region,
 function RegisterSchedule({ game, region, user,
     setSelectedGameCallback = null, setSelectedGameRegionCallback = null, onCreateScheduleCallback = null,
     setScheduleCallback = null }) {
+    // ===========================
+    const modeContext = ModeContextGet();
+    const useDarkMode = modeContext.useDarkMode;
+    // ===========================
     let result = null;
 
     if (user) {
         const scheduleIndex = user.tasks.findIndex((schedule) => schedule.gameID === game.id && schedule.regionName === region.name);
 
+        // Schedule Already Exist in User's List.
         if (scheduleIndex !== -1) {
             result = (
                 <Card.Body>
@@ -201,6 +219,7 @@ function RegisterSchedule({ game, region, user,
                 </Card.Body>
             )
         }
+        // Schedule Does Not Exist in User's List.
         else {
             result = (
                 <Card.Body>
@@ -215,14 +234,15 @@ function RegisterSchedule({ game, region, user,
                                 if (onCreateScheduleCallback)
                                     onCreateScheduleCallback(true);
                             }}
-                            className="primary-container-contrast add-schedule-button primary-border">
-                            Add to Schedule
+                            className={`primary-container-contrast add-schedule-button-${useDarkMode ? "dark" : "light"} primary-border`}>
+                            <span className="text-non-links-contrast">Add to Schedule</span>
                         </Button>
                     </Row>
-                </Card.Body>
+                </Card.Body >
             );
         }
     }
+    // ===========================
     return result;
 }
 // ==============================================

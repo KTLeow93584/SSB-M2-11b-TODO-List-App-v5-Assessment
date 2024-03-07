@@ -33,7 +33,7 @@ function BodySection() {
         render = (
             <Row className="mt-3 d-flex flex-column align-items-center justify-content-center" style={{ flex: 1 }}>
                 <Col className="col-8 text-center d-flex flex-column align-items-center justify-content-between" style={{ flex: 1 }}>
-                    <p className="fw-bold mt-5">
+                    <p className="text-non-links fw-bold mt-5">
                         {`Welcome back, ${user.firstName} ${user.lastName}! Here's your cake 🍰.`}
                     </p>
                     <Image src={new URL("../../assets/home/fgo-parody-2.webp", import.meta.url)}

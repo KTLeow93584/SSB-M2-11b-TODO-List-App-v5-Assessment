@@ -10,7 +10,7 @@ export default function ScheduleAlarmModal({ isVisible, activeAlarms, handleEndA
     return (
         <Modal size="xl" show={isVisible} onHide={handleEndAllAlarms}>
             <Modal.Header closeButton className="primary-container">
-                <Modal.Title>Time to do your dailies! [Alarm Notice]</Modal.Title>
+                <Modal.Title className="text-non-links">Time to do your dailies! [Alarm Notice]</Modal.Title>
             </Modal.Header>
 
             <Modal.Body className="secondary-container">
@@ -37,16 +37,16 @@ function AlarmGroup({ alarm, index, handleEndAlarmCallback }) {
     return (
         <Col className="col-12 d-flex align-items-center mb-3">
             <p className="my-0 ms-0 me-3 p-0">
-                {`${index + 1}`}.
+                <span className="text-non-links fw-bold">{`${index + 1}`}.</span>
                 <span> </span>
-                <span className="fw-bold">{`${alarm.schedule.title}`}</span>
+                <span className="text-non-links fw-bold">{`${alarm.schedule.title}`}</span>
                 <span> </span>
-                <span className="fw-bold">{`${alarm.schedule.regionName}`}</span>
+                <span className="text-non-links fw-bold">{`${alarm.schedule.regionName}`}</span>
             </p>
             <Button variant="danger" onClick={() => handleEndAlarmCallback(alarm.schedule.gameID)}>
                 End Alarm
             </Button>
-        </Col>
+        </Col >
     );
 }
 // ==============================================

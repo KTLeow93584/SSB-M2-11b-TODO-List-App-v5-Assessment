@@ -15,45 +15,10 @@ import { ActiveUserContextGet } from '../contexts/ActiveUserContext.jsx';
 
 import './NavigationPanel.css';
 // ==============================================
-function adjustGlobalCSSProperties({ useDarkMode }) {
-    document.documentElement.style.setProperty("--core-bg-primary-color", useDarkMode ? "#1e1e1e" : "#eeeeee");
-    document.documentElement.style.setProperty("--core-bg-primary-contrast-color", useDarkMode ? "#eeeeee" : "#1e1e1e");
-
-    document.documentElement.style.setProperty("--core-bg-secondary-color", useDarkMode ? "#212121" : "white");
-    document.documentElement.style.setProperty("--core-bg-secondary-contrast-color", useDarkMode ? "white" : "#212121");
-
-    document.documentElement.style.setProperty("--core-bg-tertiary-color", useDarkMode ? "#322646" : "#7e56c1");
-    document.documentElement.style.setProperty("--core-bg-tertiary-contrast-color", useDarkMode ? "#7e56c1" : "#322646");
-
-    document.documentElement.style.setProperty("--core-bg-container-contrast-color", useDarkMode ? "#b7b5b9" : "#2f2e30");
-
-    document.documentElement.style.setProperty("--core-text-non-links-color", useDarkMode ? "white" : "black");
-    document.documentElement.style.setProperty("--core-text-non-links-contrast-color", useDarkMode ? "black" : "white");
-
-    document.documentElement.style.setProperty("--core-text-links-color", useDarkMode ? "white" : "black");
-    document.documentElement.style.setProperty("--core-text-links-contrast-color", useDarkMode ? "black" : "white");
-
-    document.documentElement.style.setProperty("--core-text-button-color", useDarkMode ? "white" : "black");
-    document.documentElement.style.setProperty("--core-text-button-contrast-color", useDarkMode ? "black" : "white");
-
-    document.documentElement.style.setProperty("--core-border-primary-color", useDarkMode ? "#f4f4f4" : "#1f1f1f");
-    document.documentElement.style.setProperty("--core-border-secondary-color", useDarkMode ? "#7e7676" : "#ada7a7");
-}
-// ==============================================
 export default function NavigationPanel({ foundingName }) {
     // ===========================
     let userObj = ActiveUserContextGet().activeUserObj;
-    // ===========================
-    const modeContext = ModeContextGet();
-    const themeSuffix = modeContext.useDarkMode ? "dark" : "light";
 
-    function onChangeMode() {
-        const newDarkMode = !modeContext.useDarkMode;
-        modeContext.setUseDarkMode(newDarkMode);
-
-        adjustGlobalCSSProperties(newDarkMode);
-    }
-    // ===========================
     const [windowWidth, setWindowWidth] = useState(document.documentElement.clientWidth);
 
     const handleResize = () => {
@@ -74,7 +39,7 @@ export default function NavigationPanel({ foundingName }) {
                             className="d-flex align-items-center">
                             <Image className="me-3" src={new URL("../assets/logo.webp", import.meta.url)}
                                 style={{ width: "48px", height: "auto", minWidth: "48px", minHeight: "48px", maxWidth: "48px", maxHeight: "48px" }} />
-                            <span className="fs-3 fw-bold me-2">{foundingName}</span>
+                            <span className="fs-3 fw-bold me-2 text-links">{foundingName}</span>
                         </Navbar.Brand>
                         {
                             windowWidth <= 768 ?
@@ -87,17 +52,28 @@ export default function NavigationPanel({ foundingName }) {
                         }
                     </Container>
                 </Navbar>
-            </Container >
-        </Container >
+            </Container>
+        </Container>
     );
 }
 // ==============================================
 function NavigationBarBodyElements({ user }) {
+    // ===========================
     const navigate = useNavigate();
     const logout = ActiveUserContextGet().logout;
 
     const handleLogout = () => logout(() => navigate('/'));
+    // ===========================
+    const modeContext = ModeContextGet();
+    useEffect(() => adjustGlobalCSSProperties(modeContext.useDarkMode), [])
 
+    function onChangeMode() {
+        const newDarkMode = !modeContext.useDarkMode;
+        modeContext.setUseDarkMode(newDarkMode);
+
+        adjustGlobalCSSProperties(newDarkMode);
+    }
+    // ===========================
     return (
         <>
             {/* ------------------------------ */}
@@ -119,12 +95,30 @@ function NavigationBarBodyElements({ user }) {
                 <span className="text-links fw-bold">Kuru Kuru</span>
             </Nav.Link>
             {/* ------------------------------ */}
+            {/* Dark/Light Mode Feature */}
+            <div className="d-flex align-items-center form-check form-switch ms-auto me-4">
+                <input className="form-check-input me-2"
+                    type="checkbox"
+                    role="switch"
+                    checked={modeContext.useDarkMode}
+                    id="darkModeSwitch"
+                    onChange={onChangeMode} />
+                <label className="form-check-label text-links" htmlFor="darkModeSwitch">
+                    {
+                        modeContext.useDarkMode ?
+                            (<i className="bi bi-moon-fill"></i>) :
+                            (<i className="fs-3 bi bi-sun-fill"></i>)
+                    }
+                </label>
+            </div>
+            {/* ------------------------------ */}
+            {/* Profile Picture */}
             <Image onClick={() => navigate("/dashboard")}
                 type="button"
                 src={
                     new URL(((user && user.image) ? user.image : "../assets/user-profile-default.webp"),
                         import.meta.url)}
-                className="ms-auto me-2 rounded"
+                className="me-2 rounded"
                 style={{
                     width: "32px", height: "auto",
                     minWidth: "32px", minHeight: "32px",
@@ -261,5 +255,61 @@ function NavigationBarBodyOffCanvas({ user }) {
             </Offcanvas>
         </>
     );
+}
+// ==============================================
+function adjustGlobalCSSProperties(useDarkMode) {
+    // ======================
+    // Containers
+
+    // Light Theme Hex: #eeeeee
+    // Dark Theme Hex: #1e1e1e
+    document.documentElement.style.setProperty("--core-bg-primary-color", useDarkMode ? "#1e1e1e" : "#eeeeee");
+    document.documentElement.style.setProperty("--core-bg-primary-contrast-color", useDarkMode ? "#eeeeee" : "#1e1e1e");
+
+    // Light Theme Hex: #f8f8f8
+    // Dark Theme Hex: #212121
+    document.documentElement.style.setProperty("--core-bg-secondary-color", useDarkMode ? "#212121" : "#f8f8f8");
+    document.documentElement.style.setProperty("--core-bg-secondary-contrast-color", useDarkMode ? "#f8f8f8" : "#212121");
+
+    // Light Theme Hex: #7e56c1
+    // Dark Theme Hex: #322646
+    document.documentElement.style.setProperty("--core-bg-tertiary-color", useDarkMode ? "#322646" : "#7e56c1");
+    document.documentElement.style.setProperty("--core-bg-tertiary-contrast-color", useDarkMode ? "#7e56c1" : "#322646");
+
+    // Light Theme Hex: #2f2e30
+    // Dark Theme Hex: #b7b5b9
+    document.documentElement.style.setProperty("--core-bg-container-contrast-color", useDarkMode ? "#b7b5b9" : "#2f2e30");
+    // ======================
+    // Text (Non-Links)
+
+    // Light Theme Hex: black
+    // Dark Theme Hex: white
+    document.documentElement.style.setProperty("--core-text-non-links-color", useDarkMode ? "white" : "black");
+    document.documentElement.style.setProperty("--core-text-non-links-contrast-color", useDarkMode ? "black" : "white");
+    // ======================
+    // Text (Links)
+
+    // Light Theme Hex: #292929
+    // Dark Theme Hex: #c5c5c5
+    document.documentElement.style.setProperty("--core-text-links-color", useDarkMode ? "#c5c5c5" : "#292929");
+    document.documentElement.style.setProperty("--core-text-links-contrast-color", useDarkMode ? "#292929" : "#c5c5c5");
+    // ======================
+    // Text (Buttons)
+
+    // Light Theme Hex: black
+    // Dark Theme Hex: white
+    document.documentElement.style.setProperty("--core-text-button-color", useDarkMode ? "white" : "black");
+    document.documentElement.style.setProperty("--core-text-button-contrast-color", useDarkMode ? "black" : "white");
+    // ======================
+    // Border
+
+    // Light Theme Hex: #1f1f1f
+    // Dark Theme Hex: #f4f4f4
+    document.documentElement.style.setProperty("--core-border-primary-color", useDarkMode ? "#f4f4f4" : "#1f1f1f");
+
+    // Light Theme Hex: #ada7a7
+    // Dark Theme Hex: #7e7676
+    document.documentElement.style.setProperty("--core-border-secondary-color", useDarkMode ? "#7e7676" : "#ada7a7");
+    // ======================
 }
 // ==============================================

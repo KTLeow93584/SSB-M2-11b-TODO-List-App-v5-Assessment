@@ -1,6 +1,11 @@
 /* ============================== */
-.add-schedule-button:hover {
+
+.add-schedule-button-light:hover {
     background-color: #333333 !important;
+}
+
+.add-schedule-button-dark:hover {
+    background-color: #bbbbbb !important;
 }
 
 /* ============================== */
