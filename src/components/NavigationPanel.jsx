@@ -78,21 +78,24 @@ function NavigationBarBodyElements({ user }) {
         <>
             {/* ------------------------------ */}
             {/* Games & Schedule Section */}
-            <Nav.Link as={Link} to={"/games"} className="me-2">
-                <span className="text-links fw-bold">Games List</span>
+            <Nav.Link as={Link} to={"/games"}
+                className="text-links fw-bold me-2">
+                Games List
             </Nav.Link>
 
             {
                 user ? (
-                    <Nav.Link as={Link} to={"/schedule"} className="me-2">
-                        <span className="text-links fw-bold">Schedule</span>
+                    <Nav.Link as={Link} to={"/schedule"}
+                        className="text-links fw-bold me-2">
+                        Schedule
                     </Nav.Link>
                 ) : null
             }
             {/* ------------------------------ */}
             {/* Kuru Kuru Section */}
-            <Nav.Link as={Link} to={"/kururin"} className="me-2">
-                <span className="text-links fw-bold">Kuru Kuru</span>
+            <Nav.Link as={Link} to={"/kururin"}
+                className="text-links fw-bold me-2">
+                Kuru Kuru
             </Nav.Link>
             {/* ------------------------------ */}
             {/* Dark/Light Mode Feature */}
@@ -103,10 +106,10 @@ function NavigationBarBodyElements({ user }) {
                     checked={modeContext.useDarkMode}
                     id="darkModeSwitch"
                     onChange={onChangeMode} />
-                <label className="form-check-label text-links" htmlFor="darkModeSwitch">
+                <label className="form-check-label text-non-links" htmlFor="darkModeSwitch">
                     {
                         modeContext.useDarkMode ?
-                            (<i className="bi bi-moon-fill"></i>) :
+                            (<i className="fs-3 bi bi-moon-fill"></i>) :
                             (<i className="fs-3 bi bi-sun-fill"></i>)
                     }
                 </label>
@@ -134,14 +137,16 @@ function NavigationBarBodyElements({ user }) {
                             className="text-links fw-bold me-3">
                             {`${user.firstName} ${user.lastName}`}
                         </Nav.Link>
-                        <Nav.Link as={Link} onClick={handleLogout} className="me-2">
-                            <span className="text-links fw-bold">Logout</span>
+                        <Nav.Link as={Link} onClick={handleLogout}
+                            className="text-links fw-bold me-2">
+                            Logout
                         </Nav.Link>
                     </>
                 ) : (
                     <>
-                        <Nav.Link as={Link} to={"/login"} className="me-2">
-                            <span className="text-links fw-bold">Login</span>
+                        <Nav.Link as={Link} to={"/login"}
+                            className="text-links fw-bold me-2">
+                            Login
                         </Nav.Link>
                     </>
                 )
@@ -150,8 +155,9 @@ function NavigationBarBodyElements({ user }) {
             {/* Register Button */}
             {
                 user ? null : (
-                    <Nav.Link as={Link} to={"/register"}>
-                        <span className="text-links fw-bold">Register</span>
+                    <Nav.Link as={Link} to={"/register"}
+                        className="text-links fw-bold">
+                        Register
                     </Nav.Link>
                 )
             }
@@ -161,6 +167,17 @@ function NavigationBarBodyElements({ user }) {
 }
 // ==============================================
 function NavigationBarBodyOffCanvas({ user }) {
+    // ===========================
+    const modeContext = ModeContextGet();
+    useEffect(() => adjustGlobalCSSProperties(modeContext.useDarkMode), [])
+
+    function onChangeMode() {
+        const newDarkMode = !modeContext.useDarkMode;
+        modeContext.setUseDarkMode(newDarkMode);
+
+        adjustGlobalCSSProperties(newDarkMode);
+    }
+    // ===========================
     const [showOffCanvasNav, setShowOffCanvasNav] = useState(false);
 
     const navigate = useNavigate();
@@ -168,7 +185,7 @@ function NavigationBarBodyOffCanvas({ user }) {
 
     const handleLogout = () => logout(() => navigate('/'));
     const handleClose = () => setShowOffCanvasNav(false);
-
+    // ===========================
     return (
         <>
             {/* ------------------------------ */}
@@ -182,27 +199,49 @@ function NavigationBarBodyOffCanvas({ user }) {
                 className="primary-container"
                 placement="end">
                 <Offcanvas.Header closeButton className="mt-2 py-0">
-                    <Offcanvas.Title>Navigation</Offcanvas.Title>
+                    <Offcanvas.Title className="text-non-links">Navigation</Offcanvas.Title>
                 </Offcanvas.Header>
                 <hr className="horizontal-line-text" />
                 <Offcanvas.Body>
                     {/* ------------------------------ */}
-                    <Nav.Link as={Link} to={"/games"} className="mb-3">
-                        <span className="text-links fw-bold">Games List</span>
+                    {/* Games and Schedule Section */}
+                    <Nav.Link as={Link} to={"/games"} className="text-links fw-bold mb-3">
+                        Games List
                     </Nav.Link>
 
                     {
                         user ? (
-                            <Nav.Link as={Link} to={"/schedule"} className="mb-3">
-                                <span className="text-links fw-bold">Schedule</span>
+                            <Nav.Link as={Link} to={"/schedule"}
+                                className="text-links fw-bold mb-3">
+                                Schedule
                             </Nav.Link>
                         ) : null
                     }
                     {/* ------------------------------ */}
-                    <Nav.Link as={Link} to={"/kururin"} className="mb-3">
-                        <span className="text-links fw-bold">Kuru Kuru</span>
+                    {/* Kuru Kuru Section */}
+                    <Nav.Link as={Link} to={"/kururin"}
+                        className="text-links fw-bold mb-3">
+                        Kuru Kuru
                     </Nav.Link>
                     {/* ------------------------------ */}
+                    {/* Dark/Light Mode Feature */}
+                    <div className="d-flex align-items-center form-check form-switch ms-auto mb-4">
+                        <input className="form-check-input me-3"
+                            type="checkbox"
+                            role="switch"
+                            checked={modeContext.useDarkMode}
+                            id="darkModeSwitch"
+                            onChange={onChangeMode} />
+                        <label className="form-check-label text-non-links" htmlFor="darkModeSwitch">
+                            {
+                                modeContext.useDarkMode ?
+                                    (<i className="fs-2 bi bi-moon-fill"></i>) :
+                                    (<i className="fs-2 bi bi-sun-fill"></i>)
+                            }
+                        </label>
+                    </div>
+                    {/* ------------------------------ */}
+                    {/* Profile Picture + Login/Logout */}
                     <div className="d-flex align-items-center mb-3">
                         <Image onClick={() => navigate("/dashboard")}
                             type="button"
@@ -227,8 +266,9 @@ function NavigationBarBodyOffCanvas({ user }) {
                                 </>
                             ) : (
                                 <>
-                                    <Nav.Link as={Link} to={"/login"} className="me-2">
-                                        <span className="text-links fw-bold">Login</span>
+                                    <Nav.Link as={Link} to={"/login"}
+                                        className="text-links fw-bold me-2">
+                                        Login
                                     </Nav.Link>
                                 </>
                             )
@@ -236,8 +276,9 @@ function NavigationBarBodyOffCanvas({ user }) {
                     </div>
                     {
                         user ? (
-                            <Nav.Link as={Link} onClick={handleLogout} className="me-auto">
-                                <span className="text-links fw-bold">Logout</span>
+                            <Nav.Link as={Link} onClick={handleLogout}
+                                className="text-links fw-bold me-auto">
+                                Logout
                             </Nav.Link>
                         ) : null
                     }
