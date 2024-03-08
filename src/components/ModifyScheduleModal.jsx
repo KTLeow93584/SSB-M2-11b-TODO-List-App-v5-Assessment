@@ -57,6 +57,9 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         });
     }, [scheduleGameData, scheduleRegionData]);
     // =============================
+    const [originalGameID, setOriginalGameID] = useState(scheduleGameData ? scheduleGameData.id : "");
+    const [originalRegionName, setOriginalRegionName] = useState(scheduleRegionData ? scheduleRegionData.name : "");
+
     const [description, setDescription] = useState(schedule ? schedule.description : "");
     const [alarmFile, setAlarmFile] = useState(schedule ? schedule.alarmFile : null);
     const [alarmFileName, setAlarmFileName] = useState(schedule ? schedule.alarmFileName : null);
@@ -64,6 +67,9 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
 
     useEffect(() => {
         if (schedule) {
+            setOriginalGameID(scheduleGameData.id);
+            setOriginalRegionName(scheduleRegionData.name);
+
             setDescription(schedule.description);
             setAlarmFile(schedule.alarmFile);
             setAlarmFileName(schedule.alarmFileName);
@@ -87,18 +93,25 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     const onSelectNewGameType = (gameIDKey) => {
         const gameIndex = gameInfo.findIndex((game) => game.id === gameIDKey);
 
-        setModalData((previousModalData) => {
-            previousModalData.game = gameInfo[gameIndex];
-            previousModalData.region = gameInfo[gameIndex].supportedRegions[0];
-            previousModalData.time = reassignTimeData(gameInfo[gameIndex], gameInfo[gameIndex].supportedRegions[0]);
+        const newModalData = {
+            game: gameInfo[gameIndex],
+            region: gameInfo[gameIndex].supportedRegions[0],
+            time: reassignTimeData(gameInfo[gameIndex], gameInfo[gameIndex].supportedRegions[0])
+        };
 
-            return previousModalData;
-        });
+        setModalData(newModalData);
     };
 
     const onSelectNewGameRegion = (regionNameKey) => {
         const regionIndex = modalData.game.supportedRegions.findIndex((region) => region.name === regionNameKey);
 
+        const newModalData = {
+            game: modalData.game,
+            region: modalData.game.supportedRegions[regionIndex],
+            time: reassignTimeData(modalData.game, modalData.game.supportedRegions[regionIndex])
+        };
+
+        setModalData(newModalData);
         setModalData((previousModalData) => {
             previousModalData.region = modalData.game.supportedRegions[regionIndex];
             previousModalData.time = reassignTimeData(modalData.game, modalData.game.supportedRegions[regionIndex]);
@@ -133,11 +146,18 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
 
         const newSchedule = {
             id: schedule.id,
+
+            originalGameID: originalGameID,
             gameID: modalData.game.id,
+
             title: modalData.game.title,
+
             regionName: modalData.region.name,
+            originalRegionName: originalRegionName,
+
             alarmFile: alarmFile,
             alarmFileName: alarmFileName,
+
             notifyTime: notifyTime,
             description: description
         };
@@ -357,8 +377,10 @@ function onModifyScheduleEvent(schedule) {
     const timeEvent = new CustomEvent(registerModifiedScheduleEvent, {
         detail: {
             gameID: schedule.gameID,
+            originalGameID: schedule.originalGameID,
             title: schedule.title,
             regionName: schedule.regionName,
+            originalRegionName: schedule.originalRegionName,
             notifyTime: schedule.notifyTime,
             alarmFile: schedule.alarmFile
         }

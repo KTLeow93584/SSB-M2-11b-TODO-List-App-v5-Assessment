@@ -52,7 +52,8 @@ export function MainLayout() {
   const onEndIndividualAlarm = (alarmGameID) => {
     const newActiveAlarms = [...activeAlarms];
 
-    const alarmIndex = newActiveAlarms.findIndex((alarm) => alarm.schedule.gameID === alarmGameID);
+    const alarmIndex = newActiveAlarms.findIndex((alarm) => alarm.gameID === alarmGameID);
+
     newActiveAlarms[alarmIndex].alarmAudio.pause();
 
     newActiveAlarms.splice(alarmIndex, 1);
@@ -122,6 +123,7 @@ export function MainLayout() {
       const newActiveAlarm = {
         id: `${schedule.gameID}-${schedule.regionName}`,
         gameID: schedule.gameID,
+        title: schedule.title,
         regionName: schedule.regionName,
         alarmAudio: alarmAudio
       };
@@ -164,14 +166,28 @@ export function MainLayout() {
         const now = new Date();
 
         const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
-          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.gameID === schedule.gameID) : -1;
+          prevScheduleTimers.findIndex((scheduleTimer) =>
+            scheduleTimer.gameID === schedule.originalGameID &&
+            scheduleTimer.regionName === schedule.originalRegionName) : -1;
+
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
 
         const notifyDate = getNotifyDate(now, schedule);
-        const durationToAlarmMS = notifyDate.getTime() - now.getTime();
+        let durationToAlarmMS = notifyDate.getTime() - now.getTime();
 
-        prevScheduleTimers[existingTimerIndex].timer = setTimeout(() => triggerAlarm(schedule), durationToAlarmMS);
-        prevScheduleTimers[existingTimerIndex].durationToAlarmMS = durationToAlarmMS;
+        // Equal/Less than 1 second away during load time -> Skip to next day.
+        if (durationToAlarmMS <= 1000) {
+          notifyDate.setDate(notifyDate.getDate() + 1);
+          durationToAlarmMS = notifyDate.getTime() - now.getTime();
+        }
+
+        prevScheduleTimers[existingTimerIndex] = {
+          id: `${schedule.gameID}-${schedule.regionName}`,
+          gameID: schedule.gameID,
+          regionName: schedule.regionName,
+          timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
+          durationToAlarmMS: durationToAlarmMS
+        };
 
         // Debug
         //console.log("[On Modify an existing Timer] Post Update.", prevScheduleTimers);
@@ -209,10 +225,18 @@ export function MainLayout() {
         previousScheduleTimer = [];
         user.tasks.forEach((schedule) => {
           const notifyDate = getNotifyDate(now, schedule);
-          const durationToAlarmMS = notifyDate.getTime() - now.getTime();
+          let durationToAlarmMS = notifyDate.getTime() - now.getTime();
+
+          // Equal/Less than 1 second away during load time -> Skip to next day.
+          if (durationToAlarmMS <= 1000) {
+            notifyDate.setDate(notifyDate.getDate() + 1);
+            durationToAlarmMS = notifyDate.getTime() - now.getTime();
+          }
 
           const newScheduleTimer = {
-            id: schedule.gameID,
+            id: `${schedule.gameID}-${schedule.regionName}`,
+            gameID: schedule.gameID,
+            regionName: schedule.regionName,
             timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
             durationToAlarmMS: durationToAlarmMS
           };
