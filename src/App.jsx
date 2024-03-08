@@ -1,4 +1,8 @@
 // ==============================================
+// Web Page hosted in Vercel would break on refresh (F5 on Windows)
+// Solution from:
+// https://dev.to/stanlisberg/resolving-the-vercel-404-page-not-found-error-after-page-refresh-9b9
+
 import { useEffect, useState } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
