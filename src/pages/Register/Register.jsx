@@ -16,6 +16,10 @@ import { ModeContextGet } from '../../contexts/ModeContext.jsx';
 import users from '../../data/users.js';
 
 import './Register.css';
+
+import googleRegister from '../../assets/images/login-methods/google.webp';
+import facebookRegister from '../../assets/images/login-methods/facebook.webp';
+import lineRegister from '../../assets/images/login-methods/line.webp';
 // ==============================================
 export default function Register() {
     const modeContext = ModeContextGet();
@@ -350,7 +354,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* Google */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/google.webp", import.meta.url)}
+                                    <Image src={googleRegister}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Google</span>
                                 </Button>
@@ -359,7 +363,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* Facebook */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/line.webp", import.meta.url)}
+                                    <Image src={lineRegister}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> LINE</span>
                                 </Button>
@@ -368,7 +372,7 @@ function RegisterForm({ successfulCallback }) {
                                 {/* LINE */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/facebook.webp", import.meta.url)}
+                                    <Image src={facebookRegister}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Facebook</span>
                                 </Button>
