@@ -26,7 +26,7 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 - To test the project on the development environment, simply run `npm run dev`.
 
 ## How to deploy?
-- Run the command, `npm run dev` to have it work on your local host environment. (E.g. `https://localhost:Your Port Number`)
+- Run the command, `npm run dev` to have it work on your local host environment. (E.g. `http://localhost:[Your Port Number]`)
 - For production builds on GitHub Pages, run `npm run deploy` from the **KT/GitHub-Pages** branch and switch your deployment branch to `gh-pages`. (Under your GitHub Repository's `Settings -> Pages -> Build and Deployment -> Branch`)
 - For other deployment websites, you may be required to run the `npm run build` command to get the **dist** folder. Follow the instructions of your preferred website.
 
