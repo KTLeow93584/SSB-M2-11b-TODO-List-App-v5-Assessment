@@ -25,13 +25,21 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 - Run the command, `npm i` or `npm install` to install all the required packages specified in <b>package.json</b>.
 - To test the project on the development environment, simply run `npm run dev`.
 
-## How to use?
+## How to deploy?
 - Run the command, `npm run dev` to have it work on your local host environment. (E.g. `https://localhost:Your Port Number`)
 - For production builds on GitHub Pages, run `npm run deploy` from the **KT/GitHub-Pages** branch and switch your deployment branch to `gh-pages`. (Under your GitHub Repository's `Settings -> Pages -> Build and Deployment -> Branch`)
 - For other deployment websites, you may be required to run the `npm run build` command to get the **dist** folder. Follow the instructions of your preferred website.
 
+## How to use?
+- Guests can access the **Games List** page to find out when their favourite game's reset times are.
+![Guest Feature-1](./demo-images/demo-1.png)
+- Registered & Logged users on the other hand, can assign an alarm which will ring their desired audio file, on a daily basis.
+![User Feature-1](./demo-images/demo-2.png)
+![User Feature-2](./demo-images/demo-3.png)
+
 ## Contribute
 - As this project was created with the intention of pushing my capabilities to the limits within the assessment timeframe, future support for more games' inclusivity would be limited to what's already featured in [Cicerake's website](https://cicerakes.github.io/Game-Time-Master/).
+- With that said, any developers seeing potential in this project and/or want to help make it better, may feel free to fork or submit a pull request this project. 🦾
 
 ## Credits
 Big shoutout to the following websites, as the project's UI and layouts were either <b>heavily inspired</b> and/or <b>replicated</b> from them:
@@ -39,7 +47,14 @@ Big shoutout to the following websites, as the project's UI and layouts were eit
 2. [DLSite (Login Page)](https://login.dlsite.com/login)
 3. [Kuru Kuru by Caliphdev](https://github.com/caliphdev/herta_kuru)
 
-This project was created as a part of with [Sigma School Bootcamp's](https://sigmaschool.co/complete-software-development-programme)'s Module (#2) final assessment requirements.
+## Notes/Addendums
+- This project was created as a part of with [Sigma School Bootcamp's](https://sigmaschool.co/complete-software-development-programme)'s Module (#2) final assessment requirements.
+- Since this project is created fully on front-end (with no live DB), all registered users are stored locally within your browser's cache.
+
+## Pending Features (No promises that it can be fulfilled, however)
+- Snooze feature.
+- Page Optimizations as per accordance to Google Lighthouse's requirements.
+- Background Themes. (More variants as opposed to just dark/light)
 
 ## License
 MIT © [Leow Kean Tat/Project Kazcade](https://github.com/KTLeow93584)
