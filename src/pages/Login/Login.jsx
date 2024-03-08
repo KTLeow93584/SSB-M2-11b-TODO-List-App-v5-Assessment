@@ -20,6 +20,10 @@ import { registerCachedScheduleEvent } from '../../data/time.js';
 import users from '../../data/users.js';
 
 import './Login.css';
+
+import googleLogin from '../../assets/images/login-methods/google.webp';
+import facebookLogin from '../../assets/images/login-methods/facebook.webp';
+import lineLogin from '../../assets/images/login-methods/line.webp';
 // ==============================================
 export default function Login() {
     const cachedUsers = useLocalStorage("users", users)[0];
@@ -201,7 +205,7 @@ function LoginForm({ onLoginCallback }) {
                                 {/* Google */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/google.webp", import.meta.url)}
+                                    <Image src={googleLogin}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Google</span>
                                 </Button>
@@ -210,7 +214,7 @@ function LoginForm({ onLoginCallback }) {
                                 {/* Facebook */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/line.webp", import.meta.url)}
+                                    <Image src={lineLogin}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> LINE</span>
                                 </Button>
@@ -219,7 +223,7 @@ function LoginForm({ onLoginCallback }) {
                                 {/* LINE */}
                                 <Button className="d-flex align-items-center justify-content-start login-other-methods-button me-2"
                                     style={{ maxWidth: "200px", width: "100%" }}>
-                                    <Image src={new URL("../../assets/login-methods/facebook.webp", import.meta.url)}
+                                    <Image src={facebookLogin}
                                         style={{ width: "100%", height: "auto", minWidth: "16px", minHeight: "16px", maxWidth: "16px", maxHeight: "16px" }} />
                                     <span className="login-text mx-auto"> Facebook</span>
                                 </Button>

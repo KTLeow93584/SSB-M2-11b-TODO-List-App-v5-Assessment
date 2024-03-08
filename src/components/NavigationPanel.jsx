@@ -18,6 +18,8 @@ import { logout } from '../feature/activeUser/activeUserSlice.jsx';
 import { registerAllScheduleRemovalEvent } from '../data/time.js';
 
 import './NavigationPanel.css';
+import assetLogo from '../assets/images/logo.webp';
+import defaultProfile from '../assets/images/user-profile-default.webp';
 // ==============================================
 export default function NavigationPanel({ foundingName }) {
     // ===========================
@@ -51,7 +53,7 @@ export default function NavigationPanel({ foundingName }) {
                     <Container fluid className="d-flex align-items-center">
                         <Navbar.Brand as={Link} to={"/"}
                             className="d-flex align-items-center">
-                            <Image className="me-3" src={new URL("../assets/logo.webp", import.meta.url)}
+                            <Image className="me-3" src={assetLogo}
                                 style={{ width: "48px", height: "auto", minWidth: "48px", minHeight: "48px", maxWidth: "48px", maxHeight: "48px" }} />
                             <span className="fs-3 fw-bold me-2 text-non-links-primary">{foundingName}</span>
                         </Navbar.Brand>
@@ -130,7 +132,7 @@ function NavigationBarBodyElements({ user, onLogoutCallback }) {
             <Image onClick={() => navigate("/dashboard")}
                 type="button"
                 src={
-                    new URL(((user && user.image) ? user.image : "../assets/user-profile-default.webp"),
+                    new URL(((user && user.image) ? user.image : defaultProfile),
                         import.meta.url)}
                 className="me-2 rounded"
                 style={{
@@ -254,7 +256,7 @@ function NavigationBarBodyOffCanvas({ user, onLogoutCallback }) {
                         <Image onClick={() => navigate("/dashboard")}
                             type="button"
                             src={
-                                new URL(((user && user.image) ? user.image : "../assets/user-profile-default.webp"),
+                                new URL(((user && user.image) ? user.image : defaultProfile),
                                     import.meta.url)}
                             className="ms-0 rounded me-3"
                             style={{

@@ -148,7 +148,7 @@ function GameRegion({ user, game, region,
         <Col className="col-md-6 col-xxl-4 col-12 mx-auto mb-3">
             <Card className="secondary-container shadow-sm">
                 <Card.Header className="d-flex align-items-center justify-content-between">
-                    <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
+                    <Image src={new URL(`../../assets/images/game-icons/${game.icon}`, import.meta.url)}
                         className="rounded me-2"
                         style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
                     <span className="fs-4 text-non-links-primary">{game.title}</span>

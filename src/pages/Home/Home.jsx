@@ -9,6 +9,9 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 
 import Timekeeper from "../../components/Timekeeper.jsx";
+
+import fgoParodyGuest from '../../assets/images/home/fgo-parody-1.webp';
+import fgoParodyUser from '../../assets/images/home/fgo-parody-2.webp';
 // ==============================================
 export default function Home() {
     return (
@@ -37,7 +40,7 @@ function BodySection() {
                     <p className="text-non-links-primary fw-bold mt-5">
                         {`Welcome back, ${user.firstName} ${user.lastName}! Here's your cake 🍰.`}
                     </p>
-                    <Image src={new URL("../../assets/home/fgo-parody-2.webp", import.meta.url)}
+                    <Image src={fgoParodyUser}
                         style={{
                             minWidth: "128px", minHeight: "128px",
                             maxWidth: "384px", maxHeight: "384px",
@@ -58,7 +61,7 @@ function BodySection() {
                         <span className="text-danger"> RNG Gods</span> and give
                         you this cake 🍰.
                     </p>
-                    <Image src={new URL("../../assets/home/fgo-parody-1.webp", import.meta.url)}
+                    <Image src={fgoParodyGuest}
                         style={{
                             minWidth: "128px", minHeight: "128px",
                             maxWidth: "384px", maxHeight: "384px",

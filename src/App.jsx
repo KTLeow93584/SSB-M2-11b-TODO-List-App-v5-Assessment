@@ -159,7 +159,8 @@ export function MainLayout() {
 
         const now = new Date();
 
-        const existingTimerIndex = prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === schedule.gameID);
+        const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
+          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === schedule.gameID) : -1;
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
 
         const notifyDate = getNotifyDate(now, schedule);
@@ -178,10 +179,9 @@ export function MainLayout() {
     // ======================
     // Callback when modifying an existing timer from cached schedules.
     const removeScheduleTimerCallback = (event) => {
-      const gameID = event.detail.gameID;
-
       setScheduleTimers((prevScheduleTimers) => {
-        const existingTimerIndex = prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === gameID);
+        const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
+          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === event.detail.gameID) : -1;
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
         prevScheduleTimers.splice(existingTimerIndex, 1);
 

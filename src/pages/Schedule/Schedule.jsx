@@ -28,6 +28,7 @@ import gameInfo from '../../data/GameInfo/index.js';
 import users from '../../data/users.js';
 
 import './Schedule.css';
+import emptyScheduleCaption from '../../assets/images/schedule/hsr-bronya-caption.webp';
 // ==============================================
 export default function Schedule() {
     const dispatch = useDispatch();
@@ -100,7 +101,7 @@ export default function Schedule() {
         <Container fluid className="primary-container m-0 p-0 d-flex flex-column justify-content-end" style={{ flex: 1, overflowX: "hidden" }}>
             <Row className="w-100 m-0 p-0">
                 <Col className="col-12">
-                    <Image src={new URL("../../assets/schedule/hsr-bronya-caption.webp", import.meta.url)}
+                    <Image src={emptyScheduleCaption}
                         style={{
                             minWidth: "640px", minHeight: "400px",
                             maxWidth: "1152px", maxHeight: "1152px",
@@ -140,7 +141,7 @@ function ScheduleContainer({ schedule, alarmDate, game, region,
                 {/* ------------------------------------- */}
                 {/* Game Icon + Game Title + Region Name */}
                 <Card.Header className="secondary-container d-flex align-items-center justify-content-between">
-                    <Image src={new URL(`../../assets/game-icons/${game.icon}`, import.meta.url)}
+                    <Image src={new URL(`../../assets/images/game-icons/${game.icon}`, import.meta.url)}
                         className="rounded me-2"
                         style={{ minWidth: "32px", minHeight: "32px", maxWidth: "32px", maxHeight: "32px", width: "100%", height: "auto" }} />
                     <span className="fs-4 text-non-links-primary">{game.title}</span>

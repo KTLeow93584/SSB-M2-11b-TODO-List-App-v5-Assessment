@@ -4,6 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import Image from 'react-bootstrap/Image';
+
+import errorKoyuki from '../../assets/images/error-page/blue-archive-koyuki.webp';
 // ==============================================
 export default function ErrorPage() {
     return (
@@ -18,7 +20,7 @@ export default function ErrorPage() {
                         <span> </span>
                         instead to cheer you up in its place!
                     </p>
-                    <Image src={new URL("../../assets/error-page/blue-archive-koyuki.webp", import.meta.url)}
+                    <Image src={errorKoyuki}
                         style={{ minWidth: "256px", minHeight: "256px", maxWidth: "512px", maxHeight: "512px", width: "100%", height: "auto" }} />
                 </Col>
             </Row>

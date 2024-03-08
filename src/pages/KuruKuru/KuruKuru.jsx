@@ -10,21 +10,22 @@ import Button from 'react-bootstrap/Button';
 import Image from 'react-bootstrap/Image';
 
 import './KuruKuru.css';
+
+import kuruCard from '../../assets/images/kuru-kuru/card.webp';
+import kurukuru1 from '../../assets/images/kuru-kuru/herta1.webp';
+import kurukuru2 from '../../assets/images/kuru-kuru/herta2.webp';
+
+import kuruAudio1 from '../../assets/audios/kuru-kuru/kuru-1.mp3';
+import kuruAudio2 from '../../assets/audios/kuru-kuru/kuru-2.mp3';
+import kuruAudio3 from '../../assets/audios/kuru-kuru/kuru-3.mp3';
 // ==============================================
 export default function KuruKuru() {
     const [squishedTimes, setSquishedTimes] = useLocalStorage("kuru-count", 0);
     const [kuruImgList, setKuruImgList] = useState([]);
 
-    const audioList = [
-        "../../assets/kuru-kuru/kuru-1.mp3",
-        "../../assets/kuru-kuru/kuru-2.mp3",
-        "../../assets/kuru-kuru/kuru-3.mp3"
-    ];
+    const audioList = [kuruAudio1, kuruAudio2, kuruAudio3];
 
-    const imgList = [
-        "../../assets/kuru-kuru/herta1.webp",
-        "../../assets/kuru-kuru/herta2.webp"
-    ];
+    const imgList = [kurukuru1, kurukuru2];
 
     const playKuru = () => {
         const resultAudio = (squishedTimes % 100 === 99 && squishedTimes > 0) ? (audioList.length - 1) :
@@ -94,16 +95,14 @@ export default function KuruKuru() {
                         kuruImgList.length > 0 ? kuruImgList.map((img) => img.htmlElement) : null
                     }
                     <div>
-                        <Image src={new URL("../../assets/kuru-kuru/herta1.webp", import.meta.url)}
-                            className="herta-img-sample-preload" />
-                        <Image src={new URL("../../assets/kuru-kuru/herta2.webp", import.meta.url)}
-                            className="herta-img-sample-preload" />
+                        <Image src={kurukuru1} className="herta-img-sample-preload" />
+                        <Image src={kurukuru2} className="herta-img-sample-preload" />
                     </div>
                 </Col>
             </Row>
             <Row className="d-flex align-items-center primary-container mx-0 mb-0 mt-3 p-0" style={{ position: "relative" }}>
                 <Col className="col-6 mb-3 mx-auto">
-                    <Image src={new URL("../../assets/kuru-kuru/card.webp", import.meta.url)}
+                    <Image src={kuruCard}
                         style={{ width: "100%", height: "auto" }} />
                 </Col>
                 <Col className="col-6 mb-3 mx-auto">
