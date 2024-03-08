@@ -182,6 +182,9 @@ export function MainLayout() {
       setScheduleTimers((prevScheduleTimers) => {
         const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
           prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === event.detail.gameID) : -1;
+
+        console.log("Index", existingTimerIndex);
+        console.log("Object.", prevScheduleTimers);
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
         prevScheduleTimers.splice(existingTimerIndex, 1);
 
