@@ -105,7 +105,7 @@ export default function AddScheduleModal({ isVisible, handleClose, initialGame =
         };
 
         // Debug
-        console.log("[New Schedule] Create.", newSchedule);
+        //console.log("[New Schedule] Create.", newSchedule);
 
         onRegisterScheduleEvent(newSchedule);
         dispatch(createTask(newSchedule));

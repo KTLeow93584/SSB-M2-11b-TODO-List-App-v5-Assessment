@@ -120,7 +120,9 @@ export function MainLayout() {
       alarmAudio.play();
 
       const newActiveAlarm = {
-        schedule: schedule,
+        id: `${schedule.gameID}-${schedule.regionName}`,
+        gameID: schedule.gameID,
+        regionName: schedule.regionName,
         alarmAudio: alarmAudio
       };
       setActiveAlarms((previousAlarms) => [...previousAlarms, newActiveAlarm]);
@@ -136,6 +138,8 @@ export function MainLayout() {
 
         const newScheduleTimer = {
           id: `${schedule.gameID}-${schedule.regionName}`,
+          gameID: schedule.gameID,
+          regionName: schedule.regionName,
           timer: setTimeout(() => triggerAlarm(schedule), durationToAlarmMS),
           durationToAlarmMS: durationToAlarmMS
         };
@@ -160,7 +164,7 @@ export function MainLayout() {
         const now = new Date();
 
         const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
-          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === schedule.gameID) : -1;
+          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.gameID === schedule.gameID) : -1;
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
 
         const notifyDate = getNotifyDate(now, schedule);
@@ -181,10 +185,8 @@ export function MainLayout() {
     const removeScheduleTimerCallback = (event) => {
       setScheduleTimers((prevScheduleTimers) => {
         const existingTimerIndex = prevScheduleTimers && prevScheduleTimers.length > 0 ?
-          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.id === event.detail.gameID) : -1;
+          prevScheduleTimers.findIndex((scheduleTimer) => scheduleTimer.gameID === event.detail.gameID) : -1;
 
-        console.log("Index", existingTimerIndex);
-        console.log("Object.", prevScheduleTimers);
         clearTimeout(prevScheduleTimers[existingTimerIndex].timer);
         prevScheduleTimers.splice(existingTimerIndex, 1);
 

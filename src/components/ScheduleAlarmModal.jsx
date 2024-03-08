@@ -39,9 +39,9 @@ function AlarmGroup({ alarm, index, onEndIndividualAlarmCallback }) {
             <p className="my-0 ms-0 me-3 p-0">
                 <span className="text-non-links-primary fw-bold">{`${index + 1}`}.</span>
                 <span> </span>
-                <span className="text-non-links-primary fw-bold">{`${alarm.schedule.title}`}</span>
+                <span className="text-non-links-primary fw-bold">{`${alarm.gameID}`}</span>
                 <span> </span>
-                <span className="text-non-links-primary fw-bold">{`${alarm.schedule.regionName}`}</span>
+                <span className="text-non-links-primary fw-bold">{(`${alarm.regionName}`)}</span>
             </p>
             <Button variant="danger" onClick={() => onEndIndividualAlarmCallback(alarm.schedule.gameID)}>
                 End Alarm
