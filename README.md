@@ -39,7 +39,7 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 
 ## Contribute
 - As this project was created with the intention of pushing my capabilities to the limits within the assessment timeframe, future support for more games' inclusivity would be limited to what's already featured in [Cicerake's website](https://cicerakes.github.io/Game-Time-Master/).
-- With that said, any developers seeing potential in this project and/or want to help make it better, may feel free to fork or submit a pull request this project. 🦾
+- With that said, any developers seeing potential in this project and/or want to help make it better, may feel free to fork this project or submit a pull request. 🦾
 
 ## Credits
 Big shoutout to the following websites, as the project's UI and layouts were either <b>heavily inspired</b> and/or <b>replicated</b> from them:
