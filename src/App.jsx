@@ -302,36 +302,34 @@ function App() {
       <ModeContextProvider>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<MainLayout />}>
-                  <Route index element={<Home />} />
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<Home />} />
 
-                  <Route element={
-                    <UserAuth>
-                      <Dashboard />
-                    </UserAuth>
-                  } path="/dashboard" />
+                <Route element={
+                  <UserAuth>
+                    <Dashboard />
+                  </UserAuth>
+                } path="/dashboard" />
 
-                  <Route element={
-                    <UserAuth>
-                      <Schedule />
-                    </UserAuth>
-                  } path="/schedule" />
+                <Route element={
+                  <UserAuth>
+                    <Schedule />
+                  </UserAuth>
+                } path="/schedule" />
 
-                  <Route element={
-                    <GuestAuth>
-                      <Login />
-                    </GuestAuth>
-                  } path="/login" />
+                <Route element={
+                  <GuestAuth>
+                    <Login />
+                  </GuestAuth>
+                } path="/login" />
 
-                  <Route path="/register" element={<Register />} />
-                  <Route path="/games" element={<GameList />} />
-                  <Route path="/kururin" element={<KuruKuru />} />
-                  {<Route path="*" element={<ErrorPage />} />}
-                </Route>
-              </Routes>
-            </BrowserRouter>
+                <Route path="/register" element={<Register />} />
+                <Route path="/games" element={<GameList />} />
+                <Route path="/kururin" element={<KuruKuru />} />
+                {<Route path="*" element={<ErrorPage />} />}
+              </Route>
+            </Routes>
           </PersistGate>
         </Provider>
       </ModeContextProvider>
