@@ -123,9 +123,9 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
     const onUploadNewAlarmFile = (event) => {
         // ===================================================
         const file = event.target.files[0];
-
         if (!file) {
-            setAlarmFile(null);
+            setAlarmFile(schedule.alarmFile);
+            setAlarmFileName(schedule.alarmFileName);
             return;
         }
 
@@ -137,6 +137,7 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
         fileReader.addEventListener("load", () => {
             const url = fileReader.result;
             setAlarmFile(url);
+            setAlarmFileName(file.name);
         });
         // ===================================================
     };
@@ -155,8 +156,8 @@ export default function ModifyScheduleModal({ isVisible, handleClose, schedule, 
             regionName: modalData.region.name,
             originalRegionName: originalRegionName,
 
-            alarmFile: alarmFile,
-            alarmFileName: alarmFileName,
+            alarmFile: alarmFile ? alarmFile : schedule.alarmFile,
+            alarmFileName: alarmFileName ? alarmFileName : schedule.alarmFileName,
 
             notifyTime: notifyTime,
             description: description
