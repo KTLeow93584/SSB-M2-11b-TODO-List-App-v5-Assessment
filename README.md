@@ -37,6 +37,10 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 ![User Feature-1](./demo-images/demo-2.png)
 ![User Feature-2](./demo-images/demo-3.png)
 
+## Current Personal Deployment (Active)
+1. [Vercel](https://ssb-m2-11b-todo-list-app-v5-assessment.vercel.app/)
+2. [GitHub Pages](https://ktleow93584.github.io/SSB-M2-11b-TODO-List-App-v5-Assessment/)
+
 ## Contribute
 - As this project was created with the intention of pushing my capabilities to the limits within the assessment timeframe, future support for more games' inclusivity would be limited to what's already featured in [Cicerake's website](https://cicerakes.github.io/Game-Time-Master/).
 - With that said, any developers seeing potential in this project and/or want to help make it better, may feel free to fork this project or submit a pull request. 🦾
