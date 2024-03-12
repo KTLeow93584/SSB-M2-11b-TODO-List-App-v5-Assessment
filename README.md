@@ -26,7 +26,7 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 - To test the project on the development environment, simply run `npm run dev`.
 
 ## How to deploy?
-- Run the command, `npm run dev` to have it work on your local host environment. (E.g. `https://localhost:Your Port Number`)
+- Run the command, `npm run dev` to have it work on your local host environment. (E.g. `http://localhost:[Your Port Number]`)
 - For production builds on GitHub Pages, run `npm run deploy` from the **KT/GitHub-Pages** branch and switch your deployment branch to `gh-pages`. (Under your GitHub Repository's `Settings -> Pages -> Build and Deployment -> Branch`)
 - For other deployment websites, you may be required to run the `npm run build` command to get the **dist** folder. Follow the instructions of your preferred website.
 
@@ -36,6 +36,10 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 - Registered & Logged users on the other hand, can assign an alarm which will ring their desired audio file, on a daily basis.
 ![User Feature-1](./demo-images/demo-2.png)
 ![User Feature-2](./demo-images/demo-3.png)
+
+## Current Personal Deployment (Active)
+1. [Vercel](https://ssb-m2-11b-todo-list-app-v5-assessment.vercel.app/)
+2. [GitHub Pages](https://ktleow93584.github.io/SSB-M2-11b-TODO-List-App-v5-Assessment/)
 
 ## Contribute
 - As this project was created with the intention of pushing my capabilities to the limits within the assessment timeframe, future support for more games' inclusivity would be limited to what's already featured in [Cicerake's website](https://cicerakes.github.io/Game-Time-Master/).
