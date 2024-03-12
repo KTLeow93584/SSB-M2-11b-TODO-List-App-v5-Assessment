@@ -121,7 +121,7 @@ function RegisterForm({ successfulCallback }) {
     }
 
     function doPasswordsMeetCriteria() {
-        const regexUpperLetters = /[A-z]/;
+        const regexUpperLetters = /[A-Z]/;
         const regexLowerLetters = /[a-z]/;
         const regexNumbers = /[0-9]/;
         const regexSymbols = /[^a-zA-z0-9]/;
