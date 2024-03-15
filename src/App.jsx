@@ -6,7 +6,7 @@
 import { useEffect, useState } from 'react';
 import { Provider, useSelector } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
-import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom';
+import { Outlet, Route, Routes } from 'react-router-dom';
 import useLocalStorage from 'use-local-storage';
 
 import Container from 'react-bootstrap/Container';
@@ -262,7 +262,8 @@ export function MainLayout() {
         // Debug
         //console.log("[On Remove All Existing Timers] Previous Timers.", previousTimers);
 
-        previousTimers.forEach((scheduleTimerObj) => clearTimeout(scheduleTimerObj.timer));
+        if (previousTimers && previousTimers.length > 0)
+          previousTimers.forEach((scheduleTimerObj) => clearTimeout(scheduleTimerObj.timer));
         return [];
       });
     };
