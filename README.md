@@ -26,9 +26,9 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 - To test the project on the development environment, simply run `npm run dev`.
 
 ## How to deploy?
-- Run the command, `npm run dev` to have it work on your local host environment. (E.g. `http://localhost:[Your Port Number]`)
-- For production builds on GitHub Pages, run `npm run deploy` from the **KT/GitHub-Pages** branch and switch your deployment branch to `gh-pages`. (Under your GitHub Repository's `Settings -> Pages -> Build and Deployment -> Branch`)
-- For other deployment websites, you may be required to run the `npm run build` command to get the **dist** folder. Follow the instructions of your preferred website.
+- [Development] Run the command, `npm run dev` to have it work on your local host environment. (E.g. `http://localhost:[Your Port Number]`)
+- [Production - GitHub Pages] Run `npm run deploy` from the **KT/GitHub-Pages** branch and switch your deployment branch to `gh-pages`. (Under your GitHub Repository's `Settings -> Pages -> Build and Deployment -> Branch`)
+- [Production - other deployment websites] You may be required to run the `npm run build` command to get the **dist** folder. Follow the instructions of your preferred website.
 
 ## How to use?
 - Guests can access the **Games List** page to find out when their favourite game's reset times are.
@@ -68,11 +68,11 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
     }
 ```
 
-## Current Personal Deployment (Active)
+## Current Active Deployments
 1. [Vercel](https://ssb-m2-11b-todo-list-app-v5-assessment.vercel.app/)
 2. [GitHub Pages](https://ktleow93584.github.io/SSB-M2-11b-TODO-List-App-v5-Assessment/)
 
-## Contribute
+## Contributions
 - As this project was created with the intention of pushing my capabilities to the limits within the assessment timeframe, future support for more games' inclusivity would be limited to what's already featured in [Cicerake's website](https://cicerakes.github.io/Game-Time-Master/).
 - With that said, any developers seeing potential in this project and/or want to help make it better, may feel free to fork this project or submit a pull request. 🦾
 
@@ -83,7 +83,7 @@ Big shoutout to the following websites, as the project's UI and layouts were eit
 3. [Kuru Kuru by Caliphdev](https://github.com/caliphdev/herta_kuru)
 
 ## Notes/Addendums
-- This project was created as a part of with [Sigma School Bootcamp's](https://sigmaschool.co/complete-software-development-programme)'s Module (#2) final assessment requirements.
+- This project was created as a part of with [Sigma School Bootcamp](https://sigmaschool.co/complete-software-development-programme)'s Module (#2) final assessment requirements.
 - Since this project is created fully on front-end (with no live DB), all registered users are stored locally within your browser's cache.
 
 ## Pending Features (No promises that it can be fulfilled, however)
