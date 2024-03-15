@@ -37,6 +37,37 @@ It's a pet project for funsies and explorative purposes, which combines the UI l
 ![User Feature-1](./demo-images/demo-2.png)
 ![User Feature-2](./demo-images/demo-3.png)
 
+## Built-in Dummy Users
+- As the project was created purely on front-end (with no back-end database), all newly created users are cached into local storage while listed below are the cached default users stored within the project files:
+
+```
+// Located in "src/data/users.js". Use the "email" and "password" fields respectively to log in.
+    {
+        email: "aa@aa.com",
+        password: "111111",
+        firstName: "Kaz",
+        lastName: "Tachiro"
+    },
+    {
+        email: "bb@bb.com",
+        password: "222222",
+        firstName: "Itsu",
+        lastName: "Majitsu"
+    },
+    {
+        email: "cc@cc.com",
+        password: "333333",
+        firstName: "John",
+        lastName: "McClaine"
+    },
+    {
+        email: "admin@admin.com",
+        password: "123456",
+        firstName: "admin",
+        lastName: "The Meanie"
+    }
+```
+
 ## Current Personal Deployment (Active)
 1. [Vercel](https://ssb-m2-11b-todo-list-app-v5-assessment.vercel.app/)
 2. [GitHub Pages](https://ktleow93584.github.io/SSB-M2-11b-TODO-List-App-v5-Assessment/)
